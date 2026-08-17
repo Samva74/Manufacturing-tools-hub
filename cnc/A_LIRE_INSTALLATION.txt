@@ -1,0 +1,1 @@
+Version CNC Supabase. Remplacer les fichiers du dépôt GitHub/Vercel par ceux de ce ZIP. Exécuter cnc_supabase_setup_v2.sql dans Supabase avant test.
