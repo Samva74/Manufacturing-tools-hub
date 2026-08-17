@@ -1,0 +1,51 @@
+/* CNC theme aligned with Hot Stamping grey/noir style. */
+:root{
+  --bg:#d8d8d3;
+  --card:#eeeeea;
+  --card2:#f6f6f2;
+  --line:#8d8d86;
+  --txt:#1d1d1b;
+  --muted:#5f5f58;
+  --accent:#1d1d1b;
+  --yellow:#f4f1df;
+  --yellowb:#9a9a91;
+  --ok:#237a3b;
+  --warn:#a76b00;
+  --err:#b42318;
+  --res:#e5e5df;
+  --valid:#d9eadb;
+}
+html,body{background:var(--bg)!important;color:var(--txt)!important;}
+.card{background:var(--card)!important;border-color:var(--line)!important;box-shadow:0 4px 16px rgba(0,0,0,.12)!important;}
+.card h2{color:var(--accent)!important;}
+.card h2 .dot{background:var(--accent)!important;}
+label,.unit,.res-big .lbl,.res-big .u,.res-line .k,.details .grid,.calib-item .s,.empty,.foot{color:var(--muted)!important;}
+select,input{background:#fff!important;color:var(--txt)!important;border-color:var(--yellowb)!important;}
+input:focus,select:focus{border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(29,29,27,.12)!important;}
+.scie-box{border-color:var(--warn)!important;background:rgba(167,107,0,.08)!important;}
+.scie-box .h{color:#734a00!important;}
+#results .card h2,#calib .card h2{color:var(--accent)!important;}
+#results .card h2 .dot,#calib .card h2 .dot{background:var(--accent)!important;}
+.res-big{background:var(--res)!important;border-color:var(--line)!important;}
+.res-big.valid{background:var(--valid)!important;border-color:var(--ok)!important;}
+.res-big .val{color:var(--txt)!important;}
+.res-big.valid .val{color:var(--ok)!important;}
+.res-line{border-bottom-color:var(--line)!important;}
+.badge.ok{background:rgba(35,122,59,.14)!important;color:var(--ok)!important;}
+.badge.warn{background:rgba(167,107,0,.14)!important;color:#734a00!important;}
+.badge.valid{background:rgba(35,122,59,.16)!important;color:var(--ok)!important;}
+.badge.theo{background:rgba(95,95,88,.14)!important;color:var(--muted)!important;}
+.vigil{background:rgba(29,29,27,.06)!important;border-left-color:var(--accent)!important;color:#30302d!important;}
+.valid-banner{background:rgba(35,122,59,.1)!important;border-left-color:var(--ok)!important;color:var(--ok)!important;}
+.details summary{color:var(--accent)!important;}
+.details .grid b{color:var(--txt)!important;}
+.calib-inputs input{background:#fff!important;border-color:var(--yellowb)!important;color:var(--txt)!important;}
+.btn-save{background:#1d1d1b!important;color:#fff!important;background-image:none!important;}
+.btn-ghost{background:var(--card2)!important;color:var(--muted)!important;border:1px solid var(--line)!important;}
+.calib-item{background:var(--card2)!important;border-color:var(--line)!important;}
+.calib-item .t{color:var(--txt)!important;}
+.calib-item .del{color:var(--err)!important;background:rgba(180,35,24,.12)!important;}
+.toast{background:#1d1d1b!important;color:#fff!important;box-shadow:0 8px 24px rgba(0,0,0,.25)!important;}
+.mini-plus{background:var(--accent)!important;color:#fff!important;box-shadow:0 3px 10px rgba(0,0,0,.16)!important;}
+.version-row a{color:var(--txt)!important;background:var(--card2)!important;border-color:var(--line)!important;}
+.version-row a.active{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important;}
