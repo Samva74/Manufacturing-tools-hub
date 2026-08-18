@@ -16,9 +16,11 @@ const APPS = [
    description: "Paramètres et bibliothèques marquage à chaud",
    url: "/hot-stamping/"
  },
- {
-name: 'Laser',
-path: '/laser/'
+{
+  name: 'Laser',
+  short: 'LS',
+  description: 'Paramètres et bibliothèques laser',
+  url: '/laser/'
 }
 ];
 const auth = window.supabase.createClient(AUTH_SUPABASE_URL, AUTH_SUPABASE_KEY);
