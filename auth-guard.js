@@ -1,3 +1,4 @@
+console.log("VERSION ERZUVPS");
 /*
   Auth guard for protected apps.
   Add this file to each app folder and include this before </body>:
