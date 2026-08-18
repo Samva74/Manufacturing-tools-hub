@@ -1,6 +1,6 @@
 {
-  "name": "Laser Calculator V1 Supabase",
-  "short_name": "Laser",
+  "name": "Laser Calculator",
+  "short_name": "LASER",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#d8d8d3",
