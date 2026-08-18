@@ -102,5 +102,11 @@ calc();
 
 });
 document.addEventListener('input',e=>{if(['area','machineTempMax','machinePressureMax'].includes(e.target.id))calc()});
-refreshText();loadEditableLibrary();loadHotCalibrations();
+function goHub(){
+    window.location.href = "/";
+}
+
+refreshText();
+loadEditableLibrary();
+loadHotCalibrations();
 </script></body></html>
