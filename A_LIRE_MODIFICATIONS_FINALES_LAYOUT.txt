@@ -1,0 +1,27 @@
+# MODIFICATIONS FINALES APPLIQUEES
+
+Cette version corrige la structure visuelle demandée.
+
+## CNC
+- Colonne gauche : Entrées machine + Entrées outil & opération
+- Colonne droite : Lecture rapide + Calibration atelier
+- Bas pleine largeur : Bibliothèque Supabase CNC
+
+## Hot Stamping
+- Colonne gauche : Entrées machine + Support & Folio
+- Colonne droite : Lecture rapide + Calibration atelier
+- Bas pleine largeur : Bibliothèque Supabase Hot Stamping
+
+## Laser
+- Présentation conservée
+- Bouton Hub harmonisé visuellement avec Hot Stamping
+
+Fichiers modifiés :
+- cnc/index.html
+- cnc/layout-final-cnc.css
+- hot-stamping/index.html
+- hot-stamping/layout-final-hot-stamping.css
+- laser/index.html
+- laser/hub-button-hot-stamping-style.css
+
+Installation : remplacer le dépôt GitHub par ces fichiers, Commit changes, attendre Vercel, puis Ctrl + Shift + R.
