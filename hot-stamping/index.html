@@ -41,10 +41,15 @@ fillMachines(row.name);
 applyMachineData();
 
 toast('Machine ajoutée + Supabase');
-}
 catch(e){
-console.error(e);
-toast('Erreur ajout machine');
+  console.error(e);
+
+  alert(
+    'ERREUR SUPABASE :\n\n' +
+    e.message
+  );
+
+  toast('Erreur ajout machine');
 }
 }
 async function addHotSupport(){const name_fr=prompt('Nom support FR','Nouveau support');if(!name_fr)return;const code=slug(prompt('Code support simple',slug(name_fr))||name_fr);const name_en=prompt('Nom support EN',name_fr)||name_fr;const name_pt=prompt('Nom support PT',name_fr)||name_fr;const family=prompt('Famille','Support ajouté')||'Support ajouté';try{const [row]=await apiInsert('hot_supports',{code,name_fr:name_fr.trim(),name_en:name_en.trim(),name_pt:name_pt.trim(),family:family.trim()});supports.push(row);fillSupports(row.code);fillFoils();toast('Support ajouté + Supabase')}catch(e){console.error(e);toast('Erreur ajout support')}}
