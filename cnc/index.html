@@ -205,6 +205,10 @@ saveCalib = async function() {
     if (host) host.innerHTML = `<div class="empty">Erreur Supabase : ${String(e.message).replace(/[<>]/g,'')}</div>`;
   }
 };
+  
+function goHub(){
+    window.location.href = "/";
+}
 
 setTimeout(() => {
   ensureCncSupabaseCard();
