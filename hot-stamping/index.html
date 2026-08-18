@@ -17,12 +17,76 @@ function calc(){const f=currentFoil(),m=currentMachine(); if(!f||!m)return;let t
 async function apiGet(table,query='?select=*'){const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}${query}`,{headers:sbHeaders()});if(!r.ok)throw new Error(`${r.status} ${await r.text()}`);return r.json()}async function apiInsert(table,payload){const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}`,{method:'POST',headers:sbHeaders({Prefer:'return=representation'}),body:JSON.stringify(payload)});if(!r.ok)throw new Error(`${r.status} ${await r.text()}`);return r.json()}
 function slug(v){return String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,40)||('item_'+Date.now())}function nval(v,d){const n=parseFloat(String(v??'').replace(',','.'));return Number.isFinite(n)?n:d;}
 async function loadEditableLibrary(){try{const m=await apiGet('hot_machines','?select=*&order=name.asc');if(m.length)machines=[...DEFAULT_MACHINES,...m.filter(x=>!DEFAULT_MACHINES.some(d=>d.name===x.name))]}catch(e){console.warn('hot_machines',e)}try{const s=await apiGet('hot_supports','?select=*&order=name_fr.asc');if(s.length)supports=[...DEFAULT_SUPPORTS,...s.filter(x=>!DEFAULT_SUPPORTS.some(d=>d.code===x.code))]}catch(e){console.warn('hot_supports',e)}try{const f=await apiGet('hot_foils','?select=*&order=label_fr.asc');if(f.length)foils=[...DEFAULT_FOILS,...f.filter(x=>!DEFAULT_FOILS.some(d=>d.foil_code===x.foil_code))]}catch(e){console.warn('hot_foils',e)}fillMachines();fillSupports();fillFoils();}
-async function addHotMachine(){const name=prompt('Nom de la machine',$('machine').value||'Nouvelle machine');if(!name)return;const temperature_max=nval(prompt('Température max °C','160'),160);const pressure_max=nval(prompt('Pression max bar','8'),8);const dwell_time_max=nval(prompt('Temps max s','2'),2);const site=prompt('Site',$('site').value||'Atelier')||'Atelier';try{const [row]=await apiInsert('hot_machines',{name:name.trim(),temperature_max,pressure_max,dwell_time_max,site});machines.push(row);fillMachines(row.name);toast('Machine ajoutée + Supabase')}catch(e){console.error(e);toast('Erreur ajout machine')}}
+async function addHotMachine(){
+const name=prompt('Nom de la machine',$('machine').value||'Nouvelle machine');
+if(!name)return;
+
+const temperature_max=nval(prompt('Température max °C','160'),160);
+const pressure_max=nval(prompt('Pression max bar','8'),8);
+const dwell_time_max=nval(prompt('Temps max s','2'),2);
+
+const site=prompt('Site',$('site').value||'Atelier')||'Atelier';
+try{
+const [row]=await apiInsert('hot_machines',{
+name:name.trim(),
+temperature_max,
+pressure_max,
+dwell_time_max,
+site
+});
+
+machines.push(row);
+fillMachines(row.name);
+
+applyMachineData();
+
+toast('Machine ajoutée + Supabase');
+}
+catch(e){
+console.error(e);
+toast('Erreur ajout machine');
+}
+}
 async function addHotSupport(){const name_fr=prompt('Nom support FR','Nouveau support');if(!name_fr)return;const code=slug(prompt('Code support simple',slug(name_fr))||name_fr);const name_en=prompt('Nom support EN',name_fr)||name_fr;const name_pt=prompt('Nom support PT',name_fr)||name_fr;const family=prompt('Famille','Support ajouté')||'Support ajouté';try{const [row]=await apiInsert('hot_supports',{code,name_fr:name_fr.trim(),name_en:name_en.trim(),name_pt:name_pt.trim(),family:family.trim()});supports.push(row);fillSupports(row.code);fillFoils();toast('Support ajouté + Supabase')}catch(e){console.error(e);toast('Erreur ajout support')}}
 async function addHotFoil(){const support_code=$('support').value;const label_fr=prompt('Nom folio FR','Nouveau folio');if(!label_fr)return;const foil_code=slug(prompt('Code folio simple',slug(label_fr))||label_fr);const label_en=prompt('Nom folio EN',label_fr)||label_fr;const label_pt=prompt('Nom folio PT',label_fr)||label_fr;const supplier=prompt('Fournisseur','KURZ')||'';const color=prompt('Couleur','')||'';const temperature_rec=nval(prompt('Température recommandée °C','110'),110);const pressure_rec=nval(prompt('Pression recommandée bar','2'),2);const dwell_time_rec=nval(prompt('Temps recommandé s','0.8'),.8);try{const [row]=await apiInsert('hot_foils',{support_code,foil_code,label_fr:label_fr.trim(),label_en:label_en.trim(),label_pt:label_pt.trim(),supplier:supplier.trim(),color:color.trim(),temperature_min:temperature_rec-10,temperature_rec,temperature_max:temperature_rec+10,pressure_min:Math.max(0,pressure_rec-.5),pressure_rec,pressure_max:pressure_rec+.5,dwell_time_min:Math.max(0,dwell_time_rec-.2),dwell_time_rec,dwell_time_max:dwell_time_rec+.2});foils.push(row);fillFoils(row.foil_code);toast('Folio ajouté + Supabase')}catch(e){console.error(e);toast('Erreur ajout folio')}}
 async function saveCalib(){const f=currentFoil(),s=currentSupport();const payload={material:labelSupport(s),foil:labelFoil(f),temperature:num('cTemp'),pressure:num('cPress'),dwell_time:num('cDwell'),operator:$('operator').value||'Atelier',site:$('site').value||'Atelier',comments:$('cNote').value||''};if(!payload.temperature||!payload.pressure||!payload.dwell_time){toast('Valeurs ?');return}try{await apiInsert(CALIB_TABLE,payload);toast('Enregistré local + Supabase');loadHotCalibrations()}catch(e){console.error(e);toast('Erreur Supabase')}}function fillFromResult(){calc();}
 async function loadHotCalibrations(){const host=$('hotCalibList');host.innerHTML='<div class="empty">Chargement Supabase...</div>';try{remoteCalibs=await apiGet(CALIB_TABLE,'?select=*&order=created_at.desc&limit=50');renderHotCalibrations()}catch(e){host.innerHTML=`<div class="empty">Supabase non disponible : ${String(e.message).replace(/[<>]/g,'')}</div>`}}
 function renderHotCalibrations(){const host=$('hotCalibList');if(!remoteCalibs.length){host.innerHTML='<div class="empty">Aucune calibration Supabase enregistrée pour le moment.</div>';return}host.innerHTML=remoteCalibs.map(r=>{const d=r.created_at?new Date(r.created_at).toLocaleDateString('fr-FR'):'';return `<div class="calib-item"><div class="t">${esc(r.material)} · ${esc(r.foil)}</div><div class="s">${r.temperature??''} °C · ${r.pressure??''} bar · ${r.dwell_time??''} s<br>${esc(r.site)} · ${esc(r.operator)} · ${d}${r.comments?'<br><i>'+esc(r.comments)+'</i>':''}</div></div>`}).join('')}function esc(v){return String(v??'').replace(/[<>]/g,'')}
-document.addEventListener('change',e=>{if(e.target.id==='support')fillFoils();else calc()});document.addEventListener('input',e=>{if(['area','machineTempMax','machinePressureMax'].includes(e.target.id))calc()});
+function applyMachineData(){
+
+const m = machines.find(
+x => x.name === $('machine').value
+);
+
+if(!m) return;
+
+if(m.temperature_max != null)
+$('machineTempMax').value = m.temperature_max;
+
+if(m.pressure_max != null)
+$('machinePressureMax').value = m.pressure_max;
+
+if(m.site)
+$('site').value = m.site;
+
+calc();
+
+}
+document.addEventListener('change',e=>{
+
+if(e.target.id==='machine'){
+applyMachineData();
+return;
+}
+
+if(e.target.id==='support'){
+fillFoils();
+return;
+}
+
+calc();
+
+});
+document.addEventListener('input',e=>{if(['area','machineTempMax','machinePressureMax'].includes(e.target.id))calc()});
 refreshText();loadEditableLibrary();loadHotCalibrations();
 </script></body></html>
