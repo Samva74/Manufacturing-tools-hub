@@ -14,3 +14,7 @@ Installation :
 2. Commit changes.
 3. Attendre le redéploiement Vercel.
 4. Faire Ctrl + Shift + R.
+
+
+Mise à jour Hub :
+- Les cartes du menu principal utilisent maintenant les icônes PNG des dossiers cnc/, hot-stamping/ et laser/ au lieu des textes CNC / HS / LAS.
