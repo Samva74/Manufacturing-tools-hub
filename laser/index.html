@@ -15,6 +15,13 @@
   </style>
 </head>
 <body>
+
+<button class="hub-back-btn"
+        onclick="goHub()"
+        type="button">
+🏠 Hub
+</button>
+
 <div class="wrap">
   <div class="top">
     <div class="brand"><div class="logo"><svg viewBox="0 0 100 100" fill="none" stroke="#1d1d1b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 72 L44 42"/><path d="M42 20 L70 48"/><path d="M70 48 L86 48"/><path d="M52 82 H86"/><path d="M74 48 L74 82"/><path d="M18 82 H32"/></svg></div><div class="title"><h1 id="t_title">Laser Calculator V1</h1><p id="t_sub">Bibliothèque matières + puissance / vitesse / passes / air assist</p></div></div>
@@ -87,5 +94,8 @@ async function addParameter(){const material_code=$('material').value;const oper
 async function saveCalibration(){try{await apiInsert('Laser_calibrations',{material:$('material').value,operation:$('operation').value,machine:$('machine').value,thickness_mm:parseFloat($('thickness').value)||null,power_percent:parseFloat($('valPower').value)||null,speed_mm_s:parseFloat($('valSpeed').value)||null,passes:parseFloat($('valPasses').value)||null,frequency:parseFloat($('rFreq').textContent)||null,z_offset:parseFloat($('valFocus').value)||null,air_assist:$('rAir').textContent,operator:'',site:'',comments:$('comments').value||''});toast('Calibration enregistrée');loadCalibrations()}catch(e){console.error(e);toast('Erreur calibration')}}
 async function loadCalibrations(){const box=$('calibs');box.innerHTML='';try{const rows=await apiGet('Laser_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){box.innerHTML='<p class="unit">Aucune calibration chargée.</p>';return}rows.forEach(r=>{const div=document.createElement('div');div.className='calib-item';div.innerHTML=`<div class="t">${r.material||''} · ${r.operation||''} · ${r.machine||''}</div><div class="s">${r.thickness_mm||'-'} mm · ${r.power_percent||'-'}% · ${r.speed_mm_s||'-'} mm/s · ${r.passes||'-'} passes · ${r.comments||''}</div>`;box.appendChild(div)})}catch(e){box.innerHTML='<p class="unit">Supabase non chargé ou SQL non exécuté.</p>';console.warn(e)}}
 fillMachines();fillMaterials('acrylic');loadRemoteLibrary();['watt','speedMax','thickness','extraction'].forEach(id=>$(id).addEventListener('input',calc));
+function goHub(){
+    window.location.href = "/";
+}
 </script>
 </body></html>
