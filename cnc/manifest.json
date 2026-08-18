@@ -1,10 +1,10 @@
 {
-  "name": "Calculateur CNC V8 FR/EN/PT - Supabase",
+  "name": "CNC Calculator",
   "short_name": "CNC",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0f1420",
-  "theme_color": "#0f1420",
+  "background_color": "#d8d8d3",
+  "theme_color": "#d8d8d3",
   "lang": "fr",
   "icons": [
     {
