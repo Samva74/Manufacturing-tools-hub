@@ -1,0 +1,16 @@
+Manufacturing Tools Hub - version harmonisée finale
+
+Modifications incluses :
+- Bandeau supérieur commun pour CNC, Hot Stamping et Laser.
+- Bouton Hub intégré dans la ligne des langues, à gauche de French.
+- Langues affichées : French, English, Português.
+- Laser Calculator sans V1.
+- Traductions Laser corrigées pour les textes principaux.
+- CNC et Hot Stamping reprennent la présentation de Laser : deux colonnes + bibliothèque Supabase pleine largeur en bas.
+- Supabase URL et Publishable key configurées sur le projet erzuvpswagzwlrxgctaj.
+
+Installation :
+1. Remplacer les fichiers du dépôt GitHub par ceux de ce ZIP.
+2. Commit changes.
+3. Attendre le redéploiement Vercel.
+4. Faire Ctrl + Shift + R.

@@ -1,21 +1,9 @@
-console.log("VERSION ERZUVPS");
-/*
-  Auth guard for protected apps.
-  Add this file to each app folder and include this before </body>:
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="auth-guard.js"></script>
-
-  IMPORTANT: for a single login shared between apps, host the hub and apps under the SAME origin,
-  for example:
-  /index.html
-  /cnc/index.html
-  /hot-stamping/index.html
-*/
+console.log("AUTH VERSION ERZUVPS FINAL");
+/* Auth guard shared by all Manufacturing Tools apps. */
 const AUTH_SUPABASE_URL = "https://erzuvpswagzwlrxgctaj.supabase.co";
 const AUTH_SUPABASE_KEY = "sb_publishable_EERLI2l3AjQWkCLsMK3kbA_DMny2RFr";
 const AUTH_HUB_URL = "/";
 const authClient = window.supabase.createClient(AUTH_SUPABASE_URL, AUTH_SUPABASE_KEY);
-
 function authGuardStyle() {
   if (document.getElementById('authGuardStyle')) return;
   const s = document.createElement('style');
@@ -32,7 +20,6 @@ function authGuardStyle() {
   `;
   document.head.appendChild(s);
 }
-
 async function requireAuth() {
   const { data } = await authClient.auth.getSession();
   if (data.session) return data.session;
@@ -43,8 +30,8 @@ async function requireAuth() {
     <div class="auth-panel">
       <h1>Connexion</h1>
       <p>Connectez-vous pour accéder à l'application.</p>
-      <input id="guardEmail" type="email" placeholder="Adresse email" autocomplete="email">
-      <input id="guardPassword" type="password" placeholder="Mot de passe" autocomplete="current-password">
+      <input id="guardEmail" type="email" placeholder="Email">
+      <input id="guardPassword" type="password" placeholder="Mot de passe">
       <button id="guardLogin">Se connecter</button>
       <button id="guardSignup" class="secondary">Créer un compte</button>
       <button id="guardReset" class="secondary">Mot de passe oublié</button>
@@ -55,7 +42,6 @@ async function requireAuth() {
   const msg = document.getElementById('guardMsg');
   const email = document.getElementById('guardEmail');
   const password = document.getElementById('guardPassword');
-
   document.getElementById('guardLogin').onclick = async () => {
     msg.textContent = '';
     const { error } = await authClient.auth.signInWithPassword({ email: email.value.trim(), password: password.value });
@@ -65,8 +51,7 @@ async function requireAuth() {
   document.getElementById('guardSignup').onclick = async () => {
     msg.textContent = '';
     const { error } = await authClient.auth.signUp({ email: email.value.trim(), password: password.value });
-    if (error) { msg.textContent = error.message; return; }
-    msg.textContent = 'Compte créé. Si la confirmation email est activée, vérifiez votre boîte mail.';
+    msg.textContent = error ? error.message : 'Compte créé. Confirmez votre email si Supabase le demande.';
   };
   document.getElementById('guardReset').onclick = async () => {
     msg.textContent = '';
@@ -76,5 +61,4 @@ async function requireAuth() {
   };
   document.getElementById('guardHub').onclick = () => { location.href = AUTH_HUB_URL; };
 }
-
 requireAuth();
