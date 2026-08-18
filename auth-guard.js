@@ -10,7 +10,7 @@
   /cnc/index.html
   /hot-stamping/index.html
 */
-const AUTH_SUPABASE_URL = "https://exktpgmixxqgagbgkjew.supabase.co";
+const AUTH_SUPABASE_URL = "https://erzuvpswagzwlrxgctaj.supabase.co";
 const AUTH_SUPABASE_KEY = "sb_publishable_EnZYq5RqBLVh3R4nOsGW0A_NuEFm86V";
 const AUTH_HUB_URL = "/";
 const authClient = window.supabase.createClient(AUTH_SUPABASE_URL, AUTH_SUPABASE_KEY);
