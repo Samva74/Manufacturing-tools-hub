@@ -1,0 +1,80 @@
+
+/* ============================================================
+   CNC - Layout final identique logique Laser
+   Structure demandee :
+   GAUCHE : Entrees machine + Entrees outil & operation
+   DROITE : Lecture rapide + Calibration atelier
+   BAS : Bibliotheque Supabase CNC pleine largeur
+   ============================================================ */
+html,body{background:var(--bg)!important;color:var(--txt)!important;}
+body{padding:16px 16px 40px!important;}
+.wrap{
+  width:100%!important;
+  max-width:1180px!important;
+  margin:0 auto!important;
+  padding:0!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:14px!important;
+  align-items:start!important;
+}
+.card{border-radius:20px!important;box-shadow:0 4px 16px rgba(0,0,0,.12)!important;margin-bottom:0!important;}
+.card h2{font-size:18px!important;text-transform:none!important;letter-spacing:0!important;}
+.card h2 .dot{width:10px!important;height:10px!important;background:var(--accent)!important;}
+select,input,textarea{background:#fff!important;color:var(--txt)!important;border-color:var(--yellowb)!important;}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(29,29,27,.12)!important;}
+.selector-card{grid-column:1 / -1!important;}
+/* 1re carte apres langues = Entrees machine */
+.wrap > .card:nth-of-type(2){grid-column:1!important;grid-row:2!important;}
+/* 2e carte apres langues = Entrees outil & operation */
+.wrap > .card:nth-of-type(3){grid-column:1!important;grid-row:3!important;}
+/* Lecture rapide */
+#results{grid-column:2!important;grid-row:2!important;}
+#results .card{margin-bottom:0!important;}
+/* Calibration atelier */
+#calib{grid-column:2!important;grid-row:3!important;}
+#calib .card{margin-bottom:0!important;}
+/* Bibliotheque Supabase CNC : plusieurs id/classes possibles selon version */
+#cncSupabaseCard,.cnc-supabase-card,#cncLibrary,#cnc-calibrations-card,#cncCalibrations,#cncLibraryCard{
+  grid-column:1 / -1!important;
+  grid-row:auto!important;
+}
+/* Si la bibliotheque est injectee dans #calib, on la force en pleine largeur lorsque possible */
+#calib .cnc-supabase-card,#calib #cncSupabaseCard,#calib #cncLibrary,#calib #cnc-calibrations-card{
+  margin-top:14px!important;
+}
+.res-big{border-radius:18px!important;}
+.res-big.valid{background:var(--valid)!important;border-color:var(--ok)!important;}
+.btn-save{background:#1d1d1b!important;color:#fff!important;background-image:none!important;}
+.btn-ghost{background:var(--card2)!important;color:var(--txt)!important;border:1px solid var(--line)!important;}
+
+/* ============================================================
+   FPM Manufacturing Tools - Bouton Hub identique Hot Stamping
+   ============================================================ */
+.hub-back-btn{
+  position:fixed;
+  top:max(12px,env(safe-area-inset-top));
+  left:max(12px,env(safe-area-inset-left));
+  z-index:9999;
+  height:42px;
+  padding:0 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--card2);
+  color:var(--txt);
+  font-size:14px;
+  font-weight:850;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  box-shadow:0 4px 14px rgba(0,0,0,.14);
+  cursor:pointer;
+}
+.hub-back-btn:hover{background:var(--accent);color:#fff;}
+@media(max-width:700px){.hub-back-btn{height:38px;padding:0 11px;font-size:13px;}}
+
+@media(max-width:860px){
+  body{padding:12px 12px 32px!important;}
+  .wrap{display:block!important;max-width:none!important;}
+  .card,#results,#calib{margin-bottom:14px!important;}
+}
