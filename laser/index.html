@@ -1,56 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Laser Calculator V1</title>
-  <meta name="theme-color" content="#d8d8d3" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../auth-guard.js"></script>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Laser Calculator V1</title>
+<meta content="#d8d8d3" name="theme-color"/>
+<link href="manifest.json" rel="manifest"/>
+<link href="apple-touch-icon.png" rel="apple-touch-icon"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../auth-guard.js"></script>
+<style>
     :root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--warn:#a76b00;--err:#b42318;--soft:#e5e5df;--valid:#d9eadb;}
     *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}body{padding:16px;padding-bottom:40px}.wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.brand{display:flex;align-items:center;gap:12px}.logo{width:62px;height:62px;border:2px solid var(--txt);border-radius:18px;background:#e0e1dd;display:grid;place-items:center;box-shadow:inset 0 0 0 1px #fff}.logo svg{width:42px;height:42px}.title h1{margin:0;font-size:25px;letter-spacing:.2px}.title p{margin:3px 0 0;color:var(--muted);font-size:13px}.langs{display:flex;gap:6px;flex-wrap:wrap}.langs button,.version-row a{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:9px 11px;color:var(--txt);font-weight:750;text-decoration:none}.langs button.active{background:var(--accent);color:white}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.12)}.card h2{margin:0 0 12px;font-size:18px;display:flex;align-items:center;gap:8px}.dot{width:10px;height:10px;border-radius:10px;background:var(--accent)}label{display:block;color:var(--muted);font-size:13px;font-weight:750;margin:10px 0 5px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.inputline{display:flex;gap:7px;align-items:center}select,input,textarea{width:100%;padding:12px 12px;border-radius:12px;border:1px solid var(--line);background:white;color:var(--txt);font-size:15px}textarea{min-height:78px;resize:vertical}.unit{color:var(--muted);font-size:13px;white-space:nowrap}.mini-plus{min-width:38px;height:38px;border:none;border-radius:12px;background:var(--accent);color:white;font-size:22px;font-weight:800}.pillrow{display:flex;gap:7px;flex-wrap:wrap}.pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:8px 10px;font-weight:750;cursor:pointer}.pill.active{background:var(--accent);color:white}.res-big{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:13px;margin:10px 0}.res-big.valid{background:var(--valid);border-color:var(--ok)}.res-big .lbl{font-size:13px;color:var(--muted)}.res-big .val{font-size:30px;font-weight:900;margin-top:3px}.res-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0;gap:12px}.res-line .k{color:var(--muted)}.badge{display:inline-flex;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:800}.badge.ok{background:rgba(35,122,59,.14);color:var(--ok)}.badge.warn{background:rgba(167,107,0,.14);color:#734a00}.badge.err{background:rgba(180,35,24,.12);color:var(--err)}.vigil{background:rgba(29,29,27,.06);border-left:4px solid var(--accent);padding:10px;border-radius:12px;margin-top:10px;color:#30302d}.danger{background:rgba(180,35,24,.10);border-left:4px solid var(--err);padding:10px;border-radius:12px;margin-top:10px;color:#6f1710}.btn{width:100%;border:none;border-radius:13px;background:var(--accent);color:#fff;padding:13px 14px;font-weight:850;font-size:15px;margin-top:10px}.btn.secondary{background:var(--card2);color:var(--txt);border:1px solid var(--line)}.calib-item{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}.calib-item .t{font-weight:850}.calib-item .s{color:var(--muted);font-size:13px;margin-top:3px}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1d1b;color:#fff;padding:11px 14px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.25);display:none;z-index:99}.foot{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}@media(max-width:860px){.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.row{grid-template-columns:1fr}.title h1{font-size:22px}.res-big .val{font-size:26px}}
   </style>
-</head>
+<link href="hub-button-hot-stamping-style.css" rel="stylesheet"/></head>
 <body>
-
-<button class="hub-back-btn"
-        onclick="goHub()"
-        type="button">
-🏠 Hub
-</button>
-
+<button class="hub-back-btn" onclick="goHub()" type="button">🏠 Hub</button>
 <div class="wrap">
-  <div class="top">
-    <div class="brand"><div class="logo"><svg viewBox="0 0 100 100" fill="none" stroke="#1d1d1b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 72 L44 42"/><path d="M42 20 L70 48"/><path d="M70 48 L86 48"/><path d="M52 82 H86"/><path d="M74 48 L74 82"/><path d="M18 82 H32"/></svg></div><div class="title"><h1 id="t_title">Laser Calculator V1</h1><p id="t_sub">Bibliothèque matières + puissance / vitesse / passes / air assist</p></div></div>
-    <div class="langs"><button class="active" onclick="setLang('fr')">FR</button><button onclick="setLang('en')">EN</button><button onclick="setLang('pt')">PT</button></div>
-  </div>
-  <div class="grid">
-    <section class="card"><h2><span class="dot"></span><span id="t_machine">Machine laser</span></h2>
-      <label id="l_machine">Machine</label><div class="inputline"><select id="machine"></select><button class="mini-plus" onclick="addMachine()">+</button></div>
-      <div class="row"><div><label id="l_power">Puissance source</label><div class="inputline"><input id="watt" type="number" value="80" step="1"><span class="unit">W</span></div></div><div><label id="l_speedMax">Vitesse max</label><div class="inputline"><input id="speedMax" type="number" value="500" step="1"><span class="unit">mm/s</span></div></div></div>
-      <div class="row"><div><label id="l_lens">Lentille / focus</label><select id="lens"><option>1.5 inch</option><option selected>2.0 inch</option><option>2.5 inch</option><option>4.0 inch</option></select></div><div><label id="l_pipe">Extraction</label><select id="extraction"><option value="ok">OK / contrôlée</option><option value="check">À vérifier</option><option value="nok">NOK</option></select></div></div>
-      <h2 style="margin-top:18px"><span class="dot"></span><span id="t_work">Matière & opération</span></h2>
-      <label id="l_material">Matière</label><div class="inputline"><select id="material" onchange="fillOps();calc()"></select><button class="mini-plus" onclick="addMaterial()">+</button></div>
-      <div class="row"><div><label id="l_thick">Épaisseur</label><div class="inputline"><input id="thickness" type="number" value="3" step="0.1" oninput="calc()"><span class="unit">mm</span></div></div><div><label id="l_operation">Opération</label><div class="inputline"><select id="operation" onchange="calc()"></select><button class="mini-plus" onclick="addParameter()">+</button></div></div></div>
-      <label id="l_quality">Mode</label><div class="pillrow"><button class="pill" data-q="speed" onclick="setQuality('speed')">Speed</button><button class="pill active" data-q="standard" onclick="setQuality('standard')">Standard</button><button class="pill" data-q="quality" onclick="setQuality('quality')">Quality</button></div>
-      <div class="vigil" id="materialNote"></div><div class="danger" id="dangerBox" style="display:none"></div>
-    </section>
-    <section class="card"><h2><span class="dot"></span><span id="t_result">Lecture rapide</span></h2>
-      <div class="res-big valid"><div class="lbl" id="r_power_lbl">Puissance à programmer</div><div class="val"><span id="rPower">–</span><span class="unit"> %</span></div></div>
-      <div class="res-big"><div class="lbl" id="r_speed_lbl">Vitesse à programmer</div><div class="val"><span id="rSpeed">–</span><span class="unit"> mm/s</span></div></div>
-      <div class="res-line"><span class="k" id="r_pass_lbl">Passes</span><b id="rPasses">–</b></div><div class="res-line"><span class="k" id="r_freq_lbl">Fréquence / PPI</span><b id="rFreq">–</b></div><div class="res-line"><span class="k" id="r_focus_lbl">Z offset / focus</span><b id="rFocus">–</b></div><div class="res-line"><span class="k" id="r_air_lbl">Air assist</span><b id="rAir">–</b></div><div class="res-line"><span class="k" id="r_energy_lbl">Indice énergie</span><b id="rEnergy">–</b></div><div style="margin-top:10px"><span id="rSafety" class="badge ok">OK</span></div>
-      <h2 style="margin-top:18px"><span class="dot"></span><span id="t_calib">Calibration atelier</span></h2>
-      <div class="row"><div><label id="l_valPower">Puissance validée</label><input id="valPower" type="number" step="1"></div><div><label id="l_valSpeed">Vitesse validée</label><input id="valSpeed" type="number" step="0.1"></div></div>
-      <div class="row"><div><label id="l_valPasses">Passes validées</label><input id="valPasses" type="number" step="1"></div><div><label id="l_valFocus">Z offset validé</label><input id="valFocus" type="number" step="0.1"></div></div>
-      <label id="l_comments">Remarque / résultat atelier</label><textarea id="comments" placeholder="Bord propre, fumée, brunissage, collage film, etc."></textarea>
-      <button class="btn" onclick="saveCalibration()" id="b_save">💾 Enregistrer comme réglage validé</button><button class="btn secondary" onclick="useCalculated()" id="b_take">⤵ Reprendre valeurs calculées</button>
-    </section>
-  </div>
-  <section class="card" style="margin-top:14px"><h2><span class="dot"></span><span id="t_library">Réglages mémorisés</span></h2><button class="btn secondary" onclick="loadCalibrations()" id="b_reload">↻ Recharger Supabase</button><div id="calibs"></div></section>
-  <div class="foot">Laser Calculator V1 · réglages indicatifs à valider sur chute matière avant production.</div>
+<div class="top">
+<div class="brand"><div class="logo"><svg fill="none" stroke="#1d1d1b" stroke-linecap="round" stroke-linejoin="round" stroke-width="8" viewbox="0 0 100 100"><path d="M14 72 L44 42"></path><path d="M42 20 L70 48"></path><path d="M70 48 L86 48"></path><path d="M52 82 H86"></path><path d="M74 48 L74 82"></path><path d="M18 82 H32"></path></svg></div><div class="title"><h1 id="t_title">Laser Calculator V1</h1><p id="t_sub">Bibliothèque matières + puissance / vitesse / passes / air assist</p></div></div>
+<div class="langs"><button class="active" onclick="setLang('fr')">FR</button><button onclick="setLang('en')">EN</button><button onclick="setLang('pt')">PT</button></div>
+</div>
+<div class="grid">
+<section class="card"><h2><span class="dot"></span><span id="t_machine">Machine laser</span></h2>
+<label id="l_machine">Machine</label><div class="inputline"><select id="machine"></select><button class="mini-plus" onclick="addMachine()">+</button></div>
+<div class="row"><div><label id="l_power">Puissance source</label><div class="inputline"><input id="watt" step="1" type="number" value="80"/><span class="unit">W</span></div></div><div><label id="l_speedMax">Vitesse max</label><div class="inputline"><input id="speedMax" step="1" type="number" value="500"/><span class="unit">mm/s</span></div></div></div>
+<div class="row"><div><label id="l_lens">Lentille / focus</label><select id="lens"><option>1.5 inch</option><option selected="">2.0 inch</option><option>2.5 inch</option><option>4.0 inch</option></select></div><div><label id="l_pipe">Extraction</label><select id="extraction"><option value="ok">OK / contrôlée</option><option value="check">À vérifier</option><option value="nok">NOK</option></select></div></div>
+<h2 style="margin-top:18px"><span class="dot"></span><span id="t_work">Matière &amp; opération</span></h2>
+<label id="l_material">Matière</label><div class="inputline"><select id="material" onchange="fillOps();calc()"></select><button class="mini-plus" onclick="addMaterial()">+</button></div>
+<div class="row"><div><label id="l_thick">Épaisseur</label><div class="inputline"><input id="thickness" oninput="calc()" step="0.1" type="number" value="3"/><span class="unit">mm</span></div></div><div><label id="l_operation">Opération</label><div class="inputline"><select id="operation" onchange="calc()"></select><button class="mini-plus" onclick="addParameter()">+</button></div></div></div>
+<label id="l_quality">Mode</label><div class="pillrow"><button class="pill" data-q="speed" onclick="setQuality('speed')">Speed</button><button class="pill active" data-q="standard" onclick="setQuality('standard')">Standard</button><button class="pill" data-q="quality" onclick="setQuality('quality')">Quality</button></div>
+<div class="vigil" id="materialNote"></div><div class="danger" id="dangerBox" style="display:none"></div>
+</section>
+<section class="card"><h2><span class="dot"></span><span id="t_result">Lecture rapide</span></h2>
+<div class="res-big valid"><div class="lbl" id="r_power_lbl">Puissance à programmer</div><div class="val"><span id="rPower">–</span><span class="unit"> %</span></div></div>
+<div class="res-big"><div class="lbl" id="r_speed_lbl">Vitesse à programmer</div><div class="val"><span id="rSpeed">–</span><span class="unit"> mm/s</span></div></div>
+<div class="res-line"><span class="k" id="r_pass_lbl">Passes</span><b id="rPasses">–</b></div><div class="res-line"><span class="k" id="r_freq_lbl">Fréquence / PPI</span><b id="rFreq">–</b></div><div class="res-line"><span class="k" id="r_focus_lbl">Z offset / focus</span><b id="rFocus">–</b></div><div class="res-line"><span class="k" id="r_air_lbl">Air assist</span><b id="rAir">–</b></div><div class="res-line"><span class="k" id="r_energy_lbl">Indice énergie</span><b id="rEnergy">–</b></div><div style="margin-top:10px"><span class="badge ok" id="rSafety">OK</span></div>
+<h2 style="margin-top:18px"><span class="dot"></span><span id="t_calib">Calibration atelier</span></h2>
+<div class="row"><div><label id="l_valPower">Puissance validée</label><input id="valPower" step="1" type="number"/></div><div><label id="l_valSpeed">Vitesse validée</label><input id="valSpeed" step="0.1" type="number"/></div></div>
+<div class="row"><div><label id="l_valPasses">Passes validées</label><input id="valPasses" step="1" type="number"/></div><div><label id="l_valFocus">Z offset validé</label><input id="valFocus" step="0.1" type="number"/></div></div>
+<label id="l_comments">Remarque / résultat atelier</label><textarea id="comments" placeholder="Bord propre, fumée, brunissage, collage film, etc."></textarea>
+<button class="btn" id="b_save" onclick="saveCalibration()">💾 Enregistrer comme réglage validé</button><button class="btn secondary" id="b_take" onclick="useCalculated()">⤵ Reprendre valeurs calculées</button>
+</section>
+</div>
+<section class="card" style="margin-top:14px"><h2><span class="dot"></span><span id="t_library">Réglages mémorisés</span></h2><button class="btn secondary" id="b_reload" onclick="loadCalibrations()">↻ Recharger Supabase</button><div id="calibs"></div></section>
+<div class="foot">Laser Calculator V1 · réglages indicatifs à valider sur chute matière avant production.</div>
 </div><div class="toast" id="toast"></div>
 <script>
 const LASER_SUPABASE_URL="https://erzuvpswagzwlrxgctaj.supabase.co";
