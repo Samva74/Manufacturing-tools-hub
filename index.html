@@ -4,8 +4,18 @@
 const AUTH_SUPABASE_URL = "https://exktpgmixxqgagbgkjew.supabase.co";
 const AUTH_SUPABASE_KEY = "sb_publishable_EnZYq5RqBLVh3R4nOsGW0A_NuEFm86V";
 const APPS = [
-  { name: "CNC Calculator", short: "CNC", description: "Calculs et bibliothèques CNC", url: "https://cnc-calculator-seven.vercel.app/" },
-  { name: "Hot Stamping", short: "HS", description: "Paramètres et bibliothèques marquage à chaud", url: "https://hot-stamping-calculator.vercel.app/" }
+ {
+   name: "CNC Calculator",
+   short: "CNC",
+   description: "Calculs et bibliothèques CNC",
+   url: "/cnc/"
+ },
+ {
+   name: "Hot Stamping",
+   short: "HS",
+   description: "Paramètres et bibliothèques marquage à chaud",
+   url: "/hot-stamping/"
+ }
 ];
 const auth = window.supabase.createClient(AUTH_SUPABASE_URL, AUTH_SUPABASE_KEY);
 const $ = id => document.getElementById(id);
