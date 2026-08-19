@@ -184,29 +184,88 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
     </div>
     <div class="col">
       <section class="card">
-        <h2><span class="dot"></span><span>Lecture rapide</span></h2>
-        <div class="res-big valid"><div class="lbl">Température recommandée</div><div class="val"><span id="tempRec">–</span></div></div>
-        <div class="res-big"><div class="lbl">Pression recommandée</div><div class="val"><span id="pressRec">–</span></div></div>
-        <div class="res-line"><span>Temps recommandé</span><b id="dwellRec">–</b></div>
-        <div class="res-line"><span>Température min / rec / max</span><b id="tempRange">–</b></div>
-        <div class="res-line"><span>Pression min / rec / max</span><b id="pressRange">–</b></div>
-        <div class="res-line"><span>Temps min / rec / max</span><b id="dwellRange">–</b></div>
+        <h2><span class="dot"></span>
+          <span data-t="quickRead">
+          Lecture rapide
+          </span>
+        </h2>
+        <div class="res-big valid">
+          <div class="lbl" data-t="tempRec">
+            Température recommandée </div>
+          <div class="val"><span id="tempRec">–</span></div></div>
+        <div class="res-big">
+          <div class="lbl" data-t="pressRec">
+  Pression recommandée
+</div>
+          <div class="val"><span id="pressRec">–</span></div></div>
+        <div class="res-line">
+          <span data-t="timeRec">
+  Temps recommandé
+</span>
+          <b id="dwellRec">–</b></div>
+        <div class="res-line">
+          <span data-t="tempRange">
+  Température min / rec / max
+</span>
+          <b id="tempRange">–</b></div>
+        <div class="res-line">
+          <span data-t="pressRange">
+  Pression min / rec / max
+</span>
+
+          <b id="pressRange">–</b></div>
+        <div class="res-line">
+          <span data-t="timeRange">
+  Temps min / rec / max
+</span>
+          <b id="dwellRange">–</b></div>
       </section>
       <section class="card">
-        <h2><span class="dot"></span><span>Calibration atelier</span></h2>
+        <h2><span class="dot">
+          
+        <span data-t="calibration">
+  Calibration atelier
+</span>
+        </h2>
         <div class="row">
-          <div><label>Température validée</label><div class="unit-wrap"><input id="cTemp" inputmode="numeric"><span class="unit">°C</span></div></div>
-          <div><label>Pression validée</label><div class="unit-wrap"><input id="cPress" inputmode="decimal"><span class="unit">bar</span></div></div>
+          <div>
+            <label data-t="tempValidated">
+  Température validée
+</label>
+            <div class="unit-wrap"><input id="cTemp" inputmode="numeric"><span class="unit">°C</span></div></div>
+          <div>
+            <label data-t="pressValidated">
+  Pression validée
+</label>
+            <div class="unit-wrap"><input id="cPress" inputmode="decimal"><span class="unit">bar</span></div></div>
         </div>
-        <label>Temps validé</label><div class="unit-wrap"><input id="cDwell" inputmode="decimal"><span class="unit">s</span></div>
-        <label>Commentaires / observations</label><textarea id="comments"></textarea>
-        <button class="btn" onclick="saveCalibration()">💾 Enregistrer calibration</button>
+        <label data-t="timeValidated">
+  Temps validé
+</label>
+        <div class="unit-wrap"><input id="cDwell" inputmode="decimal"><span class="unit">s</span></div>
+        <label data-t="comments">
+  Commentaires / observations
+</label>
+        <textarea id="comments"></textarea>
+        <button class="btn" onclick="saveCalibration()">
+          <span data-t="save">
+  💾 Enregistrer calibration
+</span>
+        </button>
       </section>
     </div>
   </div>
   <section class="card lib">
-    <h2><span class="dot"></span><span>Bibliothèque Supabase Hot Stamping</span></h2>
-    <button class="btn secondary" onclick="loadCalibrations()">↻ Recharger calibrations</button>
+    <h2><span class="dot"></span>
+      <span data-t="supabaseLibrary">
+  Bibliothèque Supabase Hot Stamping
+</span>
+    </h2>
+    <button class="btn secondary" onclick="loadCalibrations()">
+      <span data-t="reload">
+  ↻ Recharger calibrations
+</span>
+    </button>
     <div class="status" id="libStatus">-</div>
     <div id="calibs"></div>
   </section>
