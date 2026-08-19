@@ -351,7 +351,7 @@ function goHub(){location.href='/'}
 function loc(r,b){return r?.[b+'_'+lang]||r?.[b+'_fr']||r?.[b]||''}
 function setLang(l){lang=l;localStorage.setItem(APP+'_lang',l);refreshText()}
 function refreshText(){document.querySelectorAll('[data-t]').forEach(e=>e.textContent=TXT[lang][e.dataset.t]||TXT.fr[e.dataset.t]||'');document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));fillLists();calc()}
-async function initAuth(){await window.authReady;user=await window.appAuth.getUser();role=await window.appAuth.getRole();$('rolePill').textContent=(user?.email||'')+' · '+role;if(canEdit())document.body.classList.add('can-edit')}
+async function initAuth(){await window.authReady;user=await window.appAuth.getUser();role=await window.appAuth.getRole();$('rolePill').textContent=(user?.email||'');if(canEdit())document.body.classList.add('can-edit')}
 
 function prettyCode(code){
   const manual={
