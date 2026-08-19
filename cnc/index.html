@@ -228,7 +228,9 @@
             <div class="calib-input-wrap"><input id="cFeed" inputmode="numeric"><span class="calib-unit">mm/min</span></div>
           </div>
         </div>
-        <label>Commentaires / observations</label>
+        <label data-t="commentsObservations">
+          Commentaires / Observations
+        </label>
         <textarea id="comments"></textarea>
         <button class="btn" onclick="saveCalib()" data-t="save">💾 Enregistrer calibration</button>
       </section>
@@ -276,6 +278,7 @@ const TXT={
      calibration:'Calibration atelier',
      validatedRotation:'Rotation validée',
      validatedFeed:'Avance validée',
+     commentsObservations:'Commentaires / observations',
      save:'💾 Enregistrer calibration',
      library:'Bibliothèque Supabase CNC',
      reload:'↻ Recharger Supabase',
@@ -301,6 +304,7 @@ const TXT={
      calibration:'Workshop calibration',
      validatedRotation:'Validated spindle speed',
      validatedFeed:'Validated feed rate',
+     commentsObservations:'Comments / observations',
      save:'💾 Save calibration',
      library:'CNC Supabase library',reload:'↻ Reload Supabase',
      foot:'CNC library from Excel V3.'},
@@ -325,6 +329,7 @@ const TXT={
      calibration:'Calibração oficina',
      validatedRotation:'Rotação validada',
      validatedFeed:'Avanço validado',
+     commentsObservations:'Comentários / observações',
      save:'💾 Guardar calibração',
      library:'Biblioteca CNC Supabase',
      reload:'↻ Recarregar Supabase',
