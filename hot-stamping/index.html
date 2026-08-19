@@ -19,7 +19,14 @@
       <div class="logo"><img src="icon-192.png" alt="Hot"></div>
       <div class="title"><h1>Hot Stamping Calculator</h1><p>Bibliothèque FPM complète : supports + folios + opérations + calibration</p></div>
     </div>
-    <div class="top-actions"><button class="hub-btn" onclick="location.href='/'">🏠 Hub</button><span class="role-pill" id="rolePill">...</span></div>
+    <div class="top-actions">
+      <button class="hub-btn" onclick="location.href='/'">🏠 Hub</button>
+      <span class="role-pill" id="rolePill">...</span>
+            <div class="langs">
+        <button data-lang="fr" onclick="setLang('fr')">French</button>
+        <button data-lang="en" onclick="setLang('en')">English</button>
+        <button data-lang="pt" onclick="setLang('pt')">Português</button>
+    </div>
   </div>
   <div class="layout">
     <div class="col">
@@ -70,6 +77,129 @@ var SUPABASE_URL='https://erzuvpswagzwlrxgctaj.supabase.co';
 var SUPABASE_KEY='sb_publishable_EERLI2l3AjQWkCLsMK3kbA_DMny2RFr';
 var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 var supports=[];var foils=[];var operations=[];var user=null;var role='user';
+const TXT = {
+
+fr:{
+title:'Hot Stamping Calculator',
+library:'Bibliothèque',
+support:'Support',
+foil:'Folio',
+operation:'Opération',
+quickRead:'Lecture rapide',
+
+tempRec:'Température recommandée',
+pressRec:'Pression recommandée',
+timeRec:'Temps recommandé',
+
+tempRange:'Température min / rec / max',
+pressRange:'Pression min / rec / max',
+timeRange:'Temps min / rec / max',
+
+calibration:'Calibration atelier',
+
+tempValidated:'Température validée',
+pressValidated:'Pression validée',
+timeValidated:'Temps validé',
+
+comments:'Commentaires / observations',
+
+save:'💾 Enregistrer calibration',
+
+supabaseLibrary:'Bibliothèque Supabase Hot Stamping',
+
+reload:'↻ Recharger calibrations'
+},
+
+en:{
+title:'Hot Stamping Calculator',
+library:'Library',
+support:'Support',
+foil:'Foil',
+operation:'Operation',
+quickRead:'Quick Read',
+
+tempRec:'Recommended temperature',
+pressRec:'Recommended pressure',
+timeRec:'Recommended dwell time',
+
+tempRange:'Temperature min / rec / max',
+pressRange:'Pressure min / rec / max',
+timeRange:'Time min / rec / max',
+
+calibration:'Workshop calibration',
+
+tempValidated:'Validated temperature',
+pressValidated:'Validated pressure',
+timeValidated:'Validated time',
+
+comments:'Comments / observations',
+
+save:'💾 Save calibration',
+
+supabaseLibrary:'Hot Stamping Supabase Library',
+
+reload:'↻ Reload calibrations'
+},
+
+pt:{
+title:'Calculadora Hot Stamping',
+library:'Biblioteca',
+support:'Material',
+foil:'Folio',
+operation:'Operação',
+quickRead:'Leitura rápida',
+
+tempRec:'Temperatura recomendada',
+pressRec:'Pressão recomendada',
+timeRec:'Tempo recomendado',
+
+tempRange:'Temperatura min / rec / max',
+pressRange:'Pressão min / rec / max',
+timeRange:'Tempo min / rec / max',
+
+calibration:'Calibração oficina',
+
+tempValidated:'Temperatura validada',
+pressValidated:'Pressão validada',
+timeValidated:'Tempo validado',
+
+comments:'Comentários / observações',
+
+save:'💾 Guardar calibração',
+
+supabaseLibrary:'Biblioteca Supabase Hot Stamping',
+
+reload:'↻ Recarregar calibrações'
+}
+
+};
+let currentLang =
+   localStorage.getItem('hotStampingLang')
+   || 'fr';
+
+function applyTranslations(){
+
+   const T = TXT[currentLang];
+
+   document.title = T.title;
+
+   document.querySelector('h1').textContent =
+      T.title;
+
+}
+
+function setLang(lang){
+
+   currentLang = lang;
+
+   localStorage.setItem(
+      'hotStampingLang',
+      lang
+   );
+
+   applyTranslations();
+
+}
 function el(id){return document.getElementById(id);}function text(v){return v===null||v===undefined?'':String(v);}function num(v,def){var n=Number(v);return Number.isFinite(n)?n:def;}function factor(v){var n=Number(v);return Number.isFinite(n)&&n>0?n:1;}function toast(msg){var t=el('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}async function token(){var s=(await sb.auth.getSession()).data.session;return s&&s.access_token?s.access_token:SUPABASE_KEY;}async function api(table,query,opt){var url=SUPABASE_URL+'/rest/v1/'+table+(query||'');var o=opt||{};o.headers=o.headers||{};o.headers.apikey=SUPABASE_KEY;o.headers.Authorization='Bearer '+await token();if(o.body){o.headers['Content-Type']='application/json';o.headers.Prefer='return=representation';}var r=await fetch(url,o);if(!r.ok){throw new Error(await r.text());}return await r.json();}
 function supportLabel(s){return text(s.name_fr)||text(s.name_en)||text(s.code);}function foilLabel(f){return text(f.label_fr)||text(f.label_en)||text(f.foil_code)||text(f.id);}function opLabel(o){return text(o.label_fr)||text(o.operation_code);}function validSupport(s){return s&&s.code&&s.temperature_rec!==null&&s.temperature_rec!==undefined;}function validFoil(f){return f&&(f.foil_code||f.id);}function fillSelect(sel,items,labelFn,valueFn){sel.innerHTML='';items.forEach(function(x){var opt=document.createElement('option');opt.value=valueFn(x);opt.textContent=labelFn(x);sel.appendChild(opt);});}
 async function initAuth(){if(window.authReady){await window.authReady;user=await window.appAuth.getUser();role=await window.appAuth.getRole();el('rolePill').textContent=(user&&user.email?user.email:'')+' · '+role;}}
@@ -83,7 +213,11 @@ window.searchSupport=function(){modal('Recherche support',supports.filter(validS
 window.searchFoil=function(){modal('Recherche folio',foils.filter(validFoil),foilLabel,function(f){return [f.supplier,f.reference,f.color,f.foil_type].filter(Boolean).join(' · ');},function(f){return [f.foil_code,f.label_fr,f.supplier,f.reference,f.color,f.foil_type].join(' ');},function(f){el('foil').value=f.foil_code||f.id;});};
 window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFoil();await api('Hot_Stamping_calibrations','',{method:'POST',body:JSON.stringify({material:s?s.code:null,foil:f?(f.foil_code||f.id):null,temperature:num(el('cTemp').value,null),pressure:num(el('cPress').value,null),dwell_time:num(el('cDwell').value,null),comments:el('comments').value,created_by_user_id:user?user.id:null,created_by_email:user?user.email:null})});toast('Calibration enregistrée');loadCalibrations();}catch(e){console.error(e);toast('Erreur calibration');}};
 window.loadCalibrations=async function(){var h=el('calibs');h.innerHTML='';try{var rows=await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
-async function init(){try{await initAuth();await loadData();['support','foil','operation'].forEach(function(id){el(id).addEventListener('change',calc);});loadCalibrations();}catch(e){console.error(e);el('status').textContent='Erreur chargement Supabase : '+e.message;toast('Erreur chargement Supabase');}}init();
+async function init(){
+  try{
+applyTranslations();  
+await initAuth();
+    await loadData();['support','foil','operation'].forEach(function(id){el(id).addEventListener('change',calc);});loadCalibrations();}catch(e){console.error(e);el('status').textContent='Erreur chargement Supabase : '+e.message;toast('Erreur chargement Supabase');}}init();
 })();
 </script>
 </body>
