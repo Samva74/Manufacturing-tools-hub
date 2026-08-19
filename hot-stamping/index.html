@@ -341,9 +341,7 @@ let currentLang =
 
 function setLang(lang){
 
-   currentLang = lang;
-
-console.log("CLICK :", lang);
+window.setLang = function(lang){
 
    localStorage.setItem(
       'hotStampingLang',
