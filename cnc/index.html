@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../auth-guard.js"></script>
 <style>
-:root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--soft:#e5e5df;--valid:#d9eadb;--err:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:18px}.wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:14px}.logo{width:76px;height:76px;border:2px solid var(--txt);border-radius:20px;background:#e0e1dd;display:grid;place-items:center}.logo svg{width:54px;height:54px}.title h1{margin:0;font-size:31px}.title p{margin:4px 0 0;color:var(--muted);font-size:14px}.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.hub-btn,.langs button,.role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}.langs button.active{background:var(--accent);color:white}.layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.col{display:flex;flex-direction:column;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.12)}h2{display:flex;gap:8px;margin:0 0 12px;font-size:18px}.dot{width:10px;height:10px;margin-top:6px;border-radius:50%;background:var(--accent)}label{display:block;color:var(--muted);font-size:13px;font-weight:750;margin:10px 0 5px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.inputline{display:flex;gap:8px;align-items:stretch}select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:white;color:var(--txt);font-size:15px}textarea{min-height:78px}.search-btn,.mini-plus{height:46px;min-width:46px;border-radius:14px;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}.search-btn{border:1px solid var(--line);background:white}.mini-plus{border:none;background:var(--accent);color:white;display:none}.can-edit .mini-plus{display:flex}.res-big{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:13px;margin:10px 0}.res-big.valid{background:var(--valid);border-color:var(--ok)}.res-big .lbl{font-size:13px;color:var(--muted)}.res-big .val{font-size:30px;font-weight:900}.res-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0;gap:20px}.res-line span{color:var(--muted)}.res-line b{text-align:right}.note{background:rgba(29,29,27,.06);border-left:4px solid var(--accent);padding:10px;border-radius:12px;margin-top:10px;white-space:pre-line}.btn{width:100%;border:none;border-radius:13px;background:var(--accent);color:white;padding:13px;margin-top:10px;font-weight:850;cursor:pointer}.btn.secondary{background:var(--card2);color:var(--txt);border:1px solid var(--line)}.lib{margin-top:14px}.item{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}.item .s{color:var(--muted);font-size:13px}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1d1b;color:white;padding:11px 14px;border-radius:999px;display:none;z-index:99}.foot{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;z-index:9998;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal-panel{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}.modal-head{display:flex;justify-content:space-between}.close{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:8px 12px;font-weight:900}.result{padding:12px;border:1px solid var(--line);border-radius:14px;background:white;margin-top:8px;cursor:pointer}.result:hover{background:var(--valid)}@media(max-width:860px){body{padding:12px}.top{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}.title h1{font-size:24px}.logo{width:64px;height:64px}.logo svg{width:46px;height:46px}}
+:root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--soft:#e5e5df;--valid:#d9eadb;--err:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:18px}.wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:14px}.logo{width:76px;height:76px;border:2px solid var(--txt);border-radius:20px;background:#e0e1dd;display:grid;place-items:center}.logo svg{width:54px;height:54px}.title h1{margin:0;font-size:31px}.title p{margin:4px 0 0;color:var(--muted);font-size:14px}.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.hub-btn,.langs button,.role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}.langs button.active{background:var(--accent);color:white}.layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.col{display:flex;flex-direction:column;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.12)}h2{display:flex;gap:8px;margin:0 0 12px;font-size:18px}.dot{width:10px;height:10px;margin-top:6px;border-radius:50%;background:var(--accent)}label{display:block;color:var(--muted);font-size:13px;font-weight:750;margin:10px 0 5px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.inputline{display:flex;gap:8px;align-items:stretch}select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:white;color:var(--txt);font-size:15px}textarea{min-height:78px}.search-btn,.mini-plus{height:46px;min-width:46px;border-radius:14px;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}.search-btn{border:1px solid var(--line);background:white}.mini-plus{border:none;background:var(--accent);color:white;display:none}.can-edit .mini-plus{display:flex}.res-big{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:13px;margin:10px 0}.res-big.valid{background:var(--valid);border-color:var(--ok)}.res-big .lbl{font-size:13px;color:var(--muted)}.res-big .val{font-size:30px;font-weight:900}.res-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0;gap:20px}.res-line span{color:var(--muted)}.res-line b{text-align:right}.note{background:rgba(29,29,27,.06);border-left:4px solid var(--accent);padding:10px;border-radius:12px;margin-top:10px;white-space:pre-line}.btn{width:100%;border:none;border-radius:13px;background:var(--accent);color:white;padding:13px;margin-top:10px;font-weight:850;cursor:pointer}.btn.secondary{background:var(--card2);color:var(--txt);border:1px solid var(--line)}.lib{margin-top:14px}.item{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}.item .s{color:var(--muted);font-size:13px}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1d1b;color:white;padding:11px 14px;border-radius:999px;display:none;z-index:99}.foot{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;z-index:9998;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal-panel{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}.modal-head{display:flex;justify-content:space-between}.close{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:8px 12px;font-weight:900}.result{padding:12px;border:1px solid var(--line);border-radius:14px;background:white;margin-top:8px;cursor:pointer}.result:hover{background:var(--valid)}.calib-input-wrap{position:relative}.calib-input-wrap input{font-weight:850;padding-right:78px}.calib-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-weight:850;color:var(--txt);pointer-events:none}@media(max-width:860px){body{padding:12px}.top{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}.title h1{font-size:24px}.logo{width:64px;height:64px}.logo svg{width:46px;height:46px}}
 </style>
 </head>
 <body>
@@ -93,8 +93,14 @@
       <section class="card">
         <h2><span class="dot"></span><span data-t="calibration">Calibration atelier</span></h2>
         <div class="row">
-          <div><label>Rotation validée (tr/min)</label><input id="cRpm"></div>
-          <div><label>Avance validée (mm/min)</label><input id="cFeed"></div>
+          <div>
+            <label>Rotation validée</label>
+            <div class="calib-input-wrap"><input id="cRpm" inputmode="numeric"><span class="calib-unit">tr/min</span></div>
+          </div>
+          <div>
+            <label>Avance validée</label>
+            <div class="calib-input-wrap"><input id="cFeed" inputmode="numeric"><span class="calib-unit">mm/min</span></div>
+          </div>
         </div>
         <label>Commentaires / observations</label>
         <textarea id="comments"></textarea>
@@ -130,6 +136,7 @@ const TXT={
 };
 
 let materials=[], tools=[], machines=[];
+let materialCodesFromTools=[];
 
 async function token(){return (await sb.auth.getSession()).data.session?.access_token||SUPABASE_KEY}
 async function api(table,opt={}){
@@ -144,12 +151,20 @@ function setLang(l){lang=l;localStorage.setItem(APP+'_lang',l);refreshText()}
 function refreshText(){document.querySelectorAll('[data-t]').forEach(e=>e.textContent=TXT[lang][e.dataset.t]||TXT.fr[e.dataset.t]||'');document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));fillLists();calc()}
 async function initAuth(){await window.authReady;user=await window.appAuth.getUser();role=await window.appAuth.getRole();$('rolePill').textContent=(user?.email||'')+' · '+role;if(canEdit())document.body.classList.add('can-edit')}
 
+function prettyCode(code){
+  const manual={
+    aluminium:'Aluminium',brass:'Laiton',copper:'Cuivre',dibond:'Aluminium composite / Dibond',foam_eva:'Mousse / EVA / intercalaires',greyboard:'Carton gris / greyboard',hardwood:'Bois massif dur',mdf:'MDF / HMR board',pmma:'PMMA / acrylique / plexiglas',birch_plywood:'Contreplaqué bouleau',
+    bois_massif_dur_type_noyer_hetre:'Bois massif dur type noyer/hêtre',bois_massif_tendre_bois_clair:'Bois massif tendre / bois clair',corian_solid_surface:'Corian / solid surface',panneau_mdf:'Panneau MDF',panneau_mdf_plaque:'Panneau MDF plaqué',panneau_multiplis_contreplaque:'Panneau multiplis / contreplaqué',planche_usinable_tooling_board:'Planche usinable / Tooling Board',pma_pmma_plexiglas_plexiglass:'PMA / PMMA / Plexiglas'
+  };
+  return manual[code] || String(code||'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+}
+
 function openSearch(title,items,onPick){
   let m=$('searchModal'),q=$('searchInput'),list=$('searchResults');
   $('searchTitle').textContent=title;q.value='';
   function render(){
     let term=q.value.toLowerCase().trim();
-    let rows=items.filter(x=>!term||x.search.toLowerCase().includes(term)).slice(0,100);
+    let rows=items.filter(x=>!term||x.search.toLowerCase().includes(term)).slice(0,120);
     list.innerHTML=rows.map(x=>`<div class="result"><b>${x.title}</b><div class="s">${x.sub||''}</div></div>`).join('')||'<p>Aucun résultat.</p>';
     [...list.children].forEach((el,i)=>el.onclick=()=>{onPick(rows[i].value);closeSearch()});
   }
@@ -158,16 +173,19 @@ function openSearch(title,items,onPick){
 function closeSearch(){$('searchModal').classList.remove('open')}
 
 async function loadLibraries(){
-  materials=await api('cnc_materials',{q:'?select=*&order=name_fr.asc'});
-  tools=await api('cnc_tools',{q:'?select=*&order=label_fr.asc&limit=1000'});
   machines=await api('cnc_machines',{q:'?select=*&order=name.asc'});
   if(!machines.length) machines=[{name:'Générique',n_max:24000,vf_max:3000}];
 
-  // Sécurité : si certaines matières existent seulement dans cnc_tools, on les ajoute dans la liste.
-  const known=new Set(materials.map(m=>m.code));
-  [...new Set(tools.map(t=>t.material_code).filter(Boolean))].forEach(code=>{
-    if(!known.has(code)) materials.push({code,name_fr:code,name_en:code,name_pt:code,family_fr:'Depuis outils'});
-  });
+  tools=await api('cnc_tools',{q:'?select=*&order=material_code.asc,label_fr.asc&limit=5000'});
+  materials=await api('cnc_materials',{q:'?select=*&order=name_fr.asc&limit=5000'});
+
+  // Très important : la liste matière est construite depuis cnc_tools pour ne perdre aucun code importé depuis Excel.
+  materialCodesFromTools=[...new Set(tools.map(t=>t.material_code).filter(Boolean))].sort((a,b)=>prettyCode(a).localeCompare(prettyCode(b)));
+}
+
+function materialLabel(code){
+  const m=materials.find(x=>x.code===code);
+  return (m && (loc(m,'name')||m.name_fr)) || prettyCode(code);
 }
 
 function fillLists(){
@@ -178,22 +196,19 @@ function fillLists(){
 
   let mat=$('material'), mv=mat.value;
   mat.innerHTML='';
-  materials.sort((a,b)=>(loc(a,'name')||a.code).localeCompare(loc(b,'name')||b.code)).forEach(m=>mat.add(new Option(loc(m,'name')||m.code,m.code)));
+  materialCodesFromTools.forEach(code=>mat.add(new Option(materialLabel(code),code)));
   if(mv && [...mat.options].some(o=>o.value===mv)) mat.value=mv;
 
   let tool=$('tool'), tv=tool.value;
   tool.innerHTML='';
   const current=$('material').value;
   let list=tools.filter(t=>t.material_code===current);
-  if(!list.length) list=tools;
   list.sort((a,b)=>(loc(a,'label')||a.tool_code||'').localeCompare(loc(b,'label')||b.tool_code||''));
-  list.forEach(t=>tool.add(new Option(loc(t,'label')||t.tool_code||'outil',String(t.id))));
+  list.forEach(t=>tool.add(new Option(loc(t,'label')||t.label_fr||t.tool_code||'outil',String(t.id))));
   if(tv && [...tool.options].some(o=>o.value===tv)) tool.value=tv;
 }
 
-function selectedTool(){
-  return tools.find(t=>String(t.id)===$('tool').value)||tools.find(t=>t.material_code===$('material').value)||tools[0];
-}
+function selectedTool(){return tools.find(t=>String(t.id)===$('tool').value)||tools.find(t=>t.material_code===$('material').value)||tools[0]}
 function num(v){const n=parseFloat(String(v??'').replace(',','.'));return Number.isFinite(n)?n:null}
 function mmRange(a,b,d){a=num(a);b=num(b);if(a===null||b===null||a===0&&b===0)return '–';return `${(a*d).toFixed(1).replace('.',',')} à ${(b*d).toFixed(1).replace('.',',')} mm`}
 function calc(){
@@ -208,23 +223,25 @@ function calc(){
   $('feed').textContent=feed+' mm/min';
   $('vc').textContent=`${t.vc_min??'–'} / ${t.vc_rec??'–'} / ${t.vc_max??'–'} m/min`;
   $('fz').textContent=`${t.fz_min??'–'} / ${t.fz_rec??'–'} / ${t.fz_max??'–'} mm/dent`;
-  $('pass').textContent=t.passe_txt||t.pass_txt||mmRange(t.pass_min_coef,t.pass_max_coef,d);
-  $('eng').textContent=t.engagement_txt||t.eng_txt||mmRange(t.engagement_min_coef,t.engagement_max_coef,d);
-  if($('pass').textContent==='–') $('pass').textContent='Voir remarque outil';
-  if($('eng').textContent==='–') $('eng').textContent='Voir remarque outil';
+  $('pass').textContent=t.passe_txt||t.pass_txt||mmRange(t.pass_min_coef,t.pass_max_coef,d)||'–';
+  $('eng').textContent=t.engagement_txt||t.eng_txt||mmRange(t.engagement_min_coef,t.engagement_max_coef,d)||'–';
   $('cRpm').value=rpm;
   $('cFeed').value=feed;
   let m=materials.find(x=>x.code===$('material').value);
-  $('note').textContent=[t.usage_fr||'',t.remark_fr||'',m?(loc(m,'remark')||''):'' ].filter(Boolean).join('\n');
+  $('note').textContent=[t.usage_fr||'',t.remark_fr||'',m?(loc(m,'remark')||''):''].filter(Boolean).join('\n');
 }
 
 function searchMachine(){openSearch('Recherche machine',machines.map(m=>({title:m.name,sub:'Machine CNC',search:m.name,value:m.name})),v=>{$('machine').value=v;calc()})}
-function searchMaterial(){openSearch('Recherche matière',materials.map(m=>({title:loc(m,'name')||m.code,sub:m.code+' · '+(loc(m,'family')||''),search:[m.code,loc(m,'name'),loc(m,'family'),loc(m,'remark')].join(' '),value:m.code})),v=>{$('material').value=v;fillLists();calc()})}
-function searchTool(){openSearch('Recherche outil',tools.map(t=>({title:loc(t,'label')||t.tool_code,sub:t.material_code+' · Vc '+(t.vc_rec||'')+' · Fz '+(t.fz_rec||''),search:[t.tool_code,loc(t,'label'),loc(t,'usage'),t.material_code,t.remark_fr].join(' '),value:String(t.id)})),v=>{let t=tools.find(x=>String(x.id)===v);if(t){$('material').value=t.material_code;fillLists();$('tool').value=v;calc()}})}
+function searchMaterial(){openSearch('Recherche matière',materialCodesFromTools.map(code=>({title:materialLabel(code),sub:code,search:[code,materialLabel(code)].join(' '),value:code})),v=>{$('material').value=v;fillLists();calc()})}
+function searchTool(){openSearch('Recherche outil',tools.map(t=>({title:loc(t,'label')||t.label_fr||t.tool_code,sub:materialLabel(t.material_code)+' · Vc '+(t.vc_rec||'')+' · Fz '+(t.fz_rec||''),search:[t.tool_code,loc(t,'label'),loc(t,'usage'),t.material_code,materialLabel(t.material_code),t.remark_fr].join(' '),value:String(t.id)})),v=>{let t=tools.find(x=>String(x.id)===v);if(t){$('material').value=t.material_code;fillLists();$('tool').value=v;calc()}})}
+
 async function addMaterial(){toast(canEdit()?'Ajout matière à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
 async function addMachine(){toast(canEdit()?'Ajout machine à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
 async function editTool(){toast(canEdit()?'Édition outil à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
-async function saveCalib(){await api('cnc_calibrations',{m:'POST',b:{material:$('material').value,tool:$('tool').value,machine:$('machine').value,spindle_rpm:+$('cRpm').value,feed_rate:+$('cFeed').value,comments:$('comments').value,created_by_user_id:user.id,created_by_email:user.email}});toast('Calibration enregistrée');loadCalibs()}
+async function saveCalib(){
+  await api('cnc_calibrations',{m:'POST',b:{material:$('material').value,tool:$('tool').value,machine:$('machine').value,spindle_rpm:+$('cRpm').value,feed_rate:+$('cFeed').value,comments:$('comments').value,created_by_user_id:user.id,created_by_email:user.email}});
+  toast('Calibration enregistrée');loadCalibs();
+}
 async function loadCalibs(){let h=$('calibs');h.innerHTML='';try{let rows=await api('cnc_calibrations',{q:'?select=*&order=created_at.desc&limit=20'});if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return}rows.forEach(r=>{let d=document.createElement('div');d.className='item';d.innerHTML=`<b>${r.material||''} · ${r.tool||''}</b><div class="s">${r.machine||''} · ${r.spindle_rpm||'-'} tr/min · ${r.feed_rate||'-'} mm/min<br>${r.created_by_email||r.operator||''}</div>`;h.appendChild(d)})}catch(e){h.innerHTML='<p>Supabase non chargé.</p>'}}
 async function init(){await initAuth();await loadLibraries();refreshText();loadCalibs();['machine','material','tool','diameter','flutes'].forEach(id=>$(id).addEventListener('input',calc))}
 init();
