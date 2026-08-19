@@ -78,6 +78,71 @@
   <div class="layout">
     <div class="col">
       <section class="card">
+
+  <h2>
+    <span class="dot"></span>
+    <span data-t="machineInputs">
+      Entrées machine
+    </span>
+  </h2>
+
+  <label data-t="machine">
+    Machine
+  </label>
+
+  <div class="inputline">
+
+    <select id="machine"></select>
+
+    <button class="search-btn">
+      🔍
+    </button>
+
+    <button class="mini-btn">
+      +
+    </button>
+
+  </div>
+
+  <div class="row">
+
+    <div>
+
+      <label data-t="maxTemperature">
+        Température max machine
+      </label>
+
+      <div class="unit-wrap">
+        <input id="machineTempMax" readonly>
+        <span class="unit">°C</span>
+      </div>
+
+    </div>
+
+    <div>
+
+      <label data-t="maxPressure">
+        Pression max machine
+      </label>
+
+      <div class="unit-wrap">
+        <input id="machinePressureMax" readonly>
+        <span class="unit">bar</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <label data-t="productionSite">
+    Site de production
+  </label>
+
+  <input id="productionSite" readonly>
+
+</section>
+      
+      <section class="card">
         <h2><span class="dot"></span>
           <span data-t="library">Bibliothèque</span>
         </h2>
@@ -132,6 +197,11 @@ var supports=[];var foils=[];var operations=[];var user=null;var role='user';
 const TXT = {
 
 fr:{
+machineInputs:'Entrées machine',
+machine:'Machine',
+maxTemperature:'Température max machine',
+maxPressure:'Pression max machine',
+productionSite:'Site de production',
 title:'Hot Stamping Calculator',
 library:'Bibliothèque',
 support:'Support',
@@ -163,6 +233,11 @@ reload:'↻ Recharger calibrations'
 },
 
 en:{
+machineInputs:'Machine inputs',
+machine:'Machine',
+maxTemperature:'Max machine temperature',
+maxPressure:'Max machine pressure',
+productionSite:'Production site',
 title:'Hot Stamping Calculator',
 library:'Library',
 support:'Support',
@@ -194,6 +269,11 @@ reload:'↻ Reload calibrations'
 },
 
 pt:{
+machineInputs:'Entradas da máquina',
+machine:'Máquina',
+maxTemperature:'Temperatura máxima da máquina',
+maxPressure:'Pressão máxima da máquina',
+productionSite:'Local de produção',
 title:'Calculadora Hot Stamping',
 library:'Biblioteca',
 support:'Material',
