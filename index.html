@@ -1,1 +1,222 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manufacturing Tools Hub</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>body{background:#d8d8d3;color:#1d1d1b;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:18px}.wrap{max-width:1220px;margin:auto}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:#eeeeea;border:1px solid #8d8d86;border-radius:22px;padding:24px;text-decoration:none;color:#1d1d1b;min-height:250px}.icon img{width:72px;height:72px;border-radius:18px}.card h2{font-size:30px}@media(max-width:900px){.grid{grid-template-columns:1fr}}</style></head><body><div class="wrap"><h1>Manufacturing Tools Hub</h1><p>CNC, Hot Stamping, Laser</p><div class="grid"><a class="card" href="/cnc/"><div class="icon"><img src="cnc/icon-192.png"></div><h2>CNC Calculator</h2><p>Matières, outils et paramètres d’usinage.</p></a><a class="card" href="/hot-stamping/"><div class="icon"><img src="hot-stamping/icon-192.png"></div><h2>Hot Stamping Calculator</h2><p>Supports, folios et réglages de marquage.</p></a><a class="card" href="/laser/"><div class="icon"><img src="laser/icon-192.png"></div><h2>Laser Calculator</h2><p>Matières, opérations et paramètres laser.</p></a></div></div></body></html>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Manufacturing Tools Hub</title>
+
+<script src="https://cdn/npm/@supabase/supabase-js@2script>
+
+<style>
+:root{
+--bg:#d8d8d3;
+--card:#eeeeea;
+--line:#8d8d86;
+--txt:#1d1d1b;
+--muted:#5f5f58;
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:var(--bg);
+color:var(--txt);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+padding:18px;
+}
+
+.wrap{
+max-width:1200px;
+margin:auto;
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+gap:20px;
+flex-wrap:wrap;
+}
+
+h1{
+margin:0;
+font-size:42px;
+font-weight:900;
+}
+
+.subtitle{
+margin-top:10px;
+font-size:22px;
+color:var(--muted);
+}
+
+.userbox{
+display:flex;
+gap:10px;
+align-items:center;
+flex-wrap:wrap;
+}
+
+.role{
+padding:10px 14px;
+border-radius:999px;
+background:white;
+border:1px solid var(--line);
+font-weight:700;
+}
+
+.logout{
+border:none;
+padding:12px 18px;
+border-radius:999px;
+background:#1d1d1b;
+color:white;
+font-weight:800;
+cursor:pointer;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--line);
+border-radius:22px;
+padding:24px;
+text-decoration:none;
+color:var(--txt);
+min-height:260px;
+}
+
+.card img{
+width:80px;
+height:80px;
+}
+
+.card h2{
+font-size:36px;
+margin:20px 0;
+}
+
+.card p{
+font-size:22px;
+line-height:1.4;
+color:var(--muted);
+}
+
+@media(max-width:900px){
+.grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="top">
+
+<div>
+<h1>Manufacturing Tools Hub</h1>
+<div class="subtitle">
+CNC, Hot Stamping, Laser
+</div>
+</div>
+
+<div class="userbox">
+<div class="role" id="userRole">
+Connexion...
+</div>
+
+<button class="logout" onclick="logout()">
+Déconnexion
+</button>
+</div>
+
+</div>
+
+<div class="grid">
+
+<a class="card" href="/cn2>CNC Calculator</h2>
+<p>Matières, outils et paramètres d’usinage.</p>
+</a>
+
+<a class="card" href="/hot-stamping2.png
+<h2>Hot Stamping Calculator</h2>
+<p>Supports, folios et réglages de marquage.</p>
+</a>
+
+<a class="card" href="/png
+<h2>Laser Calculator</h2>
+<p>Matières, opérations et paramètres laser.</p>
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL =
+'https://erzuvpswagzwlrxgctaj.supabase.co';
+
+const SUPABASE_KEY =
+'sb_publishable_EERLI2l3AjQWkCLsMK3kbA_DMny2RFr';
+
+const supabase =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+async function loadUser(){
+
+const { data:{ session } } =
+await supabase.auth.getSession();
+
+if(!session){
+
+document.getElementById("userRole").innerHTML =
+'Non connecté';
+
+return;
+}
+
+const user = session.user;
+
+const { data } =
+await supabase
+.from('user_roles')
+.select('*')
+.eq('user_id',user.id)
+.limit(1);
+
+let role='user';
+
+if(data && data.length){
+role=data[0].role;
+}
+
+document.getElementById("userRole").innerHTML =
+user.email + ' · ' + role;
+}
+
+async function logout(){
+
+await supabase.auth.signOut();
+
+window.location.reload();
+
+}
+
+loadUser();
+
+</script>
+
+</body>
+</html>
