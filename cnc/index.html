@@ -216,11 +216,15 @@
         <h2><span class="dot"></span><span data-t="calibration">Calibration atelier</span></h2>
         <div class="row">
           <div>
-            <label>Rotation validée</label>
+            <label data-t="validatedRotation">
+              Rotation validée
+            </label>
             <div class="calib-input-wrap"><input id="cRpm" inputmode="numeric"><span class="calib-unit">tr/min</span></div>
           </div>
           <div>
-            <label>Avance validée</label>
+            <label data-t="validatedFeed">
+              Avance validée
+            </label>
             <div class="calib-input-wrap"><input id="cFeed" inputmode="numeric"><span class="calib-unit">mm/min</span></div>
           </div>
         </div>
@@ -270,6 +274,8 @@ const TXT={
      spindle:'Rotation à programmer',
      feed:'Avance à programmer',
      calibration:'Calibration atelier',
+     validatedRotation:'Rotation validée',
+     validatedFeed:'Avance validée',
      save:'💾 Enregistrer calibration',
      library:'Bibliothèque Supabase CNC',
      reload:'↻ Recharger Supabase',
@@ -293,6 +299,8 @@ const TXT={
      spindle:'Programmed spindle speed',
      feed:'Programmed feed rate',
      calibration:'Workshop calibration',
+     validatedRotation:'Validated spindle speed',
+     validatedFeed:'Validated feed rate',
      save:'💾 Save calibration',
      library:'CNC Supabase library',reload:'↻ Reload Supabase',
      foot:'CNC library from Excel V3.'},
@@ -315,6 +323,8 @@ const TXT={
      spindle:'Rotação a programar',
      feed:'Avanço a programar',
      calibration:'Calibração oficina',
+     validatedRotation:'Rotação validada',
+     validatedFeed:'Avanço validado',
      save:'💾 Guardar calibração',
      library:'Biblioteca CNC Supabase',
      reload:'↻ Recarregar Supabase',
