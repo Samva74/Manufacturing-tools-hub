@@ -41,136 +41,15 @@
 
   <div class="layout">
     <div class="col">
-<section class="card">
-
-  <h2>
-    <span class="dot"></span>
-    <span data-t="machineInputs">
-      Entrées machine
-    </span>
-  </h2>
-
-  <label data-t="machine">
-    Machine
-  </label>
-
-  <div class="inputline">
-
-    <select id="machine"></select>
-
-    <button class="search-btn"
-            onclick="searchMachine()">
-      🔍
-    </button>
-
-    <button class="mini-plus"
-            onclick="addMachine()">
-      +
-    </button>
-
-  </div>
-
-  <div class="row">
-
-    <div>
-
-      <label>
-        n max machine
-      </label>
-
-      <div class="calib-input-wrap">
-
-        <input id="machineNmax"
-               readonly>
-
-        <span class="calib-unit">
-          tr/min
-        </span>
-
-      </div>
-
-    </div>
-
-    <div>
-
-      <label>
-        Vf max machine
-      </label>
-
-      <div class="calib-input-wrap">
-
-        <input id="machineVfmax"
-               readonly>
-
-        <span class="calib-unit">
-          mm/min
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="row">
-
-    <div>
-
-      <label>
-        Marge sécurité n
-      </label>
-
-      <div class="calib-input-wrap">
-
-        <input id="machineSafetyN">
-
-        <span class="calib-unit">
-          %
-        </span>
-
-      </div>
-
-    </div>
-
-    <div>
-
-      <label>
-        Marge sécurité Vf
-      </label>
-
-      <div class="calib-input-wrap">
-
-        <input id="machineSafetyVf">
-
-        <span class="calib-unit">
-          %
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <label>
-    Site de production
-  </label>
-
-  <div class="inputline">
-
-    <select id="productionSite"></select>
-
-    <button class="search-btn">
-      🔍
-    </button>
-
-    <button class="mini-plus">
-      +
-    </button>
-
-  </div>
-
-</section>
+      <section class="card">
+        <h2><span class="dot"></span><span data-t="machineInputs">Entrées machine</span></h2>
+        <label data-t="machine">Machine</label>
+        <div class="inputline">
+          <select id="machine"></select>
+          <button class="search-btn" onclick="searchMachine()">🔍</button>
+          <button class="mini-plus" onclick="addMachine()">+</button>
+        </div>
+      </section>
 
       <section class="card">
         <h2><span class="dot"></span><span data-t="toolInputs">Entrées outil & opération</span></h2>
@@ -434,24 +313,7 @@ function mmRange(a,b,d){a=num(a);b=num(b);if(a===null||b===null||a===0&&b===0)re
 function calc(){
   syncOperationWithTool();
   let t=selectedTool();
-  let ma=machines.find(m=>m.name===$('machine').value)$('machineNmax').value =
-   ma?.n_max || '';
-
-$('machineVfmax').value =
-   ma?.vf_max || '';
-
-$('machineSafetyN').value =
-   Math.round(
-      (ma?.safety_n || 0.95) * 100
-   );
-
-$('machineSafetyVf').value =
-   Math.round(
-      (ma?.safety_vf || 0.90) * 100
-   );
-
-$('productionSite').value =
-   ma?.site || '';||machines[0]||{n_max:24000,vf_max:3000,safety_n:1,safety_vf:1};
+  let ma=machines.find(m=>m.name===$('machine').value)||machines[0]||{n_max:24000,vf_max:3000,safety_n:1,safety_vf:1};
   updateSawPanel();
   const sawMode=isSawMode();
   let d=sawMode ? (+$('sawDiameter').value||160) : (+$('diameter').value||12);
@@ -459,23 +321,8 @@ $('productionSite').value =
   if(!t){$('rpm').textContent='–';$('feed').textContent='–';return;}
   let vc=num(t.vc_rec)||180, fz=num(t.fz_rec)||0.04;
   let nTheo=vc*1000/(Math.PI*d);
-let safetyN =
-   (+$('machineSafetyN').value || 100)
-   / 100;
-
-let safetyVf =
-   (+$('machineSafetyVf').value || 100)
-   / 100;
-
-let nLimit =
-   (+ma.n_max || 24000)
-   *
-   safetyN;
-
-let vfLimit =
-   (+ma.vf_max || 3000)
-   *
-   safetyVf;
+  let nLimit=(+ma.n_max||24000)*(+ma.safety_n||1);
+  let vfLimit=(+ma.vf_max||3000)*(+ma.safety_vf||1);
   let rpm=Math.round(Math.min(nTheo,nLimit));
   let feed=Math.round(Math.min(rpm*z*fz,vfLimit));
   $('rpm').textContent=rpm+' tr/min';
