@@ -62,7 +62,7 @@
         <div class="inputline">
           <select id="tool"></select>
           <button class="search-btn" onclick="searchTool()">🔍</button>
-          <button class="mini-plus" onclick="editTool()">✎</button>
+          <button class="mini-plus" onclick="addTool()">+</button>
         </div>
 
         <div class="row">
@@ -137,6 +137,7 @@ const TXT={
 
 let materials=[], tools=[], machines=[];
 let materialCodesFromTools=[];
+let lastMaterialForTools=null;
 
 async function token(){return (await sb.auth.getSession()).data.session?.access_token||SUPABASE_KEY}
 async function api(table,opt={}){
@@ -199,13 +200,24 @@ function fillLists(){
   materialCodesFromTools.forEach(code=>mat.add(new Option(materialLabel(code),code)));
   if(mv && [...mat.options].some(o=>o.value===mv)) mat.value=mv;
 
-  let tool=$('tool'), tv=tool.value;
-  tool.innerHTML='';
+  rebuildToolList(true);
+}
+
+function rebuildToolList(preserveSelection=false){
+  const tool=$('tool');
+  const previous=tool.value;
   const current=$('material').value;
+  const changed=current!==lastMaterialForTools;
+  tool.innerHTML='';
   let list=tools.filter(t=>t.material_code===current);
-  list.sort((a,b)=>(loc(a,'label')||a.tool_code||'').localeCompare(loc(b,'label')||b.tool_code||''));
+  list.sort((a,b)=>(loc(a,'label')||a.label_fr||a.tool_code||'').localeCompare(loc(b,'label')||b.label_fr||b.tool_code||''));
   list.forEach(t=>tool.add(new Option(loc(t,'label')||t.label_fr||t.tool_code||'outil',String(t.id))));
-  if(tv && [...tool.options].some(o=>o.value===tv)) tool.value=tv;
+  if(!changed && preserveSelection && previous && [...tool.options].some(o=>o.value===previous)){
+    tool.value=previous;
+  }else if(tool.options.length){
+    tool.selectedIndex=0;
+  }
+  lastMaterialForTools=current;
 }
 
 function selectedTool(){return tools.find(t=>String(t.id)===$('tool').value)||tools.find(t=>t.material_code===$('material').value)||tools[0]}
@@ -237,13 +249,23 @@ function searchTool(){openSearch('Recherche outil',tools.map(t=>({title:loc(t,'l
 
 async function addMaterial(){toast(canEdit()?'Ajout matière à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
 async function addMachine(){toast(canEdit()?'Ajout machine à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
-async function editTool(){toast(canEdit()?'Édition outil à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
+async function addTool(){toast(canEdit()?'Ajout outil à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
 async function saveCalib(){
   await api('cnc_calibrations',{m:'POST',b:{material:$('material').value,tool:$('tool').value,machine:$('machine').value,spindle_rpm:+$('cRpm').value,feed_rate:+$('cFeed').value,comments:$('comments').value,created_by_user_id:user.id,created_by_email:user.email}});
   toast('Calibration enregistrée');loadCalibs();
 }
 async function loadCalibs(){let h=$('calibs');h.innerHTML='';try{let rows=await api('cnc_calibrations',{q:'?select=*&order=created_at.desc&limit=20'});if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return}rows.forEach(r=>{let d=document.createElement('div');d.className='item';d.innerHTML=`<b>${r.material||''} · ${r.tool||''}</b><div class="s">${r.machine||''} · ${r.spindle_rpm||'-'} tr/min · ${r.feed_rate||'-'} mm/min<br>${r.created_by_email||r.operator||''}</div>`;h.appendChild(d)})}catch(e){h.innerHTML='<p>Supabase non chargé.</p>'}}
-async function init(){await initAuth();await loadLibraries();refreshText();loadCalibs();['machine','material','tool','diameter','flutes'].forEach(id=>$(id).addEventListener('input',calc))}
+async function init(){
+  await initAuth();
+  await loadLibraries();
+  refreshText();
+  loadCalibs();
+  $('machine').addEventListener('input',calc);
+  $('material').addEventListener('change',()=>{rebuildToolList(false);calc();});
+  $('tool').addEventListener('change',calc);
+  $('diameter').addEventListener('input',calc);
+  $('flutes').addEventListener('input',calc);
+}
 init();
 </script>
 </body>
