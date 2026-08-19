@@ -24,6 +24,13 @@
   cursor:pointer;
   font-weight:700;
 }
+
+.langs button.active{
+  background:var(--accent);
+  color:white;
+  border-color:var(--accent);
+}
+
 </style>
 </head>
 <body>
@@ -239,6 +246,24 @@ function setLang(lang){
       lang
    );
 
+   document
+      .querySelectorAll('.langs button')
+      .forEach(function(btn){
+
+         btn.classList.remove('active');
+
+      });
+
+   document
+      .querySelector(
+         '.langs button[data-lang="'+lang+'"]'
+      )
+      .classList.add('active');
+
+   applyTranslations();
+
+}
+
    function applyTranslations(){
 
     const T = TXT[currentLang];
@@ -281,7 +306,8 @@ window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFo
 window.loadCalibrations=async function(){var h=el('calibs');h.innerHTML='';try{var rows=await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
 async function init(){
   try{
-applyTranslations();  
+applyTranslations();
+setLang(currentLang);
 await initAuth();
     await loadData();
     ['support','foil','operation'].forEach(function(id){el(id).addEventListener('change',calc);});loadCalibrations();}catch(e){console.error(e);el('status').textContent='Erreur chargement Supabase : '+e.message;toast('Erreur chargement Supabase');}}init();
