@@ -9,7 +9,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../auth-guard.js"></script>
 <style>
-:root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--soft:#e5e5df;--valid:#d9eadb;--err:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:18px}.wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:14px}.logo{width:76px;height:76px;border:2px solid var(--txt);border-radius:20px;background:#e0e1dd;display:grid;place-items:center}.logo svg{width:54px;height:54px}.title h1{margin:0;font-size:31px}.title p{margin:4px 0 0;color:var(--muted);font-size:14px}.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.hub-btn,.langs button,.role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}.langs button.active{background:var(--accent);color:white}.layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.col{display:flex;flex-direction:column;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.12)}h2{display:flex;gap:8px;margin:0 0 12px;font-size:18px}.dot{width:10px;height:10px;margin-top:6px;border-radius:50%;background:var(--accent)}label{display:block;color:var(--muted);font-size:13px;font-weight:750;margin:10px 0 5px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.inputline{display:flex;gap:8px;align-items:stretch}select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:white;color:var(--txt);font-size:15px}textarea{min-height:78px}.search-btn,.mini-plus{height:46px;min-width:46px;border-radius:14px;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}.search-btn{border:1px solid var(--line);background:white}.mini-plus{border:none;background:var(--accent);color:white;display:none}.can-edit .mini-plus{display:flex}.res-big{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:13px;margin:10px 0}.res-big.valid{background:var(--valid);border-color:var(--ok)}.res-big .lbl{font-size:13px;color:var(--muted)}.res-big .val{font-size:30px;font-weight:900}.res-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0;gap:20px}.res-line span{color:var(--muted)}.res-line b{text-align:right}.note{background:rgba(29,29,27,.06);border-left:4px solid var(--accent);padding:10px;border-radius:12px;margin-top:10px;white-space:pre-line}.btn{width:100%;border:none;border-radius:13px;background:var(--accent);color:white;padding:13px;margin-top:10px;font-weight:850;cursor:pointer}.btn.secondary{background:var(--card2);color:var(--txt);border:1px solid var(--line)}.lib{margin-top:14px}.item{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}.item .s{color:var(--muted);font-size:13px}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1d1b;color:white;padding:11px 14px;border-radius:999px;display:none;z-index:99}.foot{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;z-index:9998;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal-panel{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}.modal-head{display:flex;justify-content:space-between}.close{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:8px 12px;font-weight:900}.result{padding:12px;border:1px solid var(--line);border-radius:14px;background:white;margin-top:8px;cursor:pointer}.result:hover{background:var(--valid)}.calib-input-wrap{position:relative}.calib-input-wrap input{font-weight:850;padding-right:78px}.calib-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-weight:850;color:var(--txt);pointer-events:none}@media(max-width:860px){body{padding:12px}.top{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}.title h1{font-size:24px}.logo{width:64px;height:64px}.logo svg{width:46px;height:46px}}
+:root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--soft:#e5e5df;--valid:#d9eadb;--err:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:18px}.wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:14px}.logo{width:76px;height:76px;border:2px solid var(--txt);border-radius:20px;background:#e0e1dd;display:grid;place-items:center}.logo svg{width:54px;height:54px}.title h1{margin:0;font-size:31px}.title p{margin:4px 0 0;color:var(--muted);font-size:14px}.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.hub-btn,.langs button,.role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}.langs button.active{background:var(--accent);color:white}.layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.col{display:flex;flex-direction:column;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.12)}h2{display:flex;gap:8px;margin:0 0 12px;font-size:18px}.dot{width:10px;height:10px;margin-top:6px;border-radius:50%;background:var(--accent)}label{display:block;color:var(--muted);font-size:13px;font-weight:750;margin:10px 0 5px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.inputline{display:flex;gap:8px;align-items:stretch}select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:white;color:var(--txt);font-size:15px}textarea{min-height:78px}.search-btn,.mini-plus{height:46px;min-width:46px;border-radius:14px;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}.search-btn{border:1px solid var(--line);background:white}.mini-plus{border:none;background:var(--accent);color:white;display:none}.can-edit .mini-plus{display:flex}.res-big{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:13px;margin:10px 0}.res-big.valid{background:var(--valid);border-color:var(--ok)}.res-big .lbl{font-size:13px;color:var(--muted)}.res-big .val{font-size:30px;font-weight:900}.res-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0;gap:20px}.res-line span{color:var(--muted)}.res-line b{text-align:right}.note{background:rgba(29,29,27,.06);border-left:4px solid var(--accent);padding:10px;border-radius:12px;margin-top:10px;white-space:pre-line}.btn{width:100%;border:none;border-radius:13px;background:var(--accent);color:white;padding:13px;margin-top:10px;font-weight:850;cursor:pointer}.btn.secondary{background:var(--card2);color:var(--txt);border:1px solid var(--line)}.lib{margin-top:14px}.item{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}.item .s{color:var(--muted);font-size:13px}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1d1b;color:white;padding:11px 14px;border-radius:999px;display:none;z-index:99}.foot{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;z-index:9998;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal-panel{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}.modal-head{display:flex;justify-content:space-between}.close{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:8px 12px;font-weight:900}.result{padding:12px;border:1px solid var(--line);border-radius:14px;background:white;margin-top:8px;cursor:pointer}.result:hover{background:var(--valid)}.calib-input-wrap{position:relative}.calib-input-wrap input{font-weight:850;padding-right:78px}.calib-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-weight:850;color:var(--txt);pointer-events:none}
+.saw-card{border:1px dashed #a76b00;background:rgba(167,107,0,.08);border-radius:16px;padding:13px;margin-top:14px}.saw-card.hidden{display:none}.saw-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.saw-head b{font-size:15px}.edit-small{height:38px;min-width:38px;border:none;border-radius:12px;background:var(--accent);color:white;font-size:18px;font-weight:900;cursor:pointer}.saw-card input[readonly]{background:#f6f6f2;color:#1d1d1b}.saw-note{font-size:12px;color:var(--muted);margin-top:8px}
+@media(max-width:860px){body{padding:12px}.top{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}.title h1{font-size:24px}.logo{width:64px;height:64px}.logo svg{width:46px;height:46px}}
 </style>
 </head>
 <body>
@@ -63,6 +65,32 @@
           <select id="tool"></select>
           <button class="search-btn" onclick="searchTool()">🔍</button>
           <button class="mini-plus" onclick="addTool()">+</button>
+        </div>
+
+        <label>Opération</label>
+        <select id="operation">
+          <option value="standard">Usinage standard</option>
+          <option value="saw_cut">Découpe scie</option>
+        </select>
+
+        <div id="sawPanel" class="saw-card hidden">
+          <div class="saw-head">
+            <b>⚙️ Paramètres scie circulaire</b>
+            <button id="sawEditBtn" class="edit-small" onclick="toggleSawEdit()">✎</button>
+          </div>
+          <div class="row">
+            <div>
+              <label>Dents scie</label>
+              <input id="sawTeeth" type="number" value="48" readonly>
+            </div>
+            <div>
+              <label>Ø scie</label>
+              <div class="calib-input-wrap"><input id="sawDiameter" type="number" value="160" readonly><span class="calib-unit">mm</span></div>
+            </div>
+          </div>
+          <label>Épaisseur / trait scie</label>
+          <div class="calib-input-wrap"><input id="sawKerf" type="number" step="0.1" value="3.2" readonly><span class="calib-unit">mm</span></div>
+          <div class="saw-note">Ces valeurs sont utilisées lorsque le type d’outil est une scie circulaire ou lorsque l’opération “Découpe scie” est sélectionnée.</div>
         </div>
 
         <div class="row">
@@ -221,22 +249,78 @@ function rebuildToolList(preserveSelection=false){
 }
 
 function selectedTool(){return tools.find(t=>String(t.id)===$('tool').value)||tools.find(t=>t.material_code===$('material').value)||tools[0]}
+function toolLooksLikeSaw(t){
+  const txt=[t?.tool_code,t?.label_fr,t?.label_en,t?.label_pt].join(' ').toLowerCase();
+  return txt.includes('scie') || txt.includes('saw') || txt.includes('circular');
+}
+function findSawToolForCurrentMaterial(){
+  const current=$('material')?.value;
+  return tools.find(t=>t.material_code===current && toolLooksLikeSaw(t));
+}
+function ensureSawToolSelected(){
+  if($('operation')?.value==='saw_cut'){
+    const saw=findSawToolForCurrentMaterial();
+    if(saw && String(saw.id)!==$('tool').value){
+      $('tool').value=String(saw.id);
+    }
+  }
+}
+function isSawMode(){
+  const t=selectedTool();
+  return toolLooksLikeSaw(t) || $('operation')?.value==='saw_cut';
+}
+function sawStorageKey(){return 'cnc_saw_params_'+($('material')?.value||'material')+'_'+($('tool')?.value||'tool')}
+function loadSawParams(){
+  try{const v=JSON.parse(localStorage.getItem(sawStorageKey())||'{}');
+    if(v.teeth) $('sawTeeth').value=v.teeth;
+    if(v.diameter) $('sawDiameter').value=v.diameter;
+    if(v.kerf) $('sawKerf').value=v.kerf;
+  }catch(e){}
+}
+function saveSawParams(){
+  localStorage.setItem(sawStorageKey(),JSON.stringify({teeth:+$('sawTeeth').value||48,diameter:+$('sawDiameter').value||160,kerf:+$('sawKerf').value||3.2}));
+}
+function updateSawPanel(){
+  const panel=$('sawPanel');
+  if(!panel) return;
+  if(isSawMode()){
+    loadSawParams();
+    panel.classList.remove('hidden');
+  }else{
+    panel.classList.add('hidden');
+  }
+}
+function toggleSawEdit(){
+  const fields=[$('sawTeeth'),$('sawDiameter'),$('sawKerf')];
+  const editing=fields.some(f=>f && f.hasAttribute('readonly'));
+  fields.forEach(f=>{if(!f)return; if(editing) f.removeAttribute('readonly'); else f.setAttribute('readonly','readonly');});
+  $('sawEditBtn').textContent=editing?'✓':'✎';
+  if(!editing){saveSawParams();toast('Paramètres scie enregistrés');calc();}
+}
+
 function num(v){const n=parseFloat(String(v??'').replace(',','.'));return Number.isFinite(n)?n:null}
 function mmRange(a,b,d){a=num(a);b=num(b);if(a===null||b===null||a===0&&b===0)return '–';return `${(a*d).toFixed(1).replace('.',',')} à ${(b*d).toFixed(1).replace('.',',')} mm`}
 function calc(){
+  ensureSawToolSelected();
   let t=selectedTool();
-  let ma=machines.find(m=>m.name===$('machine').value)||machines[0]||{n_max:24000,vf_max:3000};
-  let d=+$('diameter').value||12,z=+$('flutes').value||2;
+  let ma=machines.find(m=>m.name===$('machine').value)||machines[0]||{n_max:24000,vf_max:3000,safety_n:1,safety_vf:1};
+  updateSawPanel();
+  const sawMode=isSawMode();
+  let d=sawMode ? (+$('sawDiameter').value||160) : (+$('diameter').value||12);
+  let z=sawMode ? (+$('sawTeeth').value||48) : (+$('flutes').value||2);
   if(!t){$('rpm').textContent='–';$('feed').textContent='–';return;}
   let vc=num(t.vc_rec)||180, fz=num(t.fz_rec)||0.04;
-  let rpm=Math.round(Math.min(vc*1000/(Math.PI*d),+(ma.n_max||24000)));
-  let feed=Math.round(Math.min(rpm*z*fz,+(ma.vf_max||3000)));
+  let nTheo=vc*1000/(Math.PI*d);
+  let nLimit=(+ma.n_max||24000)*(+ma.safety_n||1);
+  let vfLimit=(+ma.vf_max||3000)*(+ma.safety_vf||1);
+  let rpm=Math.round(Math.min(nTheo,nLimit));
+  let feed=Math.round(Math.min(rpm*z*fz,vfLimit));
   $('rpm').textContent=rpm+' tr/min';
   $('feed').textContent=feed+' mm/min';
   $('vc').textContent=`${t.vc_min??'–'} / ${t.vc_rec??'–'} / ${t.vc_max??'–'} m/min`;
   $('fz').textContent=`${t.fz_min??'–'} / ${t.fz_rec??'–'} / ${t.fz_max??'–'} mm/dent`;
-  $('pass').textContent=t.passe_txt||t.pass_txt||mmRange(t.pass_min_coef,t.pass_max_coef,d)||'–';
-  $('eng').textContent=t.engagement_txt||t.eng_txt||mmRange(t.engagement_min_coef,t.engagement_max_coef,d)||'–';
+  $('pass').textContent=sawMode ? (($('sawKerf').value||'3.2')+' mm trait scie') : (t.passe_txt||t.pass_txt||mmRange(t.pass_min_coef,t.pass_max_coef,d)||'–');
+  $('eng').textContent=sawMode ? 'Découpe scie' : (t.engagement_txt||t.eng_txt||mmRange(t.engagement_min_coef,t.engagement_max_coef,d)||'–');
   $('cRpm').value=rpm;
   $('cFeed').value=feed;
   let m=materials.find(x=>x.code===$('material').value);
@@ -261,10 +345,12 @@ async function init(){
   refreshText();
   loadCalibs();
   $('machine').addEventListener('input',calc);
-  $('material').addEventListener('change',()=>{rebuildToolList(false);calc();});
-  $('tool').addEventListener('change',calc);
+  $('material').addEventListener('change',()=>{rebuildToolList(false);ensureSawToolSelected();updateSawPanel();calc();});
+  $('tool').addEventListener('change',()=>{updateSawPanel();calc();});
+  $('operation').addEventListener('change',()=>{ensureSawToolSelected();updateSawPanel();calc();});
   $('diameter').addEventListener('input',calc);
   $('flutes').addEventListener('input',calc);
+  ['sawTeeth','sawDiameter','sawKerf'].forEach(id=>$(id).addEventListener('input',()=>{saveSawParams();calc();}));
 }
 init();
 </script>
