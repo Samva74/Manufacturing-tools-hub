@@ -59,7 +59,34 @@
             +
           </button>
         </div>
-       <label>
+        <div class="row">
+
+  <div>
+    <label>n max machine</label>
+
+    <div class="calib-input-wrap">
+      <input id="machineNmax" readonly>
+
+      <span class="calib-unit">
+        tr/min
+      </span>
+    </div>
+  </div>
+
+  <div>
+    <label>Vf max machine</label>
+
+    <div class="calib-input-wrap">
+      <input id="machineVfmax" readonly>
+
+      <span class="calib-unit">
+        mm/min
+      </span>
+    </div>
+  </div>
+
+</div>
+<label>
   Site de production
 </label>
 
@@ -340,6 +367,12 @@ function calc(){
     )
     ||machines[0]
     ||{n_max:24000,vf_max:3000,safety_n:1,safety_vf:1};
+  
+  document.getElementById('machineNmax').value =
+  ma.n_max || '';
+
+document.getElementById('machineVfmax').value =
+  ma.vf_max || '';
   
 document.getElementById('productionSite').value =
   ma.site || '';
