@@ -1,20 +1,24 @@
-Manufacturing Tools Hub - version avec Supabase source de vérité + loupe de recherche
+Manufacturing Tools Hub - ZIP compatible avec ta base Supabase existante
 
-Inclus :
-- Création de compte libre avec email + mot de passe.
-- Rôles user / expert / admin dans Supabase.
-- Bibliothèques CNC, Hot Stamping et Laser lues depuis Supabase.
-- Bouton loupe entre l’encart blanc et le bouton + pour rechercher machine, matière, outil, support, folio, paramètre.
-- La sélection via loupe remplit automatiquement le champ et les paramètres liés.
-- Modification des paramètres depuis les apps pour expert/admin.
-- Traçabilité : chaque ajout/modification/calibration stocke l’email utilisateur.
-- Historique dans library_history.
+Ce ZIP n’écrase pas les bibliothèques existantes.
 
-Installation :
-1. Dans Supabase, exécuter supabase_setup_full.sql.
-2. Remplacer le dépôt GitHub avec ce ZIP.
+À faire :
+1. Dans Supabase, exécuter supabase_patch_existing_schema.sql.
+   Ce patch ajoute seulement : user_roles, library_history, colonnes de traçabilité et policies.
+2. Remplacer les fichiers du dépôt GitHub par ceux du ZIP.
 3. Commit changes.
 4. Attendre Vercel.
 5. Ctrl + Shift + R.
 
-Important : par défaut, un nouveau compte reçoit le rôle user. Pour autoriser la modification des bibliothèques, mettre son rôle à expert ou admin dans la table user_roles.
+Nouveautés :
+- Loupe entre le champ blanc et le +.
+- Recherche machine, matière, outil, support, folio, paramètre.
+- Les bibliothèques sont lues depuis les tables existantes : cnc_materials, cnc_tools, hot_supports, hot_foils, laser_materials, laser_parameters.
+- Les modifications expert/admin écrivent directement dans Supabase.
+- Les calibrations enregistrent created_by_email.
+- library_history trace les changements.
+
+Rôles :
+- user : lecture + calibration.
+- expert/admin : ajout + modification.
+Après ton inscription, mets ton email en admin dans user_roles.
