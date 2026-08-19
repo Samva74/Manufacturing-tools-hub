@@ -1,6 +1,6 @@
 {
   "name": "Hot Stamping Calculator",
-  "short_name": "Hot",
+  "short_name": "Hot Stamping",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#d8d8d3",
