@@ -723,7 +723,22 @@ catch(e){
 }
 
 };
-  window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFoil();await api('Hot_Stamping_calibrations','',{method:'POST',body:JSON.stringify({material:s?s.code:null,foil:f?(f.foil_code||f.id):null,temperature:num(el('cTemp').value,null),pressure:num(el('cPress').value,null),dwell_time:num(el('cDwell').value,null),comments:el('comments').value,created_by_user_id:user?user.id:null,created_by_email:user?user.email:null})});toast('Calibration enregistrée');
+  window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFoil();await api('Hot_Stamping_calibrations','',{method:'POST',
+                                                                                                                                 
+body: JSON.stringify({
+
+  code: el('newSupportCode').value,
+
+  name_fr: el('newSupportName').value,
+
+  supplier: el('newSupportSupplier').value,
+
+  temperature_rec:
+    num(el('newSupportTemp').value,null)
+
+})
+  
+  material:s?s.code:null,foil:f?(f.foil_code||f.id):null,temperature:num(el('cTemp').value,null),pressure:num(el('cPress').value,null),dwell_time:num(el('cDwell').value,null),comments:el('comments').value,created_by_user_id:user?user.id:null,created_by_email:user?user.email:null})});toast('Calibration enregistrée');
 loadCalibrations();}catch(e){
   console.error(e);
   toast('Erreur calibration');}};
