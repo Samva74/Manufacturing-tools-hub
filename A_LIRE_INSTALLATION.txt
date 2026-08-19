@@ -1,20 +1,20 @@
-Manufacturing Tools Hub - version harmonisée finale
+Manufacturing Tools Hub - version avec Supabase source de vérité + loupe de recherche
 
-Modifications incluses :
-- Bandeau supérieur commun pour CNC, Hot Stamping et Laser.
-- Bouton Hub intégré dans la ligne des langues, à gauche de French.
-- Langues affichées : French, English, Português.
-- Laser Calculator sans V1.
-- Traductions Laser corrigées pour les textes principaux.
-- CNC et Hot Stamping reprennent la présentation de Laser : deux colonnes + bibliothèque Supabase pleine largeur en bas.
-- Supabase URL et Publishable key configurées sur le projet erzuvpswagzwlrxgctaj.
+Inclus :
+- Création de compte libre avec email + mot de passe.
+- Rôles user / expert / admin dans Supabase.
+- Bibliothèques CNC, Hot Stamping et Laser lues depuis Supabase.
+- Bouton loupe entre l’encart blanc et le bouton + pour rechercher machine, matière, outil, support, folio, paramètre.
+- La sélection via loupe remplit automatiquement le champ et les paramètres liés.
+- Modification des paramètres depuis les apps pour expert/admin.
+- Traçabilité : chaque ajout/modification/calibration stocke l’email utilisateur.
+- Historique dans library_history.
 
 Installation :
-1. Remplacer les fichiers du dépôt GitHub par ceux de ce ZIP.
-2. Commit changes.
-3. Attendre le redéploiement Vercel.
-4. Faire Ctrl + Shift + R.
+1. Dans Supabase, exécuter supabase_setup_full.sql.
+2. Remplacer le dépôt GitHub avec ce ZIP.
+3. Commit changes.
+4. Attendre Vercel.
+5. Ctrl + Shift + R.
 
-
-Mise à jour Hub :
-- Les cartes du menu principal utilisent maintenant les icônes PNG des dossiers cnc/, hot-stamping/ et laser/ au lieu des textes CNC / HS / LAS.
+Important : par défaut, un nouveau compte reçoit le rôle user. Pour autoriser la modification des bibliothèques, mettre son rôle à expert ou admin dans la table user_roles.
