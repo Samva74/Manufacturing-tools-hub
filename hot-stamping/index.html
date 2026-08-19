@@ -89,67 +89,55 @@
   Machine
 </label>
 
-<label data-t="maxTemperature">
-  Température max machine
-</label>
+<div class="inputline">
 
-<label data-t="maxPressure">
-  Pression max machine
-</label>
+  <select id="machine"></select>
+
+  <button class="search-btn">
+    🔍
+  </button>
+
+  <button class="mini-btn">
+    +
+  </button>
+
+</div>
+
+<div class="row">
+
+  <div>
+
+    <label data-t="maxTemperature">
+      Température max machine
+    </label>
+
+    <div class="unit-wrap">
+      <input id="machineTempMax" readonly>
+      <span class="unit">°C</span>
+    </div>
+
+  </div>
+
+  <div>
+
+    <label data-t="maxPressure">
+      Pression max machine
+    </label>
+
+    <div class="unit-wrap">
+      <input id="machinePressureMax" readonly>
+      <span class="unit">bar</span>
+    </div>
+
+  </div>
+
+</div>
 
 <label data-t="productionSite">
   Site de production
 </label>
 
-  <div class="inputline">
-
-    <select id="machine"></select>
-
-    <button class="search-btn">
-      🔍
-    </button>
-
-    <button class="mini-btn">
-      +
-    </button>
-
-  </div>
-
-  <div class="row">
-
-    <div>
-
-      <label data-t="maxTemperature">
-        Température max machine
-      </label>
-
-      <div class="unit-wrap">
-        <input id="machineTempMax" readonly>
-        <span class="unit">°C</span>
-      </div>
-
-    </div>
-
-    <div>
-
-      <label data-t="maxPressure">
-        Pression max machine
-      </label>
-
-      <div class="unit-wrap">
-        <input id="machinePressureMax" readonly>
-        <span class="unit">bar</span>
-      </div>
-
-    </div>
-
-  </div>
-
-  <label data-t="productionSite">
-    Site de production
-  </label>
-
-  <input id="productionSite" readonly>
+<input id="productionSite" readonly>
 
 </section>
       
