@@ -300,7 +300,44 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
   </section>
 </div>
 <div class="modal" id="searchModal"><div class="modal-panel"><div class="modal-head"><h3 id="searchTitle">Recherche</h3><button class="close" id="searchClose">×</button></div><label>Recherche</label><input id="searchInput" placeholder="Nom, fournisseur, référence"><div id="searchResults"></div></div></div>
-<div class="toast" id="toast"></div>
+<div class="modal" id="supportModal">
+
+  <div class="modal-panel">
+
+    <div class="modal-head">
+
+      <h3>Nouveau support</h3>
+
+      <button class="close"
+              onclick="closeSupportModal()">
+        ×
+      </button>
+
+    </div>
+
+    <label>Code</label>
+    <input id="newSupportCode">
+
+    <label>Nom</label>
+    <input id="newSupportName">
+
+    <label>Fournisseur</label>
+    <input id="newSupportSupplier">
+
+    <label>Température recommandée</label>
+    <input id="newSupportTemp">
+
+    <button class="btn"
+            onclick="saveSupport()">
+
+      Ajouter support
+
+    </button>
+
+  </div>
+
+</div>
+  <div class="toast" id="toast"></div>
 <script>
 (function(){
 'use strict';
@@ -599,6 +636,91 @@ window.addFoil = function(){
    alert(
       'Création nouveau folio'
    );
+
+};
+  window.addSupport = function(){
+
+   document
+      .getElementById('supportModal')
+      .classList.add('open');
+
+};
+
+window.closeSupportModal = function(){
+
+   document
+      .getElementById('supportModal')
+      .classList.remove('open');
+
+};
+  window.saveSupport = async function(){
+
+  try{
+
+    await api(
+      'hot_supports',
+      '',
+      {
+        method:'POST',
+        body:JSON.stringify({
+
+          code: el('newSupportCode').value,
+
+          name_fr: el('newSupportNameFr').value,
+          name_en: el('newSupportNameEn').value,
+
+          supplier: el('newSupportSupplier').value,
+          collection: el('newSupportCollection').value,
+          family: el('newSupportFamily').value,
+
+          temperature_min:
+            num(el('newTempMin').value,null),
+
+          temperature_rec:
+            num(el('newTempRec').value,null),
+
+          temperature_max:
+            num(el('newTempMax').value,null),
+
+          pressure_min:
+            num(el('newPressureMin').value,null),
+
+          pressure_rec:
+            num(el('newPressureRec').value,null),
+
+          pressure_max:
+            num(el('newPressureMax').value,null),
+
+          dwell_time_min:
+            num(el('newTimeMin').value,null),
+
+          dwell_time_rec:
+            num(el('newTimeRec').value,null),
+
+          dwell_time_max:
+            num(el('newTimeMax').value,null),
+
+          note:
+            el('newSupportNote').value
+
+        })
+      }
+    );
+
+    closeSupportModal();
+
+    await loadData();
+
+    toast('Support ajouté');
+
+  }
+  catch(e){
+
+     console.error(e);
+
+     toast('Erreur création support');
+
+  }
 
 };
   window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFoil();await api('Hot_Stamping_calibrations','',{method:'POST',body:JSON.stringify({material:s?s.code:null,foil:f?(f.foil_code||f.id):null,temperature:num(el('cTemp').value,null),pressure:num(el('cPress').value,null),dwell_time:num(el('cDwell').value,null),comments:el('comments').value,created_by_user_id:user?user.id:null,created_by_email:user?user.email:null})});toast('Calibration enregistrée');
