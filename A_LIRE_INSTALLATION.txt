@@ -1,24 +1,8 @@
-Manufacturing Tools Hub - ZIP compatible avec ta base Supabase existante
+ZIP complet avec patch + remplissage des bibliothèques Supabase existantes.
 
-Ce ZIP n’écrase pas les bibliothèques existantes.
-
-À faire :
-1. Dans Supabase, exécuter supabase_patch_existing_schema.sql.
-   Ce patch ajoute seulement : user_roles, library_history, colonnes de traçabilité et policies.
-2. Remplacer les fichiers du dépôt GitHub par ceux du ZIP.
+1. Exécuter supabase_patch_and_seed_existing_schema.sql dans Supabase.
+2. Remplacer les fichiers GitHub par le ZIP.
 3. Commit changes.
-4. Attendre Vercel.
-5. Ctrl + Shift + R.
+4. Attendre Vercel puis Ctrl + Shift + R.
 
-Nouveautés :
-- Loupe entre le champ blanc et le +.
-- Recherche machine, matière, outil, support, folio, paramètre.
-- Les bibliothèques sont lues depuis les tables existantes : cnc_materials, cnc_tools, hot_supports, hot_foils, laser_materials, laser_parameters.
-- Les modifications expert/admin écrivent directement dans Supabase.
-- Les calibrations enregistrent created_by_email.
-- library_history trace les changements.
-
-Rôles :
-- user : lecture + calibration.
-- expert/admin : ajout + modification.
-Après ton inscription, mets ton email en admin dans user_roles.
+Le script remplit CNC, Hot Stamping et Laser avec les listes demandées et des paramètres de départ indicatifs. Les loupes sont placées entre le champ blanc et le bouton +.
