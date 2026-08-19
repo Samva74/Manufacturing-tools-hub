@@ -169,11 +169,39 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
         <label data-t="support">
           Support
         </label>
-        <div class="inputline"><select id="support"></select><button class="search-btn" onclick="searchSupport()">🔍</button></div>
+        <div class="inputline">
+
+  <select id="support"></select>
+
+  <button class="search-btn"
+          onclick="searchSupport()">
+    🔍
+  </button>
+
+  <button class="mini-btn"
+          onclick="addSupport()">
+    +
+  </button>
+
+</div>
         <label data-t="foil">
           Folio
         </label>
-        <div class="inputline"><select id="foil"></select><button class="search-btn" onclick="searchFoil()">🔍</button></div>
+        <div class="inputline">
+
+  <select id="foil"></select>
+
+  <button class="search-btn"
+          onclick="searchFoil()">
+    🔍
+  </button>
+
+  <button class="mini-btn"
+          onclick="addFoil()">
+    +
+  </button>
+
+</div>
         <label data-t="operation">
           Opération
         </label>
@@ -558,12 +586,27 @@ if(!s||!f){clearValues();return;}var baseT=[num(s.temperature_min,0),num(s.tempe
 function modal(title,items,titleFn,subFn,searchFn,pick){var m=el('searchModal'),q=el('searchInput'),list=el('searchResults');el('searchTitle').textContent=title;q.value='';function render(){var term=q.value.toLowerCase().trim();var rows=items.filter(function(x){return !term||searchFn(x).toLowerCase().indexOf(term)>=0;}).slice(0,120);list.innerHTML='';if(!rows.length){list.innerHTML='<p>Aucun résultat.</p>';return;}rows.forEach(function(x){var div=document.createElement('div');div.className='result';var b=document.createElement('b');b.textContent=titleFn(x);div.appendChild(b);var small=document.createElement('div');small.textContent=subFn(x)||'';div.appendChild(small);div.onclick=function(){pick(x);m.classList.remove('open');calc();};list.appendChild(div);});}q.oninput=render;el('searchClose').onclick=function(){m.classList.remove('open');};m.classList.add('open');setTimeout(function(){q.focus();},50);render();}
 window.searchSupport=function(){modal('Recherche support',supports.filter(validSupport),supportLabel,function(s){return [s.supplier,s.collection,s.family].filter(Boolean).join(' · ');},function(s){return [s.code,s.name_fr,s.supplier,s.collection,s.family,s.note].join(' ');},function(s){el('support').value=s.code;});};
 window.searchFoil=function(){modal('Recherche folio',foils.filter(validFoil),foilLabel,function(f){return [f.supplier,f.reference,f.color,f.foil_type].filter(Boolean).join(' · ');},function(f){return [f.foil_code,f.label_fr,f.supplier,f.reference,f.color,f.foil_type].join(' ');},function(f){el('foil').value=f.foil_code||f.id;});};
-window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFoil();await api('Hot_Stamping_calibrations','',{method:'POST',body:JSON.stringify({material:s?s.code:null,foil:f?(f.foil_code||f.id):null,temperature:num(el('cTemp').value,null),pressure:num(el('cPress').value,null),dwell_time:num(el('cDwell').value,null),comments:el('comments').value,created_by_user_id:user?user.id:null,created_by_email:user?user.email:null})});toast('Calibration enregistrée');
+window.addSupport = function(){
+
+   alert(
+      'Création nouveau support'
+   );
+
+};
+
+window.addFoil = function(){
+
+   alert(
+      'Création nouveau folio'
+   );
+
+};
+  window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFoil();await api('Hot_Stamping_calibrations','',{method:'POST',body:JSON.stringify({material:s?s.code:null,foil:f?(f.foil_code||f.id):null,temperature:num(el('cTemp').value,null),pressure:num(el('cPress').value,null),dwell_time:num(el('cDwell').value,null),comments:el('comments').value,created_by_user_id:user?user.id:null,created_by_email:user?user.email:null})});toast('Calibration enregistrée');
 loadCalibrations();}catch(e){
   console.error(e);
   toast('Erreur calibration');}};
 window.loadCalibrations=async function(){var h=el('calibs');h.innerHTML='';try{var rows=await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
-async function init(){
+  async function init(){
 try{
   await initAuth();
   applyTranslations();
