@@ -336,11 +336,13 @@ function calc(){
   let t=selectedTool();
   let ma=
     machines.find(
-      m=>m.name===$('machine').value)
-    ||machines[0]||{n_max:24000,vf_max:3000,safety_n:1,safety_vf:1};
+      m=>m.name===$('machine').value
+    )
+    ||machines[0]
+    ||{n_max:24000,vf_max:3000,safety_n:1,safety_vf:1};
   
-  $('productionSite').value =
-   ma?.site || '';
+document.getElementById('productionSite').value =
+  ma.site || '';
   
   updateSawPanel();
   const sawMode=isSawMode();
