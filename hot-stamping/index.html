@@ -662,48 +662,18 @@ window.closeSupportModal = function(){
       '',
       {
         method:'POST',
-        body:JSON.stringify({
+body: JSON.stringify({
 
-          code: el('newSupportCode').value,
+   code: el('newSupportCode').value,
 
-          name_fr: el('newSupportNameFr').value,
-          name_en: el('newSupportNameEn').value,
+   name_fr: el('newSupportName').value,
 
-          supplier: el('newSupportSupplier').value,
-          collection: el('newSupportCollection').value,
-          family: el('newSupportFamily').value,
+   supplier: el('newSupportSupplier').value,
 
-          temperature_min:
-            num(el('newTempMin').value,null),
+   temperature_rec:
+      num(el('newSupportTemp').value,null)
 
-          temperature_rec:
-            num(el('newTempRec').value,null),
-
-          temperature_max:
-            num(el('newTempMax').value,null),
-
-          pressure_min:
-            num(el('newPressureMin').value,null),
-
-          pressure_rec:
-            num(el('newPressureRec').value,null),
-
-          pressure_max:
-            num(el('newPressureMax').value,null),
-
-          dwell_time_min:
-            num(el('newTimeMin').value,null),
-
-          dwell_time_rec:
-            num(el('newTimeRec').value,null),
-
-          dwell_time_max:
-            num(el('newTimeMax').value,null),
-
-          note:
-            el('newSupportNote').value
-
-        })
+})
       }
     );
 
