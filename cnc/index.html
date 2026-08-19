@@ -62,7 +62,9 @@
         <div class="row">
 
   <div>
-    <label>n max machine</label>
+    <label data-t="machineNmax">
+  n max machine
+</label>
 
     <div class="calib-input-wrap">
       <input id="machineNmax" readonly>
@@ -74,7 +76,10 @@
   </div>
 
   <div>
-    <label>Vf max machine</label>
+    <label data-t="machineVfMax">
+  Vf max machine
+</label>
+
 
     <div class="calib-input-wrap">
       <input id="machineVfmax" readonly>
@@ -90,7 +95,7 @@
 
   <div>
 
-    <label>
+    <label data-t="machineSafetyN">
       Marge sécurité n
     </label>
 
@@ -109,9 +114,9 @@
 
   <div>
 
-    <label>
-      Marge sécurité Vf
-    </label>
+    <label data-t="machineSafetyVf">
+  Marge sécurité Vf
+</label>
 
     <div class="calib-input-wrap">
 
@@ -127,7 +132,7 @@
   </div>
 
 </div>
-<label>
+<label data-t="productionSite">
   Site de production
 </label>
 
@@ -247,9 +252,73 @@ let lang=localStorage.getItem(APP+'_lang')||'fr', user=null, role='user';
 const canEdit=()=>['expert','admin'].includes(role);
 
 const TXT={
- fr:{title:'CNC Calculator',subtitle:'Bibliothèque CNC synchronisée avec Excel V3',machineInputs:'Entrées machine',toolInputs:'Entrées outil & opération',machine:'Machine',material:'Matière',tool:'Type de fraise / outil',diameter:'Diamètre fraise',flutes:'Nombre de dents Z',quickRead:'Lecture rapide',spindle:'Rotation à programmer',feed:'Avance à programmer',calibration:'Calibration atelier',save:'💾 Enregistrer calibration',library:'Bibliothèque Supabase CNC',reload:'↻ Recharger Supabase',foot:'Bibliothèque CNC issue du fichier Excel V3 corrigé.'},
- en:{title:'CNC Calculator',subtitle:'CNC library synced with Excel V3',machineInputs:'Machine inputs',toolInputs:'Tool & operation inputs',machine:'Machine',material:'Material',tool:'Tool type',diameter:'Tool diameter',flutes:'Flutes Z',quickRead:'Quick read',spindle:'Programmed spindle speed',feed:'Programmed feed rate',calibration:'Workshop calibration',save:'💾 Save calibration',library:'CNC Supabase library',reload:'↻ Reload Supabase',foot:'CNC library from Excel V3.'},
- pt:{title:'CNC Calculator',subtitle:'Biblioteca CNC sincronizada com Excel V3',machineInputs:'Entradas da máquina',toolInputs:'Ferramenta & operação',machine:'Máquina',material:'Material',tool:'Tipo de ferramenta',diameter:'Diâmetro',flutes:'Dentes Z',quickRead:'Leitura rápida',spindle:'Rotação a programar',feed:'Avanço a programar',calibration:'Calibração oficina',save:'💾 Guardar calibração',library:'Biblioteca CNC Supabase',reload:'↻ Recarregar Supabase',foot:'Biblioteca CNC do Excel V3.'}
+ fr:{title:'CNC Calculator',
+     subtitle:'Bibliothèque CNC synchronisée avec Excel V3',
+     machineInputs:'Entrées machine',
+     machineNmax:'n max machine',
+     machineVfMax:'Vf max machine',
+     machineSafetyN:'Marge sécurité n',
+     machineSafetyVf:'Marge sécurité Vf',
+     productionSite:'Site de production',
+     toolInputs:'Entrées outil & opération',
+     machine:'Machine',
+     material:'Matière',
+     tool:'Type de fraise / outil',
+     diameter:'Diamètre fraise',
+     flutes:'Nombre de dents Z',
+     quickRead:'Lecture rapide',
+     spindle:'Rotation à programmer',
+     feed:'Avance à programmer',
+     calibration:'Calibration atelier',
+     save:'💾 Enregistrer calibration',
+     library:'Bibliothèque Supabase CNC',
+     reload:'↻ Recharger Supabase',
+     foot:'Bibliothèque CNC issue du fichier Excel V3 corrigé.'},
+  
+ en:{title:'CNC Calculator',
+     subtitle:'CNC library synced with Excel V3',
+     machineInputs:'Machine inputs',
+     machineNmax:'Max spindle speed',
+     machineVfMax:'Max feed rate',
+     machineSafetyN:'Safety margin RPM',
+     machineSafetyVf:'Safety margin Feed',
+     productionSite:'Production site',
+     toolInputs:'Tool & operation inputs',
+     machine:'Machine',
+     material:'Material',
+     tool:'Tool type',
+     diameter:'Tool diameter',
+     flutes:'Flutes Z',
+     quickRead:'Quick read',
+     spindle:'Programmed spindle speed',
+     feed:'Programmed feed rate',
+     calibration:'Workshop calibration',
+     save:'💾 Save calibration',
+     library:'CNC Supabase library',reload:'↻ Reload Supabase',
+     foot:'CNC library from Excel V3.'},
+  
+ pt:{title:'CNC Calculator',
+     subtitle:'Biblioteca CNC sincronizada com Excel V3',
+     machineInputs:'Entradas da máquina',
+     machineNmax:'Rotação máxima',
+     machineVfMax:'Avanço máximo',
+     machineSafetyN:'Margem de segurança rotação',
+     machineSafetyVf:'Margem de segurança avanço',
+     productionSite:'Local de produção',
+     toolInputs:'Ferramenta & operação',
+     machine:'Máquina',
+     material:'Material',
+     tool:'Tipo de ferramenta',
+     diameter:'Diâmetro',
+     flutes:'Dentes Z',
+     quickRead:'Leitura rápida',
+     spindle:'Rotação a programar',
+     feed:'Avanço a programar',
+     calibration:'Calibração oficina',
+     save:'💾 Guardar calibração',
+     library:'Biblioteca CNC Supabase',
+     reload:'↻ Recarregar Supabase',
+     foot:'Biblioteca CNC do Excel V3.'}
 };
 
 let materials=[], tools=[], machines=[];
