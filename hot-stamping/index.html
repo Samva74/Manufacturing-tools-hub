@@ -81,14 +81,25 @@
 
   <h2>
     <span class="dot"></span>
-    <span data-t="machineInputs">
-      Entrées machine
-    </span>
-  </h2>
+<span data-t="machineInputs">
+  Entrées machine
+</span>
 
-  <label data-t="machine">
-    Machine
-  </label>
+<label data-t="machine">
+  Machine
+</label>
+
+<label data-t="maxTemperature">
+  Température max machine
+</label>
+
+<label data-t="maxPressure">
+  Pression max machine
+</label>
+
+<label data-t="productionSite">
+  Site de production
+</label>
 
   <div class="inputline">
 
@@ -193,7 +204,11 @@
 var SUPABASE_URL='https://erzuvpswagzwlrxgctaj.supabase.co';
 var SUPABASE_KEY='sb_publishable_EERLI2l3AjQWkCLsMK3kbA_DMny2RFr';
 var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-var supports=[];var foils=[];var operations=[];var user=null;var role='user';
+var supports=[];
+  var foils=[];
+  var operations=[];
+  var machines=[];
+  var user=null;var role='user';
 const TXT = {
 
 fr:{
@@ -365,8 +380,61 @@ function setLang(lang){
 function el(id){return document.getElementById(id);}function text(v){return v===null||v===undefined?'':String(v);}function num(v,def){var n=Number(v);return Number.isFinite(n)?n:def;}function factor(v){var n=Number(v);return Number.isFinite(n)&&n>0?n:1;}function toast(msg){var t=el('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}async function token(){var s=(await sb.auth.getSession()).data.session;return s&&s.access_token?s.access_token:SUPABASE_KEY;}async function api(table,query,opt){var url=SUPABASE_URL+'/rest/v1/'+table+(query||'');var o=opt||{};o.headers=o.headers||{};o.headers.apikey=SUPABASE_KEY;o.headers.Authorization='Bearer '+await token();if(o.body){o.headers['Content-Type']='application/json';o.headers.Prefer='return=representation';}var r=await fetch(url,o);if(!r.ok){throw new Error(await r.text());}return await r.json();}
 function supportLabel(s){return text(s.name_fr)||text(s.name_en)||text(s.code);}function foilLabel(f){return text(f.label_fr)||text(f.label_en)||text(f.foil_code)||text(f.id);}function opLabel(o){return text(o.label_fr)||text(o.operation_code);}function validSupport(s){return s&&s.code&&s.temperature_rec!==null&&s.temperature_rec!==undefined;}function validFoil(f){return f&&(f.foil_code||f.id);}function fillSelect(sel,items,labelFn,valueFn){sel.innerHTML='';items.forEach(function(x){var opt=document.createElement('option');opt.value=valueFn(x);opt.textContent=labelFn(x);sel.appendChild(opt);});}
 async function initAuth(){if(window.authReady){await window.authReady;user=await window.appAuth.getUser();role=await window.appAuth.getRole();el('rolePill').textContent=(user&&user.email?user.email:'');}}
-async function loadData(){supports=await api('hot_supports','?select=*&order=name_fr.asc&limit=5000');foils=await api('hot_foils','?select=*&order=label_fr.asc&limit=5000');operations=await api('hot_operations','?select=*&order=operation_code.asc&limit=100');if(!operations.length){operations=[{operation_code:'standard',label_fr:'Standard',temp_factor:1,pressure_factor:1,dwell_factor:1}];}fillLists();}
-function fillLists(){var usable=supports.filter(validSupport);if(!usable.length){usable=supports;}fillSelect(el('support'),usable,supportLabel,function(s){return s.code;});fillSelect(el('foil'),foils.filter(validFoil),foilLabel,function(f){return f.foil_code||f.id;});fillSelect(el('operation'),operations,opLabel,function(o){return o.operation_code;});el('status').textContent=usable.length+' supports utilisables · '+foils.length+' folios · '+operations.length+' opérations';el('libStatus').textContent=supports.length+' supports totaux · '+foils.length+' folios totaux';calc();}
+async function loadData(){
+  supports=
+  await api(
+    'hot_supports',
+    '?select=*&order=name_fr.asc&limit=5000'
+  );
+  foils=
+  await api(
+    'hot_foils',
+    '?select=*&order=label_fr.asc&limit=5000'
+  );
+  operations=
+  await api(
+    'hot_operations',
+    '?select=*&order=operation_code.asc&limit=100'
+  );
+  machines =
+  await api(
+    'hot_machines',
+    '?select=*&order=name.asc'
+  );
+if(!operations.length){operations=[{operation_code:'standard',label_fr:'Standard',temp_factor:1,pressure_factor:1,dwell_factor:1}];}fillLists();}
+function fillLists(){var usable=supports.filter(validSupport);if(!usable.length){usable=supports;}
+      fillSelect(
+  el('machine'),
+  machines,
+  function(m){
+     return m.name;
+  },
+  function(m){
+     return m.name;
+  }
+);
+      fillSelect(
+        el('support'),
+        usable,supportLabel,
+        function(s){
+          return s.code;
+  }
+);
+      fillSelect(
+        el('foil'),
+        foils.filter(validFoil),foilLabel,
+        function(f){
+          return f.foil_code||f.id;
+  }
+);
+      fillSelect(
+        el('operation'),
+        operations,opLabel,
+        function(o){
+          return o.operation_code;
+  }
+);
+      el('status').textContent=usable.length+' supports utilisables · '+foils.length+' folios · '+operations.length+' opérations';el('libStatus').textContent=supports.length+' supports totaux · '+foils.length+' folios totaux';calc();}
 function selectedSupport(){var code=el('support').value;return supports.find(function(s){return s.code===code;});}function selectedFoil(){var code=el('foil').value;return foils.find(function(f){return f.foil_code===code||f.id===code;});}function selectedOperation(){var code=el('operation').value;return operations.find(function(o){return o.operation_code===code;})||{temp_factor:1,pressure_factor:1,dwell_factor:1,label_fr:'Standard'};}
 function clearValues(){['tempRec','pressRec','dwellRec','tempRange','pressRange','dwellRange'].forEach(function(id){el(id).textContent='–';});}
 function calc(){var s=selectedSupport(),f=selectedFoil(),o=selectedOperation();if(!s||!f){clearValues();return;}var baseT=[num(s.temperature_min,0),num(s.temperature_rec,0),num(s.temperature_max,0)];var baseP=[num(s.pressure_min,0),num(s.pressure_rec,0),num(s.pressure_max,0)];var baseD=[num(s.dwell_time_min,0),num(s.dwell_time_rec,0),num(s.dwell_time_max,0)];var dt=num(f.temperature_delta,0);var pf=factor(f.pressure_factor);var df=factor(f.dwell_factor);if((!s.temperature_rec)&&f.temperature_rec){baseT=[num(f.temperature_min,0),num(f.temperature_rec,0),num(f.temperature_max,0)];baseP=[num(f.pressure_min,0),num(f.pressure_rec,0),num(f.pressure_max,0)];baseD=[num(f.dwell_time_min,0),num(f.dwell_time_rec,0),num(f.dwell_time_max,0)];dt=0;pf=1;df=1;}var tf=factor(o.temp_factor);var opf=factor(o.pressure_factor);var odf=factor(o.dwell_factor);var t=baseT.map(function(x){return Math.round((x+dt)*tf);});var p=baseP.map(function(x){return (x*pf*opf).toFixed(1);});var d=baseD.map(function(x){return (x*df*odf).toFixed(2);});el('tempRec').textContent=t[1]+' °C';el('pressRec').textContent=p[1]+' bar';el('dwellRec').textContent=d[1]+' s';el('tempRange').textContent=t.join(' / ')+' °C';el('pressRange').textContent=p.join(' / ')+' bar';el('dwellRange').textContent=d.join(' / ')+' s';el('cTemp').value=t[1];el('cPress').value=p[1];el('cDwell').value=d[1];var lines=[];if(s.family)lines.push(s.family);if(s.supplier)lines.push('Support : '+s.supplier+(s.collection?' · '+s.collection:''));if(s.note)lines.push(s.note);if(f.supplier)lines.push('Folio : '+f.supplier+(f.reference?' · '+f.reference:''));lines.push('Folio : ΔT '+dt+' °C · P× '+pf+' · t× '+df);el('note').textContent=lines.join('\n');}
