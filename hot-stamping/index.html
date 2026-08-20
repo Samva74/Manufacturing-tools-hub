@@ -166,14 +166,37 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
             Bibliothèque
           </span>
         </h2>
-        <label data-t="support">
-          Support
-        </label>
-        <div class="inputline"><select id="support"></select><button class="search-btn" onclick="searchSupport()">🔍</button></div>
-        <label data-t="foil">
-          Folio
-        </label>
-        <div class="inputline"><select id="foil"></select><button class="search-btn" onclick="searchFoil()">🔍</button></div>
+       <label data-t="support">Support</label>
+
+<div class="inputline">
+  <select id="support"></select>
+
+  <button class="search-btn"
+          onclick="searchSupport()">
+    🔍
+  </button>
+
+  <button class="mini-btn"
+          onclick="addSupport()">
+    +
+  </button>
+</div>
+<label data-t="foil">Folio</label>
+
+<div class="inputline">
+  <select id="foil"></select>
+
+  <button class="search-btn"
+          onclick="searchFoil()">
+    🔍
+  </button>
+
+  <button class="mini-btn"
+          onclick="addFoil()">
+    +
+  </button>
+</div>
+
         <label data-t="operation">
           Opération
         </label>
