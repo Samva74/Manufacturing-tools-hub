@@ -334,6 +334,21 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
     <label>Pression max</label>
     <input id="sPressMax" type="number">
 
+    <label>Temps min</label>
+<input id="sDwellMin"
+       type="number"
+       step="0.01">
+
+<label>Temps recommandé</label>
+<input id="sDwellRec"
+       type="number"
+       step="0.01">
+
+<label>Temps max</label>
+<input id="sDwellMax"
+       type="number"
+       step="0.01">
+
     <button class="btn"
         type="button"
         onclick="window.saveSupport()">
@@ -786,7 +801,16 @@ window.saveSupport = async function(){
         num(el('sPressRec').value, null),
 
       pressure_max:
-        num(el('sPressMax').value, null)
+  Number(el('sPressMax').value),
+
+dwell_time_min:
+  Number(el('sDwellMin').value),
+
+dwell_time_rec:
+  Number(el('sDwellRec').value),
+
+dwell_time_max:
+  Number(el('sDwellMax').value)
 
     };
 
