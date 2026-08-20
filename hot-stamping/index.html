@@ -673,25 +673,118 @@ if(!s||!f){clearValues();return;}var baseT=[num(s.temperature_min,0),num(s.tempe
 function modal(title,items,titleFn,subFn,searchFn,pick){var m=el('searchModal'),q=el('searchInput'),list=el('searchResults');el('searchTitle').textContent=title;q.value='';function render(){var term=q.value.toLowerCase().trim();var rows=items.filter(function(x){return !term||searchFn(x).toLowerCase().indexOf(term)>=0;}).slice(0,120);list.innerHTML='';if(!rows.length){list.innerHTML='<p>Aucun résultat.</p>';return;}rows.forEach(function(x){var div=document.createElement('div');div.className='result';var b=document.createElement('b');b.textContent=titleFn(x);div.appendChild(b);var small=document.createElement('div');small.textContent=subFn(x)||'';div.appendChild(small);div.onclick=function(){pick(x);m.classList.remove('open');calc();};list.appendChild(div);});}q.oninput=render;el('searchClose').onclick=function(){m.classList.remove('open');};m.classList.add('open');setTimeout(function(){q.focus();},50);render();}
 window.searchSupport=function(){modal('Recherche support',supports.filter(validSupport),supportLabel,function(s){return [s.supplier,s.collection,s.family].filter(Boolean).join(' · ');},function(s){return [s.code,s.name_fr,s.supplier,s.collection,s.family,s.note].join(' ');},function(s){el('support').value=s.code;});};
 window.searchFoil=function(){modal('Recherche folio',foils.filter(validFoil),foilLabel,function(f){return [f.supplier,f.reference,f.color,f.foil_type].filter(Boolean).join(' · ');},function(f){return [f.foil_code,f.label_fr,f.supplier,f.reference,f.color,f.foil_type].join(' ');},function(f){el('foil').value=f.foil_code||f.id;});};
-window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFoil();await api('Hot_Stamping_calibrations','',{method:'POST',body:JSON.stringify({material:s?s.code:null,foil:f?(f.foil_code||f.id):null,temperature:num(el('cTemp').value,null),pressure:num(el('cPress').value,null),dwell_time:num(el('cDwell').value,null),comments:el('comments').value,created_by_user_id:user?user.id:null,created_by_email:user?user.email:null})});toast('Calibration enregistrée');
+window.saveCalibration = async function(){
+
+  try{
+
+    var s = selectedSupport();
+    var f = selectedFoil();
+
+    await api(
+      'Hot_Stamping_calibrations',
+      '',
+      {
+        method:'POST',
+        body:JSON.stringify({
+
+          material:
+            s ? s.code : null,
+
+          foil:
+            f ? (f.foil_code || f.id) : null,
+
+          temperature:
+            num(el('cTemp').value, null),
+
+          pressure:
+            num(el('cPress').value, null),
+
+          dwell_time:
+            num(el('cDwell').value, null),
+
+          comments:
+            el('comments').value,
+
+          created_by_user_id:
+            user ? user.id : null,
+
+          created_by_email:
+            user ? user.email : null
+
+        })
+      }
+    );
+
+    toast('Calibration enregistrée');
+
+    loadCalibrations();
+
+  }
+  catch(e){
+
+    console.error('Erreur calibration :', e);
+
+    alert(e.message);
+
+    toast('Erreur calibration');
+
+  }
+
+};
+
+
 window.saveSupport = async function(){
 
   try{
 
+    var code = el('sCode').value.trim();
+    var nameFr = el('sNameFr').value.trim();
+
+    if(!code){
+
+      alert('Le code du support est obligatoire.');
+      el('sCode').focus();
+      return;
+
+    }
+
+    if(!nameFr){
+
+      alert('Le nom du support est obligatoire.');
+      el('sNameFr').focus();
+      return;
+
+    }
+
     const payload = {
 
-      code: el('sCode').value,
-      name_fr: el('sNameFr').value,
-      supplier: el('sSupplier').value,
-      family: el('sFamily').value,
+      code: code,
 
-      temperature_min: Number(el('sTempMin').value),
-      temperature_rec: Number(el('sTempRec').value),
-      temperature_max: Number(el('sTempMax').value),
+      name_fr: nameFr,
 
-      pressure_min: Number(el('sPressMin').value),
-      pressure_rec: Number(el('sPressRec').value),
-      pressure_max: Number(el('sPressMax').value)
+      supplier:
+        el('sSupplier').value.trim() || null,
+
+      family:
+        el('sFamily').value.trim() || null,
+
+      temperature_min:
+        num(el('sTempMin').value, null),
+
+      temperature_rec:
+        num(el('sTempRec').value, null),
+
+      temperature_max:
+        num(el('sTempMax').value, null),
+
+      pressure_min:
+        num(el('sPressMin').value, null),
+
+      pressure_rec:
+        num(el('sPressRec').value, null),
+
+      pressure_max:
+        num(el('sPressMax').value, null)
 
     };
 
@@ -708,77 +801,147 @@ window.saveSupport = async function(){
 
     toast('Support ajouté');
 
+    closeSupportModal();
+
     await loadData();
 
-    closeSupportModal();
+    el('support').value = code;
+
+    calc();
+
+    [
+      'sCode',
+      'sNameFr',
+      'sSupplier',
+      'sFamily',
+      'sTempMin',
+      'sTempRec',
+      'sTempMax',
+      'sPressMin',
+      'sPressRec',
+      'sPressMax'
+    ].forEach(function(id){
+
+      el(id).value = '';
+
+    });
 
   }
   catch(e){
 
-    console.error(e);
+    console.error('Erreur ajout support :', e);
 
-    alert(e.message);
+    alert(
+      'Impossible d’enregistrer le support dans Supabase.\n\n'
+      + e.message
+    );
 
     toast('Erreur ajout support');
 
   }
 
 };
+
+
 window.saveFoil = async function(){
 
- try{
+  try{
 
-   await api(
+    var code = el('fCode').value.trim();
+    var labelFr = el('fLabelFr').value.trim();
+
+    if(!code){
+
+      alert('Le code du folio est obligatoire.');
+      el('fCode').focus();
+      return;
+
+    }
+
+    if(!labelFr){
+
+      alert('Le nom du folio est obligatoire.');
+      el('fLabelFr').focus();
+      return;
+
+    }
+
+    const payload = {
+
+      foil_code:
+        code,
+
+      label_fr:
+        labelFr,
+
+      supplier:
+        el('fSupplier').value.trim() || null,
+
+      reference:
+        el('fReference').value.trim() || null,
+
+      temperature_delta:
+        num(el('fDeltaTemp').value, 0),
+
+      pressure_factor:
+        num(el('fPressureFactor').value, 1),
+
+      dwell_factor:
+        num(el('fDwellFactor').value, 1)
+
+    };
+
+    console.log('INSERT FOLIO', payload);
+
+    await api(
       'hot_foils',
       '',
       {
         method:'POST',
-        body:JSON.stringify({
-
-           foil_code:
-             el('fCode').value,
-
-           label_fr:
-             el('fLabelFr').value,
-
-           supplier:
-             el('fSupplier').value,
-
-           reference:
-             el('fReference').value,
-
-           temperature_delta:
-             Number(el('fDeltaTemp').value),
-
-           pressure_factor:
-             Number(el('fPressureFactor').value),
-
-           dwell_factor:
-             Number(el('fDwellFactor').value)
-
-        })
+        body:JSON.stringify(payload)
       }
-   );
+    );
 
-   toast('Folio ajouté');
+    toast('Folio ajouté');
 
-   closeFoilModal();
+    closeFoilModal();
 
-   await loadData();
+    await loadData();
 
- }
- catch(e){
+    el('foil').value = code;
 
-   console.error(e);
+    calc();
 
-   toast('Erreur ajout folio');
+    [
+      'fCode',
+      'fLabelFr',
+      'fSupplier',
+      'fReference',
+      'fDeltaTemp'
+    ].forEach(function(id){
 
- }
+      el(id).value = '';
 
-};                                            
-loadCalibrations();}catch(e){
-  console.error(e);
-  toast('Erreur calibration');}};
+    });
+
+    el('fPressureFactor').value = '1';
+    el('fDwellFactor').value = '1';
+
+  }
+  catch(e){
+
+    console.error('Erreur ajout folio :', e);
+
+    alert(
+      'Impossible d’enregistrer le folio dans Supabase.\n\n'
+      + e.message
+    );
+
+    toast('Erreur ajout folio');
+
+  }
+
+};
 window.loadCalibrations=async function(){var h=el('calibs');h.innerHTML='';try{var rows=await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
 window.addSupport=function(){
 
