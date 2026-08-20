@@ -676,56 +676,52 @@ window.searchFoil=function(){modal('Recherche folio',foils.filter(validFoil),foi
 window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFoil();await api('Hot_Stamping_calibrations','',{method:'POST',body:JSON.stringify({material:s?s.code:null,foil:f?(f.foil_code||f.id):null,temperature:num(el('cTemp').value,null),pressure:num(el('cPress').value,null),dwell_time:num(el('cDwell').value,null),comments:el('comments').value,created_by_user_id:user?user.id:null,created_by_email:user?user.email:null})});toast('Calibration enregistrée');
 window.saveSupport = async function(){
 
- try{
+  try{
 
-   await api(
+    const payload = {
+
+      code: el('sCode').value,
+      name_fr: el('sNameFr').value,
+      supplier: el('sSupplier').value,
+      family: el('sFamily').value,
+
+      temperature_min: Number(el('sTempMin').value),
+      temperature_rec: Number(el('sTempRec').value),
+      temperature_max: Number(el('sTempMax').value),
+
+      pressure_min: Number(el('sPressMin').value),
+      pressure_rec: Number(el('sPressRec').value),
+      pressure_max: Number(el('sPressMax').value)
+
+    };
+
+    console.log('INSERT SUPPORT', payload);
+
+    await api(
       'hot_supports',
       '',
       {
         method:'POST',
-        body:JSON.stringify({
-
-          code: el('sCode').value,
-          name_fr: el('sNameFr').value,
-          supplier: el('sSupplier').value,
-          family: el('sFamily').value,
-
-          temperature_min:
-             Number(el('sTempMin').value),
-
-          temperature_rec:
-             Number(el('sTempRec').value),
-
-          temperature_max:
-             Number(el('sTempMax').value),
-
-          pressure_min:
-             Number(el('sPressMin').value),
-
-          pressure_rec:
-             Number(el('sPressRec').value),
-
-          pressure_max:
-             Number(el('sPressMax').value)
-
-        })
+        body:JSON.stringify(payload)
       }
-   );
+    );
 
-   toast('Support ajouté');
+    toast('Support ajouté');
 
-   closeSupportModal();
+    await loadData();
 
-   await loadData();
+    closeSupportModal();
 
- }
- catch(e){
+  }
+  catch(e){
 
-   console.error(e);
+    console.error(e);
 
-   toast('Erreur ajout support');
+    alert(e.message);
 
- }
+    toast('Erreur ajout support');
+
+  }
 
 };
 window.saveFoil = async function(){
