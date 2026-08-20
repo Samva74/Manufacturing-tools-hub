@@ -161,12 +161,6 @@
           <button class="mini-plus" onclick="addTool()">+</button>
         </div>
 
-        <label>Opération</label>
-        <select id="operation">
-          <option value="standard">Usinage standard</option>
-          <option value="saw_cut">Découpe scie</option>
-        </select>
-
         <div id="sawPanel" class="saw-card hidden">
           <div class="saw-head">
             <b>⚙️ Paramètres scie circulaire</b>
@@ -197,6 +191,13 @@
             <input id="flutes" type="number" value="2" step="1">
           </div>
         </div>
+
+        <label>Opération</label>
+        <select id="operation">
+          <option value="standard">Usinage standard</option>
+          <option value="saw_cut">Découpe scie</option>
+        </select>
+        
         <div class="note" id="note"></div>
       </section>
     </div>
