@@ -295,7 +295,99 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
   </section>
 </div>
 <div class="modal" id="searchModal"><div class="modal-panel"><div class="modal-head"><h3 id="searchTitle">Recherche</h3><button class="close" id="searchClose">×</button></div><label>Recherche</label><input id="searchInput" placeholder="Nom, fournisseur, référence"><div id="searchResults"></div></div></div>
-<div class="toast" id="toast"></div>
+<!-- Modal Ajout Support -->
+<div class="modal" id="supportModal">
+  <div class="modal-panel">
+
+    <div class="modal-head">
+      <h3>Ajouter un support</h3>
+      <button class="close" onclick="closeSupportModal()">×</button>
+    </div>
+
+    <label>Code</label>
+    <input id="sCode">
+
+    <label>Nom FR</label>
+    <input id="sNameFr">
+
+    <label>Fournisseur</label>
+    <input id="sSupplier">
+
+    <label>Famille</label>
+    <input id="sFamily">
+
+    <label>Température min</label>
+    <input id="sTempMin" type="number">
+
+    <label>Température recommandée</label>
+    <input id="sTempRec" type="number">
+
+    <label>Température max</label>
+    <input id="sTempMax" type="number">
+
+    <label>Pression min</label>
+    <input id="sPressMin" type="number">
+
+    <label>Pression recommandée</label>
+    <input id="sPressRec" type="number">
+
+    <label>Pression max</label>
+    <input id="sPressMax" type="number">
+
+    <button class="btn"
+            onclick="saveSupport()">
+      Enregistrer Support
+    </button>
+
+  </div>
+</div>
+
+
+<!-- Modal Ajout Folio -->
+<div class="modal" id="foilModal">
+  <div class="modal-panel">
+
+    <div class="modal-head">
+      <h3>Ajouter un folio</h3>
+      <button class="close" onclick="closeFoilModal()">×</button>
+    </div>
+
+    <label>Code folio</label>
+    <input id="fCode">
+
+    <label>Nom FR</label>
+    <input id="fLabelFr">
+
+    <label>Fournisseur</label>
+    <input id="fSupplier">
+
+    <label>Référence</label>
+    <input id="fReference">
+
+    <label>Δ Température</label>
+    <input id="fDeltaTemp" type="number">
+
+    <label>Facteur pression</label>
+    <input id="fPressureFactor"
+           value="1"
+           type="number"
+           step="0.1">
+
+    <label>Facteur temps</label>
+    <input id="fDwellFactor"
+           value="1"
+           type="number"
+           step="0.1">
+
+    <button class="btn"
+            onclick="saveFoil()">
+      Enregistrer Folio
+    </button>
+
+  </div>
+</div>
+
+  <div class="toast" id="toast"></div>
 <script>
 (function(){
 'use strict';
@@ -586,15 +678,39 @@ loadCalibrations();}catch(e){
   console.error(e);
   toast('Erreur calibration');}};
 window.loadCalibrations=async function(){var h=el('calibs');h.innerHTML='';try{var rows=await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
-window.addSupport = function(){
+window.addSupport=function(){
 
-  toast('Ajout support à développer');
+ document
+   .getElementById('supportModal')
+   .classList
+   .add('open');
 
 };
 
-window.addFoil = function(){
+window.addFoil=function(){
 
-  toast('Ajout folio à développer');
+ document
+   .getElementById('foilModal')
+   .classList
+   .add('open');
+
+};
+
+window.closeSupportModal=function(){
+
+ document
+   .getElementById('supportModal')
+   .classList
+   .remove('open');
+
+};
+
+window.closeFoilModal=function(){
+
+ document
+   .getElementById('foilModal')
+   .classList
+   .remove('open');
 
 };
   async function init(){
