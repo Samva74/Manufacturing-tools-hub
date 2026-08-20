@@ -245,6 +245,271 @@
   <div class="foot" data-t="foot">Bibliothèque CNC issue du fichier Excel V3 corrigé.</div>
 </div>
 
+<!-- Modal Ajout Matière -->
+<div class="modal" id="materialModal">
+
+  <div class="modal-panel">
+
+    <div class="modal-head">
+
+      <h3>Ajouter une matière</h3>
+
+      <button class="close"
+              type="button"
+              onclick="closeMaterialModal()">
+        ×
+      </button>
+
+    </div>
+
+    <label>Code matière</label>
+    <input id="newMaterialCode"
+           placeholder="Exemple : mdf_noir">
+
+    <label>Nom français</label>
+    <input id="newMaterialNameFr"
+           placeholder="Exemple : MDF noir">
+
+    <label>Nom anglais</label>
+    <input id="newMaterialNameEn">
+
+    <label>Nom portugais</label>
+    <input id="newMaterialNamePt">
+
+    <label>Remarque</label>
+    <textarea id="newMaterialRemarkFr"></textarea>
+
+    <button class="btn"
+            type="button"
+            onclick="saveMaterial()">
+      Enregistrer la matière
+    </button>
+
+  </div>
+
+</div>
+
+<!-- Modal Ajout Machine -->
+<div class="modal" id="machineModal">
+
+  <div class="modal-panel">
+
+    <div class="modal-head">
+
+      <h3>Ajouter une machine CNC</h3>
+
+      <button class="close"
+              type="button"
+              onclick="closeMachineModal()">
+        ×
+      </button>
+
+    </div>
+
+    <label>Nom de la machine</label>
+    <input id="newMachineName"
+           placeholder="Exemple : MasterWood MW310">
+
+    <div class="row">
+
+      <div>
+
+        <label>n max machine</label>
+
+        <div class="calib-input-wrap">
+
+          <input id="newMachineNmax"
+                 type="number"
+                 inputmode="numeric">
+
+          <span class="calib-unit">
+            tr/min
+          </span>
+
+        </div>
+
+      </div>
+
+      <div>
+
+        <label>Vf max machine</label>
+
+        <div class="calib-input-wrap">
+
+          <input id="newMachineVfMax"
+                 type="number"
+                 inputmode="numeric">
+
+          <span class="calib-unit">
+            mm/min
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div>
+
+        <label>Marge sécurité n</label>
+
+        <div class="calib-input-wrap">
+
+          <input id="newMachineSafetyN"
+                 type="number"
+                 min="0"
+                 max="100"
+                 step="1"
+                 value="100">
+
+          <span class="calib-unit">
+            %
+          </span>
+
+        </div>
+
+      </div>
+
+      <div>
+
+        <label>Marge sécurité Vf</label>
+
+        <div class="calib-input-wrap">
+
+          <input id="newMachineSafetyVf"
+                 type="number"
+                 min="0"
+                 max="100"
+                 step="1"
+                 value="100">
+
+          <span class="calib-unit">
+            %
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <label>Site de production</label>
+
+    <input id="newMachineSite"
+           placeholder="Exemple : Portugal">
+
+    <button class="btn"
+            type="button"
+            onclick="saveMachine()">
+      Enregistrer la machine
+    </button>
+
+  </div>
+
+</div>
+
+<!-- Modal Ajout Outil -->
+<div class="modal" id="toolModal">
+
+  <div class="modal-panel">
+
+    <div class="modal-head">
+
+      <h3>Ajouter un outil CNC</h3>
+
+      <button class="close"
+              type="button"
+              onclick="closeToolModal()">
+        ×
+      </button>
+
+    </div>
+
+    <label>Matière associée</label>
+    <select id="newToolMaterial"></select>
+
+    <label>Code outil</label>
+    <input id="newToolCode"
+           placeholder="Exemple : fraise_2d_standard">
+
+    <label>Nom français</label>
+    <input id="newToolLabelFr">
+
+    <label>Nom anglais</label>
+    <input id="newToolLabelEn">
+
+    <label>Nom portugais</label>
+    <input id="newToolLabelPt">
+
+    <h3>Vitesse de coupe</h3>
+
+    <div class="row">
+
+      <div>
+        <label>Vc min</label>
+        <input id="newToolVcMin"
+               type="number"
+               step="0.01">
+      </div>
+
+      <div>
+        <label>Vc recommandée</label>
+        <input id="newToolVcRec"
+               type="number"
+               step="0.01">
+      </div>
+
+    </div>
+
+    <label>Vc max</label>
+    <input id="newToolVcMax"
+           type="number"
+           step="0.01">
+
+    <h3>Avance par dent</h3>
+
+    <div class="row">
+
+      <div>
+        <label>Fz min</label>
+        <input id="newToolFzMin"
+               type="number"
+               step="0.001">
+      </div>
+
+      <div>
+        <label>Fz recommandée</label>
+        <input id="newToolFzRec"
+               type="number"
+               step="0.001">
+      </div>
+
+    </div>
+
+    <label>Fz max</label>
+    <input id="newToolFzMax"
+           type="number"
+           step="0.001">
+
+    <label>Utilisation</label>
+    <textarea id="newToolUsageFr"></textarea>
+
+    <label>Remarque</label>
+    <textarea id="newToolRemarkFr"></textarea>
+
+    <button class="btn"
+            type="button"
+            onclick="saveTool()">
+      Enregistrer l’outil
+    </button>
+
+  </div>
+
+</div>
+  
 <div class="toast" id="toast"></div>
 <div class="modal" id="searchModal"><div class="modal-panel"><div class="modal-head"><h3 id="searchTitle">Recherche</h3><button class="close" id="searchClose">×</button></div><label>Recherche</label><input id="searchInput" placeholder="Nom, numéro ou référence"><div id="searchResults"></div></div></div>
 
@@ -382,7 +647,27 @@ async function loadLibraries(){
   materials=await api('cnc_materials',{q:'?select=*&order=name_fr.asc&limit=5000'});
 
   // Très important : la liste matière est construite depuis cnc_tools pour ne perdre aucun code importé depuis Excel.
-  materialCodesFromTools=[...new Set(tools.map(t=>t.material_code).filter(Boolean))].sort((a,b)=>prettyCode(a).localeCompare(prettyCode(b)));
+  materialCodesFromTools = [
+
+  ...new Set([
+
+    ...tools.map(function(t){
+      return t.material_code;
+    }),
+
+    ...materials.map(function(m){
+      return m.code;
+    })
+
+  ].filter(Boolean))
+
+].sort(function(a,b){
+
+  return prettyCode(a).localeCompare(
+    prettyCode(b)
+  );
+
+});
 }
 
 function materialLabel(code){
@@ -535,12 +820,650 @@ function searchMachine(){openSearch('Recherche machine',machines.map(m=>({title:
 function searchMaterial(){openSearch('Recherche matière',materialCodesFromTools.map(code=>({title:materialLabel(code),sub:code,search:[code,materialLabel(code)].join(' '),value:code})),v=>{$('material').value=v;fillLists();calc()})}
 function searchTool(){openSearch('Recherche outil',tools.map(t=>({title:loc(t,'label')||t.label_fr||t.tool_code,sub:materialLabel(t.material_code)+' · Vc '+(t.vc_rec||'')+' · Fz '+(t.fz_rec||''),search:[t.tool_code,loc(t,'label'),loc(t,'usage'),t.material_code,materialLabel(t.material_code),t.remark_fr].join(' '),value:String(t.id)})),v=>{let t=tools.find(x=>String(x.id)===v);if(t){$('material').value=t.material_code;fillLists();$('tool').value=v;calc()}})}
 
-async function addMaterial(){toast(canEdit()?'Ajout matière à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
-async function addMachine(){toast(canEdit()?'Ajout machine à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
-async function addTool(){toast(canEdit()?'Ajout outil à faire dans Supabase ou prochaine itération':'Droit expert/admin requis')}
+function addMaterial(){
+
+  if(!canEdit()){
+
+    toast('Droit expert/admin requis');
+    return;
+
+  }
+
+  $('materialModal').classList.add('open');
+
+  setTimeout(function(){
+
+    $('newMaterialCode').focus();
+
+  }, 50);
+
+}
+
+
+function closeMaterialModal(){
+
+  $('materialModal').classList.remove('open');
+
+}
+
+
+function addMachine(){
+
+  if(!canEdit()){
+
+    toast('Droit expert/admin requis');
+    return;
+
+  }
+
+  $('machineModal').classList.add('open');
+
+  setTimeout(function(){
+
+    $('newMachineName').focus();
+
+  }, 50);
+
+}
+
+
+function closeMachineModal(){
+
+  $('machineModal').classList.remove('open');
+
+}
+
+
+function addTool(){
+
+  if(!canEdit()){
+
+    toast('Droit expert/admin requis');
+    return;
+
+  }
+
+  const select = $('newToolMaterial');
+
+  select.innerHTML = '';
+
+  const availableCodes = [
+    ...new Set([
+      ...materials.map(function(m){
+        return m.code;
+      }),
+      ...materialCodesFromTools
+    ].filter(Boolean))
+  ];
+
+  availableCodes.sort(function(a,b){
+
+    return materialLabel(a).localeCompare(
+      materialLabel(b)
+    );
+
+  });
+
+  availableCodes.forEach(function(code){
+
+    select.add(
+      new Option(
+        materialLabel(code),
+        code
+      )
+    );
+
+  });
+
+  if(
+    $('material').value &&
+    availableCodes.includes($('material').value)
+  ){
+
+    select.value = $('material').value;
+
+  }
+
+  $('toolModal').classList.add('open');
+
+  setTimeout(function(){
+
+    $('newToolCode').focus();
+
+  }, 50);
+
+}
+
+
+function closeToolModal(){
+
+  $('toolModal').classList.remove('open');
+
+}
+
+async function saveMaterial(){
+
+  if(!canEdit()){
+
+    toast('Droit expert/admin requis');
+    return;
+
+  }
+
+  const code =
+    $('newMaterialCode')
+      .value
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '_');
+
+  const nameFr =
+    $('newMaterialNameFr')
+      .value
+      .trim();
+
+  if(!code){
+
+    alert('Le code matière est obligatoire.');
+
+    $('newMaterialCode').focus();
+
+    return;
+
+  }
+
+  if(!nameFr){
+
+    alert('Le nom français est obligatoire.');
+
+    $('newMaterialNameFr').focus();
+
+    return;
+
+  }
+
+  const payload = {
+
+    code: code,
+
+    name_fr:
+      nameFr,
+
+    name_en:
+      $('newMaterialNameEn').value.trim() || null,
+
+    name_pt:
+      $('newMaterialNamePt').value.trim() || null,
+
+    remark_fr:
+      $('newMaterialRemarkFr').value.trim() || null,
+
+    created_by_user_id:
+      user ? user.id : null,
+
+    created_by_email:
+      user ? user.email : null
+
+  };
+
+  try{
+
+    console.log(
+      'INSERT CNC MATERIAL',
+      payload
+    );
+
+    await api(
+      'cnc_materials',
+      {
+        m:'POST',
+        b:payload
+      }
+    );
+
+    toast('Matière ajoutée');
+
+    closeMaterialModal();
+
+    await loadLibraries();
+
+    refreshText();
+
+    $('material').value = code;
+
+    rebuildToolList(false);
+
+    calc();
+
+    [
+      'newMaterialCode',
+      'newMaterialNameFr',
+      'newMaterialNameEn',
+      'newMaterialNamePt',
+      'newMaterialRemarkFr'
+    ].forEach(function(id){
+
+      $(id).value = '';
+
+    });
+
+  }
+  catch(e){
+
+    console.error(
+      'Erreur ajout matière :',
+      e
+    );
+
+    alert(
+      'Impossible d’enregistrer la matière dans Supabase.\n\n'
+      + e.message
+    );
+
+    toast('Erreur ajout matière');
+
+  }
+
+}
+
+async function saveMachine(){
+
+  if(!canEdit()){
+
+    toast('Droit expert/admin requis');
+    return;
+
+  }
+
+  const name =
+    $('newMachineName').value.trim();
+
+  const nMax =
+    num($('newMachineNmax').value);
+
+  const vfMax =
+    num($('newMachineVfMax').value);
+
+  const safetyNPercent =
+    num($('newMachineSafetyN').value);
+
+  const safetyVfPercent =
+    num($('newMachineSafetyVf').value);
+
+  const site =
+    $('newMachineSite').value.trim();
+
+  if(!name){
+
+    alert('Le nom de la machine est obligatoire.');
+
+    $('newMachineName').focus();
+
+    return;
+
+  }
+
+  if(nMax === null || nMax <= 0){
+
+    alert('Le n max machine doit être supérieur à zéro.');
+
+    $('newMachineNmax').focus();
+
+    return;
+
+  }
+
+  if(vfMax === null || vfMax <= 0){
+
+    alert('Le Vf max machine doit être supérieur à zéro.');
+
+    $('newMachineVfMax').focus();
+
+    return;
+
+  }
+
+  const payload = {
+
+    name:
+      name,
+
+    n_max:
+      nMax,
+
+    vf_max:
+      vfMax,
+
+    /*
+      Dans ta table, les marges sont utilisées
+      sous forme de coefficient.
+
+      100 % devient 1
+      90 % devient 0.9
+      80 % devient 0.8
+    */
+
+    safety_n:
+      safetyNPercent === null
+        ? 1
+        : safetyNPercent / 100,
+
+    safety_vf:
+      safetyVfPercent === null
+        ? 1
+        : safetyVfPercent / 100,
+
+    site:
+      site || null,
+
+    created_by_user_id:
+      user ? user.id : null,
+
+    created_by_email:
+      user ? user.email : null
+
+  };
+
+  try{
+
+    console.log(
+      'INSERT CNC MACHINE',
+      payload
+    );
+
+    await api(
+      'cnc_machines',
+      {
+        m:'POST',
+        b:payload
+      }
+    );
+
+    toast('Machine ajoutée');
+
+    closeMachineModal();
+
+    await loadLibraries();
+
+    refreshText();
+
+    $('machine').value = name;
+
+    calc();
+
+    [
+      'newMachineName',
+      'newMachineNmax',
+      'newMachineVfMax',
+      'newMachineSite'
+    ].forEach(function(id){
+
+      $(id).value = '';
+
+    });
+
+    $('newMachineSafetyN').value = '100';
+    $('newMachineSafetyVf').value = '100';
+
+  }
+  catch(e){
+
+    console.error(
+      'Erreur ajout machine :',
+      e
+    );
+
+    alert(
+      'Impossible d’enregistrer la machine dans Supabase.\n\n'
+      + e.message
+    );
+
+    toast('Erreur ajout machine');
+
+  }
+
+}
+
+async function saveTool(){
+
+  if(!canEdit()){
+
+    toast('Droit expert/admin requis');
+    return;
+
+  }
+
+  const materialCode =
+    $('newToolMaterial').value;
+
+  const toolCode =
+    $('newToolCode')
+      .value
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '_');
+
+  const labelFr =
+    $('newToolLabelFr')
+      .value
+      .trim();
+
+  if(!materialCode){
+
+    alert('La matière associée est obligatoire.');
+
+    return;
+
+  }
+
+  if(!toolCode){
+
+    alert('Le code outil est obligatoire.');
+
+    $('newToolCode').focus();
+
+    return;
+
+  }
+
+  if(!labelFr){
+
+    alert('Le nom français de l’outil est obligatoire.');
+
+    $('newToolLabelFr').focus();
+
+    return;
+
+  }
+
+  const payload = {
+
+    material_code:
+      materialCode,
+
+    tool_code:
+      toolCode,
+
+    label_fr:
+      labelFr,
+
+    label_en:
+      $('newToolLabelEn').value.trim() || null,
+
+    label_pt:
+      $('newToolLabelPt').value.trim() || null,
+
+    vc_min:
+      num($('newToolVcMin').value),
+
+    vc_rec:
+      num($('newToolVcRec').value),
+
+    vc_max:
+      num($('newToolVcMax').value),
+
+    fz_min:
+      num($('newToolFzMin').value),
+
+    fz_rec:
+      num($('newToolFzRec').value),
+
+    fz_max:
+      num($('newToolFzMax').value),
+
+    usage_fr:
+      $('newToolUsageFr').value.trim() || null,
+
+    remark_fr:
+      $('newToolRemarkFr').value.trim() || null,
+
+    created_by_user_id:
+      user ? user.id : null,
+
+    created_by_email:
+      user ? user.email : null
+
+  };
+
+  try{
+
+    console.log(
+      'INSERT CNC TOOL',
+      payload
+    );
+
+    const inserted = await api(
+      'cnc_tools',
+      {
+        m:'POST',
+        b:payload
+      }
+    );
+
+    toast('Outil ajouté');
+
+    closeToolModal();
+
+    await loadLibraries();
+
+    refreshText();
+
+    $('material').value =
+      materialCode;
+
+    rebuildToolList(false);
+
+    if(
+      inserted &&
+      inserted[0] &&
+      inserted[0].id !== undefined
+    ){
+
+      $('tool').value =
+        String(inserted[0].id);
+
+    }
+
+    calc();
+
+    [
+      'newToolCode',
+      'newToolLabelFr',
+      'newToolLabelEn',
+      'newToolLabelPt',
+      'newToolVcMin',
+      'newToolVcRec',
+      'newToolVcMax',
+      'newToolFzMin',
+      'newToolFzRec',
+      'newToolFzMax',
+      'newToolUsageFr',
+      'newToolRemarkFr'
+    ].forEach(function(id){
+
+      $(id).value = '';
+
+    });
+
+  }
+  catch(e){
+
+    console.error(
+      'Erreur ajout outil :',
+      e
+    );
+
+    alert(
+      'Impossible d’enregistrer l’outil dans Supabase.\n\n'
+      + e.message
+    );
+
+    toast('Erreur ajout outil');
+
+  }
+
+}
+  
 async function saveCalib(){
-  await api('cnc_calibrations',{m:'POST',b:{material:$('material').value,tool:$('tool').value,machine:$('machine').value,spindle_rpm:+$('cRpm').value,feed_rate:+$('cFeed').value,comments:$('comments').value,created_by_user_id:user.id,created_by_email:user.email}});
-  toast('Calibration enregistrée');loadCalibs();
+
+  try{
+
+    await api(
+      'cnc_calibrations',
+      {
+        m:'POST',
+
+        b:{
+
+          material:
+            $('material').value,
+
+          tool:
+            $('tool').value,
+
+          machine:
+            $('machine').value,
+
+          spindle_rpm:
+            +$('cRpm').value,
+
+          feed_rate:
+            +$('cFeed').value,
+
+          comments:
+            $('comments').value,
+
+          created_by_user_id:
+            user ? user.id : null,
+
+          created_by_email:
+            user ? user.email : null
+
+        }
+      }
+    );
+
+    toast('Calibration enregistrée');
+
+    loadCalibs();
+
+  }
+  catch(e){
+
+    console.error(
+      'Erreur calibration CNC :',
+      e
+    );
+
+    alert(
+      'Impossible d’enregistrer la calibration.\n\n'
+      + e.message
+    );
+
+    toast('Erreur calibration');
+
+  }
+
 }
 async function loadCalibs(){let h=$('calibs');h.innerHTML='';try{let rows=await api('cnc_calibrations',{q:'?select=*&order=created_at.desc&limit=20'});if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return}rows.forEach(r=>{let d=document.createElement('div');d.className='item';d.innerHTML=`<b>${r.material||''} · ${r.tool||''}</b><div class="s">${r.machine||''} · ${r.spindle_rpm||'-'} tr/min · ${r.feed_rate||'-'} mm/min<br>${r.created_by_email||r.operator||''}</div>`;h.appendChild(d)})}catch(e){h.innerHTML='<p>Supabase non chargé.</p>'}}
 async function init(){
