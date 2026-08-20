@@ -586,7 +586,18 @@ loadCalibrations();}catch(e){
   console.error(e);
   toast('Erreur calibration');}};
 window.loadCalibrations=async function(){var h=el('calibs');h.innerHTML='';try{var rows=await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
-async function init(){
+window.addSupport = function(){
+
+  toast('Ajout support à développer');
+
+};
+
+window.addFoil = function(){
+
+  toast('Ajout folio à développer');
+
+};
+  async function init(){
 try{
   await initAuth();
   applyTranslations();
