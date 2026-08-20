@@ -728,6 +728,58 @@ window.saveSupport = async function(){
  }
 
 };
+window.saveFoil = async function(){
+
+ try{
+
+   await api(
+      'hot_foils',
+      '',
+      {
+        method:'POST',
+        body:JSON.stringify({
+
+           foil_code:
+             el('fCode').value,
+
+           label_fr:
+             el('fLabelFr').value,
+
+           supplier:
+             el('fSupplier').value,
+
+           reference:
+             el('fReference').value,
+
+           temperature_delta:
+             Number(el('fDeltaTemp').value),
+
+           pressure_factor:
+             Number(el('fPressureFactor').value),
+
+           dwell_factor:
+             Number(el('fDwellFactor').value)
+
+        })
+      }
+   );
+
+   toast('Folio ajouté');
+
+   closeFoilModal();
+
+   await loadData();
+
+ }
+ catch(e){
+
+   console.error(e);
+
+   toast('Erreur ajout folio');
+
+ }
+
+};                                            
 loadCalibrations();}catch(e){
   console.error(e);
   toast('Erreur calibration');}};
