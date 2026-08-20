@@ -107,9 +107,10 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
     🔍
   </button>
 
-  <button class="mini-btn">
-    +
-  </button>
+<button class="mini-btn"
+        onclick="addMachine()">
+  +
+</button>
 
 </div>
 
@@ -404,6 +405,42 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
   </div>
 </div>
 
+<!-- Modal Ajout Machine -->
+<div class="modal" id="machineModal">
+
+  <div class="modal-panel">
+
+    <div class="modal-head">
+      <h3>Ajouter une machine</h3>
+
+      <button class="close"
+              onclick="closeMachineModal()">
+        ×
+      </button>
+    </div>
+
+    <label>Nom machine</label>
+    <input id="mName">
+
+    <label>Température max</label>
+    <input id="mTempMax" type="number">
+
+    <label>Pression max</label>
+    <input id="mPressMax" type="number">
+
+    <label>Site de production</label>
+    <input id="mSite">
+
+    <button class="btn"
+            type="button"
+            onclick="window.saveMachine()">
+      Enregistrer Machine
+    </button>
+
+  </div>
+
+</div>
+  
   <div class="toast" id="toast"></div>
 <script>
 (function(){
@@ -987,7 +1024,79 @@ user ? user.email : null,
   }
 
 };
-window.loadCalibrations=async function(){var h=el('calibs');h.innerHTML='';try{var rows=
+
+window.saveMachine = async function(){
+
+  try{
+
+    const payload = {
+
+      name:
+        el('mName').value,
+
+      temperature_max:
+        num(el('mTempMax').value, null),
+
+      pressure_max:
+        num(el('mPressMax').value, null),
+
+      site:
+        el('mSite').value,
+
+      created_by_user_id:
+        user ? user.id : null,
+
+      created_by_email:
+        user ? user.email : null
+
+    };
+
+    console.log(
+      'INSERT MACHINE',
+      payload
+    );
+
+    await api(
+      'hot_machines',
+      '',
+      {
+        method:'POST',
+        body:JSON.stringify(payload)
+      }
+    );
+
+    toast('Machine ajoutée');
+
+    closeMachineModal();
+
+    await loadData();
+
+    [
+      'mName',
+      'mTempMax',
+      'mPressMax',
+      'mSite'
+    ].forEach(function(id){
+
+      el(id).value='';
+
+    });
+
+  }
+  catch(e){
+
+    console.error(e);
+
+    alert(e.message);
+
+    toast('Erreur ajout machine');
+
+  }
+
+};
+  
+window.loadCalibrations=async function(){
+  var h=el('calibs');h.innerHTML='';try{var rows=
   await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
 window.addSupport=function(){
 
@@ -999,6 +1108,24 @@ window.addSupport=function(){
 };
 
 window.addFoil=function(){
+
+window.addMachine = function(){
+
+  document
+    .getElementById('machineModal')
+    .classList
+    .add('open');
+
+};
+
+window.closeMachineModal = function(){
+
+  document
+    .getElementById('machineModal')
+    .classList
+    .remove('open');
+
+};
 
  document
    .getElementById('foilModal')
