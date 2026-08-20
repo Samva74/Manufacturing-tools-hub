@@ -10,31 +10,69 @@
 :root{--bg:#d8d8d3;--card:#eeeeea;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--card2:#f6f6f2}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:28px}.wrap{max-width:1220px;margin:auto}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:58px}h1{font-size:42px;margin:36px 0 0;font-weight:900}.subtitle{font-size:21px;margin:28px 0 0;color:#000}.actions{display:flex;gap:8px;align-items:center;margin-top:50px}.pill,.logout{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:16px 24px;font-weight:900;font-size:20px;cursor:pointer}.logout{background:#1d1d1b;color:white}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:30px;text-decoration:none;color:var(--txt);min-height:415px}.card img{width:90px;height:90px;border-radius:20px;margin-bottom:36px}.card h2{font-size:40px;line-height:1.2;margin:0 0 34px;font-weight:900}.card p{font-size:28px;line-height:1.35;color:var(--muted);margin:0}
 @media(max-width:900px){
-  body{padding:16px}
-  .top{flex-direction:column}
-  .actions{margin-top:10px}
-  .grid{grid-template-columns:1fr}
+
+  body{
+    padding:12px;
+  }
+
+  h1{
+    font-size:28px;
+    margin:0;
+  }
+
+  .subtitle{
+    font-size:15px;
+    margin-top:6px;
+  }
+
+  .top{
+    flex-direction:column;
+    margin-bottom:15px;
+  }
+
+  .actions{
+    margin-top:8px;
+    width:100%;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
 
   .card{
-    min-height:90px;
-    padding:16px;
+    min-height:80px;
+
+    padding:12px;
+
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+
+  .card-text{
+    flex:1;
   }
 
   .card img{
-    width:55px;
-    height:55px;
-    margin-bottom:10px;
+    width:42px;
+    height:42px;
+    margin:0;
+    flex-shrink:0;
   }
 
   .card h2{
-    font-size:24px;
-    margin-bottom:8px;
+    font-size:20px;
+    margin:0 0 4px 0;
+    line-height:1.1;
   }
 
   .card p{
-    font-size:16px;
+    font-size:13px;
     line-height:1.2;
+    margin:0;
   }
+
 }
 </style>
 </head>
@@ -50,38 +88,41 @@
       <button class="logout" onclick="window.appAuth.signOut()">Déconnexion</button>
     </div>
   </div>
-  <div class="grid">
-    
-    <a class="card" href="/cnc/">
+<div class="grid">
 
-  <img src="cncpng
+  <a class="card" href="/cnc/">
 
-  <div class="card-text">
-    <h2>CNC Calculator</h2>
-    <p>Matières, outils et paramètres d’usinage.</p>
-  </div>
+    cnc/icon-192.png
 
-</a>
-  
-   <a classmping/
+    <div class="card-text">
+      <h2>CNC Calculator</h2>
+      <p>Matières, outils et paramètres d’usinage.</p>
+    </div>
 
-  <img src="hot-stamping/icon  <div class="card-text">
-    <h2>Hot Stamping Calculator</h2>
-    <p>Supports, folios et réglages de marquage.</p>
-  </div>
+  </a>
 
-</a>
-  
-<a class="card" href="/laserg
+  /hot-stamping/
 
-  <div class="card-text">
-    <h2>Laser Calculator</h2>
-    <p>Matières, opérations et paramètres laser.</p>
-  </div>
+    <img src="hot-stamping/icon-192.png"
+         alt="Hot Stamping">
 
-</a>
-  
-  </div>
+    <div class="card-</h2>
+      <p>Supports, folios et réglages de marquage.</p>
+    </div>
+
+  </a>
+
+  /laser/
+
+    <img src="laser/icon-192.png"
+         d-text">
+      <h2>Laser Calculator</h2>
+      <p>Matières, opérations et paramètres laser.</p>
+    </div>
+
+  </a>
+
+</div>
 </div>
 <script>
 window.authReady.then(async()=>{
