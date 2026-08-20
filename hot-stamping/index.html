@@ -773,46 +773,52 @@ window.saveSupport = async function(){
 
     }
 
-    const payload = {
+const payload = {
 
-      code: code,
+  code: code,
 
-      name_fr: nameFr,
+  name_fr: nameFr,
 
-      supplier:
-        el('sSupplier').value.trim() || null,
+  supplier:
+    el('sSupplier').value.trim() || null,
 
-      family:
-        el('sFamily').value.trim() || null,
+  family:
+    el('sFamily').value.trim() || null,
 
-      temperature_min:
-        num(el('sTempMin').value, null),
+  created_by_user_id:
+  user ? user.id : null,
 
-      temperature_rec:
-        num(el('sTempRec').value, null),
+created_by_email:
+  user ? user.email : null,
 
-      temperature_max:
-        num(el('sTempMax').value, null),
+  temperature_min:
+    num(el('sTempMin').value, null),
 
-      pressure_min:
-        num(el('sPressMin').value, null),
+  temperature_rec:
+    num(el('sTempRec').value, null),
 
-      pressure_rec:
-        num(el('sPressRec').value, null),
+  temperature_max:
+    num(el('sTempMax').value, null),
 
-      pressure_max:
-  Number(el('sPressMax').value),
+  pressure_min:
+    num(el('sPressMin').value, null),
 
-dwell_time_min:
-  Number(el('sDwellMin').value),
+  pressure_rec:
+    num(el('sPressRec').value, null),
 
-dwell_time_rec:
-  Number(el('sDwellRec').value),
+  pressure_max:
+    num(el('sPressMax').value, null),
 
-dwell_time_max:
-  Number(el('sDwellMax').value)
+  dwell_time_min:
+    num(el('sDwellMin').value, null),
 
-    };
+  dwell_time_rec:
+    num(el('sDwellRec').value, null),
+
+  dwell_time_max:
+    num(el('sDwellMax').value, null)
+
+};
 
     console.log('INSERT SUPPORT', payload);
 
@@ -913,6 +919,12 @@ window.saveFoil = async function(){
       reference:
         el('fReference').value.trim() || null,
 
+created_by_user_id:
+user ? user.id : null,
+ 
+created_by_email:
+user ? user.email : null,
+
       temperature_delta:
         num(el('fDeltaTemp').value, 0),
 
@@ -975,7 +987,8 @@ window.saveFoil = async function(){
   }
 
 };
-window.loadCalibrations=async function(){var h=el('calibs');h.innerHTML='';try{var rows=await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
+window.loadCalibrations=async function(){var h=el('calibs');h.innerHTML='';try{var rows=
+  await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
 window.addSupport=function(){
 
  document
