@@ -836,17 +836,24 @@ dwell_time_max:
     calc();
 
     [
-      'sCode',
-      'sNameFr',
-      'sSupplier',
-      'sFamily',
-      'sTempMin',
-      'sTempRec',
-      'sTempMax',
-      'sPressMin',
-      'sPressRec',
-      'sPressMax'
-    ].forEach(function(id){
+'sCode',
+'sNameFr',
+'sSupplier',
+'sFamily',
+
+'sTempMin',
+'sTempRec',
+'sTempMax',
+
+'sPressMin',
+'sPressRec',
+'sPressMax',
+
+'sDwellMin',
+'sDwellRec',
+'sDwellMax'
+]
+      .forEach(function(id){
 
       el(id).value = '';
 
