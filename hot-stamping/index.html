@@ -674,6 +674,60 @@ function modal(title,items,titleFn,subFn,searchFn,pick){var m=el('searchModal'),
 window.searchSupport=function(){modal('Recherche support',supports.filter(validSupport),supportLabel,function(s){return [s.supplier,s.collection,s.family].filter(Boolean).join(' · ');},function(s){return [s.code,s.name_fr,s.supplier,s.collection,s.family,s.note].join(' ');},function(s){el('support').value=s.code;});};
 window.searchFoil=function(){modal('Recherche folio',foils.filter(validFoil),foilLabel,function(f){return [f.supplier,f.reference,f.color,f.foil_type].filter(Boolean).join(' · ');},function(f){return [f.foil_code,f.label_fr,f.supplier,f.reference,f.color,f.foil_type].join(' ');},function(f){el('foil').value=f.foil_code||f.id;});};
 window.saveCalibration=async function(){try{var s=selectedSupport(),f=selectedFoil();await api('Hot_Stamping_calibrations','',{method:'POST',body:JSON.stringify({material:s?s.code:null,foil:f?(f.foil_code||f.id):null,temperature:num(el('cTemp').value,null),pressure:num(el('cPress').value,null),dwell_time:num(el('cDwell').value,null),comments:el('comments').value,created_by_user_id:user?user.id:null,created_by_email:user?user.email:null})});toast('Calibration enregistrée');
+window.saveSupport = async function(){
+
+ try{
+
+   await api(
+      'hot_supports',
+      '',
+      {
+        method:'POST',
+        body:JSON.stringify({
+
+          code: el('sCode').value,
+          name_fr: el('sNameFr').value,
+          supplier: el('sSupplier').value,
+          family: el('sFamily').value,
+
+          temperature_min:
+             Number(el('sTempMin').value),
+
+          temperature_rec:
+             Number(el('sTempRec').value),
+
+          temperature_max:
+             Number(el('sTempMax').value),
+
+          pressure_min:
+             Number(el('sPressMin').value),
+
+          pressure_rec:
+             Number(el('sPressRec').value),
+
+          pressure_max:
+             Number(el('sPressMax').value)
+
+        })
+      }
+   );
+
+   toast('Support ajouté');
+
+   closeSupportModal();
+
+   await loadData();
+
+ }
+ catch(e){
+
+   console.error(e);
+
+   toast('Erreur ajout support');
+
+ }
+
+};
 loadCalibrations();}catch(e){
   console.error(e);
   toast('Erreur calibration');}};
