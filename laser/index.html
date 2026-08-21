@@ -543,7 +543,7 @@
 
             <div class="input-unit">
                 <input id="cDwell">
-                <span class="unit">passes</span>
+                <span class="unit" data-t="passesUnit"></span>
             </div>
         </div>
 
@@ -700,11 +700,14 @@
           save: '💾 Enregistrer calibration',
           library: 'Bibliothèque Supabase Laser',
           reload: '↻ Recharger Supabase',
-          foot: 'Les données viennent de Supabase.'
+          foot: 'Les données viennent de Supabase.',
           powerValidated:'Puissance validée',
           speedValidated:'Vitesse validée',
           passesValidated:'Passes validées',
           commentsLabel:'Commentaires / observations',
+          passesUnit:'passes',
+          powerUnit:'%',
+          speedUnit:'mm/s',
         },
         
         en: {
@@ -723,11 +726,14 @@
           save: '💾 Save calibration',
           library: 'Laser Supabase library',
           reload: '↻ Reload Supabase',
-          foot: 'Data comes from Supabase.'
+          foot: 'Data comes from Supabase.',
           powerValidated:'Validated power',
           speedValidated:'Validated speed',
           passesValidated:'Validated passes',
           commentsLabel:'Comments / observations',
+          passesUnit:'passes',
+          powerUnit:'%',
+          speedUnit:'mm/s',
         },
         pt: {
           title: 'Laser Calculator',
@@ -745,11 +751,14 @@
           save: '💾 Guardar calibração',
           library: 'Biblioteca Laser',
           reload: '↻ Recarregar',
-          foot: 'Dados vêm do Supabase.'
+          foot: 'Dados vêm do Supabase.',
           powerValidated:'Potência validada',
           speedValidated:'Velocidade validada',
           passesValidated:'Passagens validadas',
           commentsLabel:'Comentários / observações',
+          passesUnit:'passagens',
+          powerUnit:'%',
+          speedUnit:'mm/s',
         }
       };
       let materials = [],
