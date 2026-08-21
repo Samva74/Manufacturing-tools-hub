@@ -49,19 +49,20 @@
 }
 
   .saw-card{border:1px dashed #a76b00;background:rgba(167,107,0,.08);border-radius:16px;padding:13px;margin-top:14px}.saw-card.hidden{display:none}.saw-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.saw-head b{font-size:15px}.edit-small{height:38px;min-width:38px;border:none;border-radius:12px;background:var(--accent);color:white;font-size:18px;font-weight:900;cursor:pointer}.saw-card input[readonly]{background:#f6f6f2;color:#1d1d1b}.saw-note{font-size:12px;color:var(--muted);margin-top:8px}
-@media(max-width:860px){body{padding:12px}.top{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}.title h1{font-size:24px}.logo{width:64px;height:64px}.logo svg{width:46px;height:46px}}
+@media(max-width:900px){body{padding:12px}.top{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}.title h1{font-size:24px}.logo{width:64px;height:64px}.logo svg{width:46px;height:46px}}
 .role-pill{
     height:40px;
     font-size:14px;
 }
 
 .hub-btn{
-    height:40px;
+    font-size:28px;
 }
 
 .langs button{
     height:40px;
 }
+
 </style>
 </head>
 <body>
@@ -78,7 +79,9 @@
       </div>
     </div>
     <div class="top-actions">
-      <button class="hub-btn" onclick="goHub()">🏠 Hub</button>
+      <button class="hub-btn" onclick="goHub()">
+    🏠 Hub
+</button>
       <span class="role-pill" id="rolePill">...</span>
       <div class="langs">
         <button data-lang="fr" onclick="setLang('fr')">French</button>
