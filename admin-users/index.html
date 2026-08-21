@@ -12,28 +12,71 @@
 :root{
     --bg:#d8d8d3;
     --card:#eeeeea;
+    --card2:#f6f6f2;
     --line:#8d8d86;
     --txt:#1d1d1b;
+    --muted:#5f5f58;
+}
+
+*{
+    box-sizing:border-box;
 }
 
 body{
     margin:0;
     background:var(--bg);
+    color:var(--txt);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    padding:20px;
+    padding:18px;
+}
+
+.wrap{
+    max-width:1200px;
+    margin:auto;
 }
 
 .card{
-    max-width:1000px;
-    margin:auto;
     background:var(--card);
     border:1px solid var(--line);
     border-radius:20px;
-    padding:24px;
+    padding:18px;
+    box-shadow:0 4px 16px rgba(0,0,0,.12);
 }
 
-h1{
-    margin-top:0;
+h2{
+    display:flex;
+    gap:8px;
+    margin:0 0 16px;
+    font-size:22px;
+}
+
+.dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#1d1d1b;
+    margin-top:7px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.section{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px;
+}
+
+label{
+    display:block;
+    margin:10px 0 6px;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:700;
 }
 
 input,
@@ -42,91 +85,146 @@ select{
     padding:12px;
     border-radius:12px;
     border:1px solid var(--line);
-    margin-top:6px;
+    background:white;
+    font-size:15px;
 }
 
-button{
-    padding:12px;
-    border-radius:12px;
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+}
+
+.btn{
+    flex:1;
     border:none;
+    border-radius:12px;
     background:#1d1d1b;
     color:white;
-    font-weight:700;
+    padding:12px;
+    font-weight:800;
     cursor:pointer;
-    margin-top:10px;
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
+.btn.secondary{
+    background:var(--card2);
+    color:var(--txt);
+    border:1px solid var(--line);
 }
 
-.list{
-    margin-top:30px;
+.users-title{
+    margin:0 0 12px;
+    font-size:18px;
 }
 
 .item{
     background:white;
     border:1px solid var(--line);
-    border-radius:12px;
+    border-radius:14px;
     padding:12px;
-    margin-top:8px;
+    margin-top:10px;
 }
+
+.email{
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.role{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.created{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:4px;
+}
+
+@media(max-width:860px){
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+}
+
 </style>
+    
 </head>
 
 <body>
 
+<div class="wrap">
+
 <div class="card">
 
-<h1>👤 Gestion Utilisateurs</h1>
+<h2>
+    <span class="dot"></span>
+    Gestion Utilisateurs
+</h2>
 
-<div class="grid">
+<div class="layout">
 
-<div>
+    <!-- Création utilisateur -->
 
-<label>Email</label>
-<input id="email">
+    <div class="section">
+
+        <h3>Création utilisateur</h3>
+
+        <label>Adresse email</label>
+        <input id="email">
+
+        <label>Rôle</label>
+
+        <select id="role">
+            <option value="user">User</option>
+            <option value="expert">Expert</option>
+            <option value="admin">Admin</option>
+        </select>
+
+        <label>Mot de passe généré</label>
+        <input id="password" readonly>
+
+        <div class="actions">
+
+            <button
+                id="generateBtn"
+                class="btn secondary">
+
+                Générer
+
+            </button>
+
+            <button
+                id="createBtn"
+                class="btn">
+
+                Créer utilisateur
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Liste utilisateurs -->
+
+    <div class="section">
+
+        <h3 class="users-title">
+            Utilisateurs
+        </h3>
+
+        <div id="users"></div>
+
+    </div>
 
 </div>
 
-<div>
-
-<label>Rôle</label>
-
-<select id="role">
-<option value="user">User</option>
-<option value="expert">Expert</option>
-<option value="admin">Admin</option>
-</select>
-
 </div>
 
 </div>
-
-<label>Mot de passe généré</label>
-
-<input id="password" readonly>
-
-<button id="generateBtn">
-Générer un mot de passe
-</button>
-
-<button id="createBtn">
-Créer utilisateur
-</button>
-
-<div class="list">
-
-<h2>Utilisateurs</h2>
-
-<div id="users"></div>
-
-</div>
-
-</div>
-
 <script>
 
 const SUPABASE_URL =
@@ -165,22 +263,25 @@ function generatePassword(){
 
 async function loadUsers(){
 
-    const token =
+    const session =
         (
             await sb.auth.getSession()
-        ).data.session?.access_token;
+        ).data.session;
+
+    if(!session){
+        return;
+    }
 
     const r = await fetch(
 
         SUPABASE_URL +
-        '/rest/v1/user_roles?select=*' +
-        '&order=email.asc',
+        '/rest/v1/user_roles?select=*&order=email.asc',
 
         {
             headers:{
                 apikey:SUPABASE_KEY,
                 Authorization:
-                    'Bearer ' + token
+                    'Bearer ' + session.access_token
             }
         }
 
@@ -206,11 +307,30 @@ async function loadUsers(){
         div.className =
             'item';
 
-        div.innerHTML =
-            '<b>' +
-            user.email +
-            '</b><br>' +
-            user.role;
+        div.innerHTML = `
+
+            <div class="email">
+                ${user.email}
+            </div>
+
+            <div class="role">
+                ${user.role}
+            </div>
+
+            <div class="created">
+                Créé le :
+                ${
+                    user.created_at
+                    ? new Date(
+                        user.created_at
+                    ).toLocaleDateString(
+                        'fr-FR'
+                    )
+                    : '-'
+                }
+            </div>
+
+        `;
 
         users.appendChild(div);
 
@@ -261,6 +381,16 @@ async function createUser(){
             await sb.auth.getSession()
         ).data.session;
 
+    if(!session){
+
+        alert(
+            'Session expirée'
+        );
+
+        return;
+
+    }
+
     const response =
         await fetch(
 
@@ -310,7 +440,13 @@ async function createUser(){
         'Utilisateur créé'
     );
 
-    loadUsers();
+    document
+        .getElementById('email')
+        .value = '';
+
+    generatePassword();
+
+    await loadUsers();
 
 }
 
@@ -350,7 +486,7 @@ async()=>{
 
     generatePassword();
 
-    loadUsers();
+    await loadUsers();
 
 });
 
