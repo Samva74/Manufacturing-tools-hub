@@ -39,35 +39,74 @@
   .card p{font-size:28px;line-height:1.35;color:var(--muted);margin:0}
   
 @media(max-width:900px){
+
   html,
-body{
-    overflow-x:hidden;
-    width:100%;
-}
-  .top{flex-direction:column}
-  .actions{margin-top:10px}
-  .grid{grid-template-columns:1fr}
+  body{
+      overflow-x:hidden;
+      width:100%;
+  }
+
+  body{
+      padding:12px;
+  }
+
+  .top{
+      flex-direction:column;
+      gap:10px;
+  }
+
+  .actions{
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-top:0;
+  }
+
+  .pill,
+  .logout{
+      width:100%;
+      font-size:14px;
+      padding:10px;
+      text-align:center;
+  }
+
+  .grid{
+      grid-template-columns:1fr;
+      gap:12px;
+  }
 
   .card{
-    width:100%;
-    max-width:100%;
-}
+      width:100%;
+      max-width:100%;
 
-  .card img{
-    width:55px;
-    height:55px;
-    margin-bottom:10px;
+      min-height:170px;
+
+      padding:14px;
+  }
+
+  .app-icon{
+      width:50px;
+      height:50px;
+      margin-bottom:10px;
+      border-radius:14px;
+  }
+
+  .app-icon svg{
+      width:30px;
+      height:30px;
   }
 
   .card h2{
-    font-size:22px;
-    margin-bottom:8px;
+      font-size:24px;
+      margin-bottom:6px;
   }
 
   .card p{
-    font-size:15px;
-    line-height:1.2;
+      font-size:14px;
+      line-height:1.3;
   }
+
 }
 </style>
 </head>
