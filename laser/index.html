@@ -708,6 +708,12 @@
           passesUnit:'passes',
           powerUnit:'%',
           speedUnit:'mm/s',
+          cut:'Découpe',
+          engrave:'Gravure',
+          mark:'Marquage',
+          score:'Rainage laser',
+          kiss_cut:'Découpe partielle',
+          de_engrave:'Dégravage',
         },
         
         en: {
@@ -734,6 +740,12 @@
           passesUnit:'passes',
           powerUnit:'%',
           speedUnit:'mm/s',
+          cut:'Cutting',
+          engrave:'Engraving',
+          mark:'Marking',
+          score:'Laser scoring',
+          kiss_cut:'Kiss cutting',
+          de_engrave:'Surface stripping',
         },
         pt: {
           title: 'Laser Calculator',
@@ -759,6 +771,12 @@
           passesUnit:'passagens',
           powerUnit:'%',
           speedUnit:'mm/s',
+          cut:'Corte',
+          engrave:'Gravação',
+          mark:'Marcação',
+          score:'Vinco a laser',
+          kiss_cut:'Meio-corte',
+          de_engrave:'Desgravação',
         }
       };
       let materials = [],
@@ -797,7 +815,22 @@
         let op = $('operation'),
           vo = op.value;
         op.innerHTML = '';
-        [...new Set(params.filter(p => p.material_code === $('material').value).map(p => p.operation))].forEach(o => op.add(new Option(o, o)));
+        [...new Set(
+    params
+        .filter(p => p.material_code === $('material').value)
+        .map(p => p.operation)
+)].forEach(o => {
+
+    const label =
+        TXT[lang][o] ||
+        TXT.fr[o] ||
+        o;
+
+    op.add(
+        new Option(label, o)
+    );
+
+});
         if ([...op.options].some(o => o.value === vo)) op.value = vo
       }
 
