@@ -98,24 +98,24 @@
         text-decoration: none
       }
 
-      .langs button.active {
+      .langs button.active{
         background: var(--accent);
         color: white
       }
 
-      .layout {
+      .layout{
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 14px
       }
 
-      .col {
+      .col{
         display: flex;
         flex-direction: column;
         gap: 14px
       }
 
-      .card {
+      .card{
         background: var(--card);
         border: 1px solid var(--line);
         border-radius: 20px;
@@ -123,14 +123,14 @@
         box-shadow: 0 4px 16px rgba(0, 0, 0, .12)
       }
 
-      h2 {
+      h2{
         display: flex;
         gap: 8px;
         margin: 0 0 12px;
         font-size: 18px
       }
 
-      .dot {
+      .dot{
         width: 10px;
         height: 10px;
         margin-top: 6px;
@@ -138,7 +138,7 @@
         background: var(--accent)
       }
 
-      label {
+      label{
         display: block;
         color: var(--muted);
         font-size: 13px;
@@ -146,24 +146,25 @@
         margin: 10px 0 5px
       }
 
-      .row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px
-      }
+     .row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+}
 
-      .inputline {
+      .inputline{
         display: flex;
         gap: 8px;
         align-items: stretch
       }
 
-      .input-unit{
+.input-unit{
     position:relative;
 }
 
 .input-unit input{
     padding-right:70px;
+    font-weight:700;
 }
 
 .unit{
@@ -171,9 +172,9 @@
     right:15px;
     top:50%;
     transform:translateY(-50%);
-    color:var(--muted);
-    font-size:13px;
+    color:var(--txt);
     font-weight:700;
+    font-size:14px;
 }
 
 
@@ -265,10 +266,12 @@
     color: var(--muted);
 }
 
-.res-small .val {
-    font-size: 30px;
-    font-weight: 900;
+.res-small .val{
+    font-size:30px;
+    font-weight:900;
+    margin-top:6px;
 }
+
 
       .res-line {
         display: flex;
@@ -510,19 +513,32 @@
           </section>
           <section class="card">
             <h2><span class="dot"></span><span data-t="calibration"></span></h2>
-<div class="input-unit">
-    <input id="cTemp">
-    <span class="unit">%</span>
-</div>
+<div class="row">
 
-<div class="input-unit">
-    <input id="cPress">
-    <span class="unit">mm/s</span>
-</div>
+    <div>
+        <label>Puissance validée</label>
+        <div class="input-unit">
+            <input id="cTemp">
+            <span class="unit">%</span>
+        </div>
+    </div>
 
-<div class="input-unit">
-    <input id="cDwell">
-    <span class="unit">Passes</span>
+    <div>
+        <label>Vitesse validée</label>
+        <div class="input-unit">
+            <input id="cPress">
+            <span class="unit">mm/s</span>
+        </div>
+    </div>
+
+    <div>
+        <label>Passes validées</label>
+        <div class="input-unit">
+            <input id="cDwell">
+            <span class="unit">passes</span>
+        </div>
+    </div>
+
 </div>
             <textarea id="comments"></textarea><button class="btn" onclick="saveCalib()" data-t="save"></button>
           </section>
