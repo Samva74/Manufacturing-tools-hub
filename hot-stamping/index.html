@@ -720,7 +720,7 @@ function fillLists(){var usable=supports.filter(validSupport);if(!usable.length)
           return o.operation_code;
   }
 );
-      el('status').textContent=usable.length+' supports utilisables · '+foils.length+' folios · '+operations.length+' opérations';el('libStatus').textContent=supports.length+' supports totaux · '+foils.length+' folios totaux';
+      el('status').textContent=usable.length+' supports utilisables · '+foils.length+' folios · '+operations.length+' opérations';
 calc();}
 function selectedSupport(){var code=el('support').value;return supports.find(function(s){return s.code===code;});}
 function selectedFoil(){var code=el('foil').value;return foils.find(function(f){return f.foil_code===code||f.id===code;});}
