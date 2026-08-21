@@ -551,17 +551,23 @@ body:not(.can-edit) .parameter-save-btn{
         <div class="col">
           <section class="card">
             <h2><span class="dot"></span><span data-t="machineInputs"></span></h2><label data-t="machine"></label>
-            <div class="inputline"><select id="machine"></select><button class="search-btn" onclick="searchMachine()">🔍</button><button class="mini-plus" onclick="addMachine()">+</button></div>
+            <div class="inputline">
+              <select id="machine"></select>
+              <button
+                class="search-btn"
+                onclick="searchMachine()">
+                🔍
+              </button>
+            </div>
           </section>
           <section class="card">
             <h2><span class="dot"></span><span data-t="materialOperation"></span></h2>
             <label data-t="material"></label>
             <div class="inputline">
               <select id="material"></select>
-              <button class="search-btn" onclick="searchSupport()">
+              <button class="search-btn"
+                onclick="searchSupport()">
                 🔍
-              </button><button class="mini-plus" onclick="addSupport()">
-                +
               </button>
             </div>
             <label data-t="thickness"></label>
@@ -576,9 +582,14 @@ body:not(.can-edit) .parameter-save-btn{
               <select id="operation"></select>
               <button class="search-btn" onclick="searchFoil()">
                 🔍
-              </button><button class="mini-plus" onclick="editFoil()">
-                ✎
               </button>
+              <button
+    class="mini-plus"
+    type="button"
+    onclick="addLaserParameter()"
+    title="Ajouter un paramètre laser">
+    +
+</button>
             </div>
             
             <div class="note" id="note"></div>
