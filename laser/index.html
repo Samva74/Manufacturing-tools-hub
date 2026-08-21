@@ -1239,7 +1239,22 @@ function fillOperationList() {
 
                 !parameter.machine_id
 
-            
+                &&
+
+                parameter.material_code ===
+                    selectedMaterialCode
+
+                &&
+
+                Number(
+                    parameter.thickness_mm
+                ) === Number(
+                    selectedThickness
+                )
+
+            );
+
+        }
     );
 
 }
