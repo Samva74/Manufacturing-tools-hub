@@ -512,36 +512,54 @@
             </div>
           </section>
           <section class="card">
-            <h2><span class="dot"></span><span data-t="calibration"></span></h2>
-<div class="row">
 
-    <div>
-        <label>Puissance validée</label>
-        <div class="input-unit">
-            <input id="cTemp">
-            <span class="unit">%</span>
+    <h2>
+        <span class="dot"></span>
+        <span data-t="calibration"></span>
+    </h2>
+
+    <div class="row">
+
+        <div>
+            <label data-t="powerValidated"></label>
+
+            <div class="input-unit">
+                <input id="cTemp">
+                <span class="unit">%</span>
+            </div>
         </div>
+
+        <div>
+            <label data-t="speedValidated"></label>
+
+            <div class="input-unit">
+                <input id="cPress">
+                <span class="unit">mm/s</span>
+            </div>
+        </div>
+
+        <div>
+            <label data-t="passesValidated"></label>
+
+            <div class="input-unit">
+                <input id="cDwell">
+                <span class="unit">passes</span>
+            </div>
+        </div>
+
     </div>
 
-    <div>
-        <label>Vitesse validée</label>
-        <div class="input-unit">
-            <input id="cPress">
-            <span class="unit">mm/s</span>
-        </div>
-    </div>
+    <label data-t="commentsLabel"></label>
 
-    <div>
-        <label>Passes validées</label>
-        <div class="input-unit">
-            <input id="cDwell">
-            <span class="unit">passes</span>
-        </div>
-    </div>
+    <textarea id="comments"></textarea>
 
-</div>
-            <textarea id="comments"></textarea><button class="btn" onclick="saveCalib()" data-t="save"></button>
-          </section>
+    <button
+        class="btn"
+        onclick="saveCalib()"
+        data-t="save">
+    </button>
+
+</section>
         </div>
       </div>
       <section class="card lib">
@@ -683,7 +701,12 @@
           library: 'Bibliothèque Supabase Laser',
           reload: '↻ Recharger Supabase',
           foot: 'Les données viennent de Supabase.'
+          powerValidated:'Puissance validée',
+          speedValidated:'Vitesse validée',
+          passesValidated:'Passes validées',
+          commentsLabel:'Commentaires / observations',
         },
+        
         en: {
           title: 'Laser Calculator',
           subtitle: 'Supabase material + operation library',
@@ -701,6 +724,10 @@
           library: 'Laser Supabase library',
           reload: '↻ Reload Supabase',
           foot: 'Data comes from Supabase.'
+          powerValidated:'Validated power',
+          speedValidated:'Validated speed',
+          passesValidated:'Validated passes',
+          commentsLabel:'Comments / observations',
         },
         pt: {
           title: 'Laser Calculator',
@@ -719,6 +746,10 @@
           library: 'Biblioteca Laser',
           reload: '↻ Recarregar',
           foot: 'Dados vêm do Supabase.'
+          powerValidated:'Potência validada',
+          speedValidated:'Velocidade validada',
+          passesValidated:'Passagens validadas',
+          commentsLabel:'Comentários / observações',
         }
       };
       let materials = [],
