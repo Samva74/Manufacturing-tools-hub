@@ -922,21 +922,23 @@ body:not(.can-edit) .parameter-save-btn{
 
     /* =========================================
        MACHINE
-       La valeur du menu est maintenant l’ID
-       Supabase de la machine.
        ========================================= */
 
-    const machineSelect = $('machine');
-    const previousMachineId = machineSelect.value;
+    const machineSelect =
+        $('machine');
+
+    const previousMachineId =
+        machineSelect.value;
 
     machineSelect.innerHTML = '';
 
     machines.forEach(machine => {
 
-        const option = new Option(
-            machine.name,
-            String(machine.id)
-        );
+        const option =
+            new Option(
+                machine.name,
+                String(machine.id)
+            );
 
         machineSelect.add(option);
 
@@ -946,10 +948,14 @@ body:not(.can-edit) .parameter-save-btn{
         previousMachineId &&
         machines.some(
             machine =>
-                String(machine.id) === previousMachineId
+                String(machine.id) ===
+                previousMachineId
         )
     ) {
-        machineSelect.value = previousMachineId;
+
+        machineSelect.value =
+            previousMachineId;
+
     }
 
 
@@ -957,17 +963,21 @@ body:not(.can-edit) .parameter-save-btn{
        MATIÈRE
        ========================================= */
 
-    const materialSelect = $('material');
-    const previousMaterialCode = materialSelect.value;
+    const materialSelect =
+        $('material');
+
+    const previousMaterialCode =
+        materialSelect.value;
 
     materialSelect.innerHTML = '';
 
     materials.forEach(material => {
 
-        const option = new Option(
-            loc(material, 'name'),
-            material.code
-        );
+        const option =
+            new Option(
+                loc(material, 'name'),
+                material.code
+            );
 
         materialSelect.add(option);
 
@@ -977,130 +987,42 @@ body:not(.can-edit) .parameter-save-btn{
         previousMaterialCode &&
         materials.some(
             material =>
-                material.code === previousMaterialCode
+                material.code ===
+                previousMaterialCode
         )
     ) {
-        materialSelect.value = previousMaterialCode;
-    }
 
-      /* =========================================
-       Epaisseurs
-       ========================================= */      
-
-
-        
-
-    if (!matchingParameters.length) {
-
-        matchingParameters =
-            params.filter(
-                parameter => {
-
-                    return (
-
-                        !parameter.machine_id
-
-                        &&
-
-                        parameter.material_code ===
-                            selectedMaterialCode
-
-                    );
-
-                }
-            );
+        materialSelect.value =
+            previousMaterialCode;
 
     }
 
-    const availableThicknesses = [
 
-        ...new Set(
+    /* =========================================
+       ÉPAISSEURS ET OPÉRATIONS
+       ========================================= */
 
-            matchingParameters
+    fillThicknessList();
 
-                .map(
-                    parameter =>
-                        parameter.thickness_mm
-                )
-
-                .filter(
-                    thickness =>
-                        thickness !== null &&
-                        thickness !== undefined
-                )
-
-        )
-
-    ].sort(
-        (a,b) => a-b
-    );
-
-  console.log(
-    'matchingParameters',
-    matchingParameters
-);
-
-console.log(
-    'availableThicknesses',
-    availableThicknesses
-);
-    thicknessSelect.innerHTML = '';
-
-    availableThicknesses.forEach(
-        thickness => {
-
-            thicknessSelect.add(
-                new Option(
-                    thickness + ' mm',
-                    thickness
-                )
-            );
-
-        }
-    );
-
-    if(
-        previousThickness &&
-        [...thicknessSelect.options]
-            .some(
-                option =>
-                    option.value ==
-                    previousThickness
-            )
-    ){
-
-        thicknessSelect.value =
-            previousThickness;
-
-    }
+    fillOperationList();
 
 }
 
-/* ============*============================
-   RE*PLISSAGE DU MENU ÉPAISSEUR
-   ====*==================================*= */
 
-fillThicknessList();
-
-
-/* ==*==================================*===
-   OPÉ**TIONS DISPONIBLES
-  *Filtrées par machine + matière
-   *==================================*===== */
-
-fillOperationList();
-
-}
 function fillThicknessList() {
-
-  alert('fillThicknessList');
-  
-console.log('fillThicknessList exécutée');
-console.log('machine=', $('machine').value);
-console.log('matiere=', $('material').value);
 
     const thicknessSelect =
         $('thickness');
+
+    if (!thicknessSelect) {
+
+        console.error(
+            'Le select #thickness est introuvable'
+        );
+
+        return;
+
+    }
 
     const selectedMachineId =
         String(
@@ -1113,15 +1035,38 @@ console.log('matiere=', $('material').value);
     const previousThickness =
         thicknessSelect.value;
 
+
+    /* Paramètres machine + matière */
+
     let matchingParameters =
-        params.filter(
-            parameter => {
+        params.filter(parameter => {
+
+            return (
+
+                String(
+                    parameter.machine_id || ''
+                ) === selectedMachineId
+
+                &&
+
+                parameter.material_code ===
+                    selectedMaterialCode
+
+            );
+
+        });
+
+
+    /* Repli sur les paramètres sans machine */
+
+    if (!matchingParameters.length) {
+
+        matchingParameters =
+            params.filter(parameter => {
 
                 return (
 
-                    String(
-                        parameter.machine_id || ''
-                    ) === selectedMachineId
+                    !parameter.machine_id
 
                     &&
 
@@ -1130,7 +1075,103 @@ console.log('matiere=', $('material').value);
 
                 );
 
-            }
+            });
+
+    }
+
+
+    /* Épaisseurs uniques */
+
+    const availableThicknesses = [
+
+        ...new Set(
+
+            matchingParameters
+
+                .map(
+                    parameter =>
+                        Number(
+                            parameter.thickness_mm
+                        )
+                )
+
+                .filter(
+                    thickness =>
+                        Number.isFinite(
+                            thickness
+                        )
+                )
+
+        )
+
+    ].sort(
+        (a, b) => a - b
+    );
+
+
+    thicknessSelect.innerHTML = '';
+
+
+    availableThicknesses.forEach(
+        thickness => {
+
+            thicknessSelect.add(
+
+                new Option(
+                    thickness + ' mm',
+                    String(thickness)
+                )
+
+            );
+
+        }
+    );
+
+
+    if (!availableThicknesses.length) {
+
+        thicknessSelect.add(
+
+            new Option(
+                'Aucune épaisseur disponible',
+                ''
+            )
+
+        );
+
+        thicknessSelect.disabled = true;
+
+        return;
+
+    }
+
+
+    thicknessSelect.disabled = false;
+
+
+    const previousStillExists = [
+
+        ...thicknessSelect.options
+
+    ].some(
+        option =>
+            option.value ===
+            previousThickness
+    );
+
+
+    if (previousStillExists) {
+
+        thicknessSelect.value =
+            previousThickness;
+
+    } else {
+
+        thicknessSelect.selectedIndex = 0;
+
+    }
+
+}
 function fillOperationList() {
 
     const operationSelect = $('operation');
@@ -2199,6 +2240,7 @@ $('machine').addEventListener(
     }
 );
 
+
 $('material').addEventListener(
     'change',
     () => {
@@ -2212,6 +2254,7 @@ $('material').addEventListener(
     }
 );
 
+
 $('thickness').addEventListener(
     'change',
     () => {
@@ -2222,7 +2265,8 @@ $('thickness').addEventListener(
 
     }
 );
-        
+
+
 $('operation').addEventListener(
     'change',
     calc
