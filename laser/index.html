@@ -613,6 +613,12 @@ body:not(.can-edit) .parameter-save-btn{
 
     <select id="thickness"></select>
 
+    <button
+        class="search-btn"
+        style="visibility:hidden">
+        🔍
+    </button>
+
 </div>
             <label data-t="operation"></label>
             <div class="inputline">
@@ -620,13 +626,7 @@ body:not(.can-edit) .parameter-save-btn{
               <button class="search-btn" onclick="searchFoil()">
                 🔍
               </button>
-              <button
-    class="mini-plus"
-    type="button"
-    onclick="addLaserParameter()"
-    title="Ajouter un paramètre laser">
-    +
-</button>
+              
             </div>
             
             <div class="note" id="note"></div>
