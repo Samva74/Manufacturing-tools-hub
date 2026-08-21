@@ -77,17 +77,14 @@
   }
 
   .card{
-      width:100%;
-      max-width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
-      min-height:auto;
-
-      display:flex;
-      align-items:center;
-      gap:12px;
-
-      padding:12px;
-  }
+.card-text{
+    flex:1;
+}
 
   .app-icon{
       width:50px;
@@ -191,7 +188,6 @@
 
   </a>
 
-  <a
 <a
     class="card admin-only"
     href="/admin-users/"
@@ -200,19 +196,15 @@
 
     <div class="app-icon">
 
-            stroke-width="8"
-             stroke-linecap="round"
+        <svg viewBox="0 0 100 100         stroke-linecap="round"
              stroke-linejoin="round">
 
             <circle cx="40" cy="35" r="12"/>
-
             <path d="M18 78 C18 58 62 58 62 78"/>
 
             <circle cx="74" cy="62" r="10"/>
-
             <path d="M74 46 V52"/>
             <path d="M74 72 V78"/>
-
             <path d="M58 62 H64"/>
             <path d="M84 62 H90"/>
 
@@ -231,7 +223,6 @@
     </div>
 
 </a>
-
 </div>
 <script>
 window.authReady.then(async()=>{
