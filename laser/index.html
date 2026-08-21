@@ -988,6 +988,9 @@ body:not(.can-edit) .parameter-save-btn{
        ========================================= */      
 
 function fillThicknessList() {
+console.log('fillThicknessList exécutée');
+console.log('machine=', $('machine').value);
+console.log('matiere=', $('material').value);
 console.log('fillThicknessList OK');
     const thicknessSelect =
         $('thickness');
@@ -1069,6 +1072,15 @@ console.log('fillThicknessList OK');
     );
 console.log(
     'EPAISSEURS',
+    availableThicknesses
+);
+  console.log(
+    'matchingParameters',
+    matchingParameters
+);
+
+console.log(
+    'availableThicknesses',
     availableThicknesses
 );
     thicknessSelect.innerHTML = '';
