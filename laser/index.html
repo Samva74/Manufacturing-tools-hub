@@ -983,6 +983,122 @@ body:not(.can-edit) .parameter-save-btn{
         materialSelect.value = previousMaterialCode;
     }
 
+      /* =========================================
+       Epaisseurs
+       ========================================= */      
+
+function fillThicknessList() {
+
+    const thicknessSelect =
+        $('thickness');
+
+    const selectedMachineId =
+        String(
+            $('machine').value || ''
+        );
+
+    const selectedMaterialCode =
+        $('material').value;
+
+    const previousThickness =
+        thicknessSelect.value;
+
+    let matchingParameters =
+        params.filter(
+            parameter => {
+
+                return (
+
+                    String(
+                        parameter.machine_id || ''
+                    ) === selectedMachineId
+
+                    &&
+
+                    parameter.material_code ===
+                        selectedMaterialCode
+
+                );
+
+            }
+        );
+
+    if (!matchingParameters.length) {
+
+        matchingParameters =
+            params.filter(
+                parameter => {
+
+                    return (
+
+                        !parameter.machine_id
+
+                        &&
+
+                        parameter.material_code ===
+                            selectedMaterialCode
+
+                    );
+
+                }
+            );
+
+    }
+
+    const availableThicknesses = [
+
+        ...new Set(
+
+            matchingParameters
+
+                .map(
+                    parameter =>
+                        parameter.thickness_mm
+                )
+
+                .filter(
+                    thickness =>
+                        thickness !== null &&
+                        thickness !== undefined
+                )
+
+        )
+
+    ].sort(
+        (a,b) => a-b
+    );
+
+    thicknessSelect.innerHTML = '';
+
+    availableThicknesses.forEach(
+        thickness => {
+
+            thicknessSelect.add(
+                new Option(
+                    thickness + ' mm',
+                    thickness
+                )
+            );
+
+        }
+    );
+
+    if(
+        previousThickness &&
+        [...thicknessSelect.options]
+            .some(
+                option =>
+                    option.value ==
+                    previousThickness
+            )
+    ){
+
+        thicknessSelect.value =
+            previousThickness;
+
+    }
+
+}
 
     /* =========================================
        OPÉRATIONS DISPONIBLES
