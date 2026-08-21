@@ -221,28 +221,36 @@
         color: var(--muted)
       }
 
-      .res-big .val {
-        font-size: 30px;
+      .res-big .lbl {
+    font-size: 13px;
+    color: var(--muted);
+}
 
-        font-weight:900 .res-small {
-          border: 1px solid var(--line);
-          background: var(--soft);
-          border-radius: 18px;
-          padding: 8px 13px;
-          margin-top: 10px;
-        }
+.res-big .val {
+    font-size: 30px;
+    font-weight: 900;
+}
 
-        .res-small .lbl {
-          font-size: 13px;
-          color: var(--muted);
-        }
+/* Bloc compact pour Passes */
 
-        .res-small .val {
-          font-size: 24px;
-          font-weight: 900;
-          text-align: right;
-        }
-      }
+.res-small {
+    border: 1px solid var(--line);
+    background: var(--soft);
+    border-radius: 18px;
+    padding: 8px 13px;
+    margin-top: 10px;
+}
+
+.res-small .lbl {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.res-small .val {
+    font-size: 24px;
+    font-weight: 900;
+    text-align: right;
+}
 
       .res-line {
         display: flex;
@@ -414,8 +422,43 @@
             <p data-t="subtitle">Bibliothèque Supabase matières + opérations + paramètres</p>
           </div>
         </div>
-        <div class="top-actions"><button class="hub-btn" onclick="goHub()">🏠 Hub</button><span class="role-pill" id="rolePill">...</span>
-          <div class="langs"><button data-lang="fr" onclick="setLang('fr')">French</button><button data-lang="en" onclick="setLang('en')">English</button><button data-lang="pt" onclick="setLang('pt')">Português</button></div>
+<div class="top-actions">
+
+    <button
+        class="hub-btn"
+        onclick="goHub()">
+        🏠 Hub
+    </button>
+
+    <span
+        class="role-pill"
+        id="rolePill">
+        ...
+    </span>
+
+    <div class="langs">
+
+        <button
+            data-lang="fr"
+            onclick="setLang('fr')">
+            French
+        </button>
+
+        <button
+            data-lang="en"
+            onclick="setLang('en')">
+            English
+        </button>
+
+        <button
+            data-lang="pt"
+            onclick="setLang('pt')">
+            Português
+        </button>
+
+    </div>
+
+</div>
         </div>
       </div>
       <div class="layout">
