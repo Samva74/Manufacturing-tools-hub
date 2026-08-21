@@ -280,7 +280,37 @@ select{
         </h3>
 
         <div id="users"></div>
+<div
+    id="credentialsCard"
+    class="item"
+    style="display:none;margin-top:12px;">
 
+    <div class="email">
+        Derniers identifiants générés
+    </div>
+
+    <div class="created">
+
+        Email :
+        <span id="lastEmail"></span>
+
+        <br><br>
+
+        Mot de passe :
+        <span id="lastPassword"></span>
+
+    </div>
+
+    <button
+        id="copyCredentialsBtn"
+        class="btn"
+        style="margin-top:12px;">
+
+        📋 Copier les identifiants
+
+    </button>
+
+</div>
     </div>
 
 </div>
@@ -691,6 +721,11 @@ Le compte et son historique seront conservés.`
 
         });
 
+        showCredentials(
+        email,
+        newPassword
+);
+        
         alert(
 
 `Mot de passe réinitialisé
@@ -913,6 +948,11 @@ async function createUser(){
 
     }
 
+    showCredentials(
+    email,
+    password
+);
+    
     alert(
 `Utilisateur créé avec succès
 
@@ -949,6 +989,68 @@ document
 .onclick =
 createUser;
 
+function showCredentials(
+    email,
+    password
+){
+
+    document
+        .getElementById(
+            'lastEmail'
+        )
+        .textContent =
+            email;
+
+    document
+        .getElementById(
+            'lastPassword'
+        )
+        .textContent =
+            password;
+
+    document
+        .getElementById(
+            'credentialsCard'
+        )
+        .style.display =
+            'block';
+
+}
+
+document
+.getElementById(
+    'copyCredentialsBtn'
+)
+.onclick =
+async()=>{
+
+    const txt =
+
+`Bonjour,
+
+Votre accès Manufacturing Tools Hub est disponible.
+
+Adresse email :
+${document.getElementById('lastEmail').textContent}
+
+Mot de passe :
+${document.getElementById('lastPassword').textContent}
+
+Lien :
+https://manufacturing-tools-hub.vercel.app`;
+
+    await navigator
+        .clipboard
+        .writeText(
+            txt
+        );
+
+    alert(
+        'Identifiants copiés'
+    );
+
+};
+    
 window.authReady.then(
 async()=>{
 
