@@ -158,6 +158,25 @@
         align-items: stretch
       }
 
+      .input-unit{
+    position:relative;
+}
+
+.input-unit input{
+    padding-right:70px;
+}
+
+.unit{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--muted);
+    font-size:13px;
+    font-weight:700;
+}
+
+
       select,
       input,
       textarea {
@@ -247,9 +266,8 @@
 }
 
 .res-small .val {
-    font-size: 24px;
+    font-size: 30px;
     font-weight: 900;
-    text-align: right;
 }
 
       .res-line {
@@ -491,7 +509,22 @@
             </div>
           </section>
           <section class="card">
-            <h2><span class="dot"></span><span data-t="calibration"></span></h2><input id="cTemp"><input id="cPress"><input id="cDwell"><textarea id="comments"></textarea><button class="btn" onclick="saveCalib()" data-t="save"></button>
+            <h2><span class="dot"></span><span data-t="calibration"></span></h2>
+<div class="input-unit">
+    <input id="cTemp">
+    <span class="unit">%</span>
+</div>
+
+<div class="input-unit">
+    <input id="cPress">
+    <span class="unit">mm/s</span>
+</div>
+
+<div class="input-unit">
+    <input id="cDwell">
+    <span class="unit">Passes</span>
+</div>
+            <textarea id="comments"></textarea><button class="btn" onclick="saveCalib()" data-t="save"></button>
           </section>
         </div>
       </div>
