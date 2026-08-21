@@ -728,6 +728,7 @@ body:not(.can-edit) .parameter-save-btn{
           editPermissionRequired: 'Droit expert ou administrateur requis',
           parameterSaveError: 'Impossible de sauvegarder le paramètre',
           noOperation: 'Aucune opération disponible',
+          legacyParameter: 'Ce réglage générique ne peut pas être modifié. Sélectionne une machine précise.',
         },
         
         en: {
@@ -768,6 +769,7 @@ body:not(.can-edit) .parameter-save-btn{
           editPermissionRequired: 'Expert or administrator permission required',
           parameterSaveError: 'Unable to save parameter',
           noOperation: 'No operation available',
+          legacyParameter: 'This generic setting cannot be edited. Select a specific machine.',
         },
         pt: {
           title: 'Laser Calculator',
@@ -807,6 +809,7 @@ body:not(.can-edit) .parameter-save-btn{
           editPermissionRequired: 'É necessária permissão de especialista ou administrador',
           parameterSaveError: 'Não foi possível guardar o parâmetro',
           noOperation: 'Nenhuma operação disponível',
+          legacyParameter: 'Este parâmetro genérico não pode ser alterado. Selecione uma máquina específica.',
         }
       };
       let materials = [],
@@ -1470,18 +1473,37 @@ function fillOperationList() {
        Machine + Matière + Opération
        ========================================= */
 
-    const parameter = sp();
+const parameter = sp();
 
-    if (!parameter || !parameter.id) {
+/* ----------------------------------
+   Vérifie que ce n'est pas
+   un ancien paramètre générique
+---------------------------------- */
 
-        toast(
-            TXT[lang].parameterNotFound ||
-            TXT.fr.parameterNotFound
-        );
+if (
+    parameter &&
+    !parameter.machine_id
+) {
 
-        return;
+    toast(
+        TXT[lang].legacyParameter ||
+        TXT.fr.legacyParameter
+    );
 
-    }
+    return;
+
+}
+
+if (!parameter || !parameter.id) {
+
+    toast(
+        TXT[lang].parameterNotFound ||
+        TXT.fr.parameterNotFound
+    );
+
+    return;
+
+}
 
 
     /* =========================================
