@@ -1362,11 +1362,6 @@ function fillOperationList() {
 }
       
      function sp() {
-
-console.log('Machine=', $('machine').value);
-console.log('Matière=', $('material').value);
-console.log('Épaisseur=', $('thickness').value);
-console.log('Opération=', $('operation').value);
        
     const selectedMachineId =
     String($('machine').value || '');
@@ -1385,12 +1380,6 @@ console.log('Opération=', $('operation').value);
        1. PARAMÈTRE SPÉCIFIQUE À LA MACHINE
        ========================================= */
 
-console.log({
-    machine: $('machine').value,
-    material: $('material').value,
-    thickness: $('thickness').value,
-    operation: $('operation').value
-});
        
     const machineParameter = params.find(
     parameter => {
@@ -1420,10 +1409,6 @@ console.log({
     }
 );
 
-console.log(
-    'RESULTAT SP',
-    machineParameter
-);
        
     /* =========================================
        2. REPLI SUR UN ANCIEN PARAMÈTRE
