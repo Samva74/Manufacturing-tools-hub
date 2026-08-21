@@ -69,7 +69,6 @@ async function showAuthModal() {
     <input id="guardEmail" type="email" placeholder="Email">
     <input id="guardPassword" type="password" placeholder="Mot de passe">
     <button id="guardLogin">Se connecter</button>
-    <button id="guardSignup" class="secondary">Créer un compte</button>
     <button id="guardReset" class="secondary">Mot de passe oublié</button>
     <button id="guardClose" class="secondary">Fermer</button>
     <div id="guardMsg" class="auth-error"></div>
@@ -83,11 +82,6 @@ async function showAuthModal() {
     const { error } = await authClient.auth.signInWithPassword({ email: email.value.trim(), password: password.value });
     if (error) { msg.textContent = error.message; return; }
     location.reload();
-  };
-  document.getElementById('guardSignup').onclick = async () => {
-    msg.textContent = '';
-    const { error } = await authClient.auth.signUp({ email: email.value.trim(), password: password.value });
-    msg.textContent = error ? error.message : 'Compte créé. Si Supabase demande une confirmation email, confirmez puis reconnectez-vous.';
   };
   document.getElementById('guardReset').onclick = async () => {
     msg.textContent = '';
