@@ -554,9 +554,33 @@ body:not(.can-edit) .parameter-save-btn{
             <div class="inputline"><select id="machine"></select><button class="search-btn" onclick="searchMachine()">🔍</button><button class="mini-plus" onclick="addMachine()">+</button></div>
           </section>
           <section class="card">
-            <h2><span class="dot"></span><span data-t="materialOperation"></span></h2><label data-t="material"></label>
-            <div class="inputline"><select id="material"></select><button class="search-btn" onclick="searchSupport()">🔍</button><button class="mini-plus" onclick="addSupport()">+</button></div><label data-t="operation"></label>
-            <div class="inputline"><select id="operation"></select><button class="search-btn" onclick="searchFoil()">🔍</button><button class="mini-plus" onclick="editFoil()">✎</button></div>
+            <h2><span class="dot"></span><span data-t="materialOperation"></span></h2>
+            <label data-t="material"></label>
+            <div class="inputline">
+              <select id="material"></select>
+              <button class="search-btn" onclick="searchSupport()">
+                🔍
+              </button><button class="mini-plus" onclick="addSupport()">
+                +
+              </button>
+            </div>
+            <label data-t="thickness"></label>
+
+<div class="inputline">
+
+    <select id="thickness"></select>
+
+</div>
+            <label data-t="operation"></label>
+            <div class="inputline">
+              <select id="operation"></select>
+              <button class="search-btn" onclick="searchFoil()">
+                🔍
+              </button><button class="mini-plus" onclick="editFoil()">
+                ✎
+              </button>
+            </div>
+            
             <div class="note" id="note"></div>
             
           </section>
