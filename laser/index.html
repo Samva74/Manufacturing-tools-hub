@@ -7,20 +7,14 @@
     background:var(--soft);
     border-radius:18px;
     padding:8px 13px;
-    margin-top:10px;
-}
-
+    margin-top:10px;}
 .res-small .lbl{
     font-size:13px;
-    color:var(--muted);
-}
-
+    color:var(--muted);}
 .res-small .val{
     font-size:24px;
     font-weight:900;
-    text-align:right;
-}
-
+    text-align:right;}
 }.res-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0}.note{background:rgba(29,29,27,.06);border-left:4px solid var(--accent);padding:10px;border-radius:12px;margin-top:10px}.btn{width:100%;border:none;border-radius:13px;background:var(--accent);color:white;padding:13px;margin-top:10px;font-weight:850}.btn.secondary{background:var(--card2);color:var(--txt);border:1px solid var(--line)}.lib{margin-top:14px}.item{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}.item .s{color:var(--muted);font-size:13px}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1d1b;color:white;padding:11px 14px;border-radius:999px;display:none;z-index:99}.foot{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;z-index:9998;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal-panel{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}.modal-head{display:flex;justify-content:space-between}.close{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:8px 12px;font-weight:900}.result{padding:12px;border:1px solid var(--line);border-radius:14px;background:white;margin-top:8px;cursor:pointer}.result:hover{background:var(--valid)}@media(max-width:860px){body{padding:12px}.top{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}.title h1{font-size:24px}.logo{width:64px;height:64px}.logo svg{width:46px;height:46px}}
 </style></head><body><div class="wrap"><div class="top"><div class="brand"><div class="logo"><svg viewBox="0 0 100 100" fill="none" stroke="#1d1d1b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 76 L48 48"/><path d="M48 48 L32 22"/><path d="M48 48 H78"/><path d="M70 48 V76"/><path d="M56 76 H86"/></svg></div><div class="title"><h1 data-t="title">Laser Calculator</h1><p data-t="subtitle">Bibliothèque Supabase matières + opérations + paramètres</p></div></div><div class="top-actions"><button class="hub-btn" onclick="goHub()">🏠 Hub</button><span class="role-pill" id="rolePill">...</span><div class="langs"><button data-lang="fr" onclick="setLang('fr')">French</button><button data-lang="en" onclick="setLang('en')">English</button><button data-lang="pt" onclick="setLang('pt')">Português</button></div></div></div><div class="layout"><div class="col"><section class="card"><h2><span class="dot"></span><span data-t="machineInputs"></span></h2><label data-t="machine"></label><div class="inputline"><select id="machine"></select><button class="search-btn" onclick="searchMachine()">🔍</button><button class="mini-plus" onclick="addMachine()">+</button></div></section><section class="card"><h2><span class="dot"></span><span data-t="materialOperation"></span></h2><label data-t="material"></label><div class="inputline"><select id="material"></select><button class="search-btn" onclick="searchSupport()">🔍</button><button class="mini-plus" onclick="addSupport()">+</button></div><label data-t="operation"></label><div class="inputline"><select id="operation"></select><button class="search-btn" onclick="searchFoil()">🔍</button><button class="mini-plus" onclick="editFoil()">✎</button></div><div class="note" id="note"></div></section></div><div class="col"><section class="card"><h2><span class="dot"></span><span data-t="quickRead"></span></h2><div class="res-big valid"><div class="lbl" data-t="temperature"></div><div class="val"><span id="rTemp">–</span></div></div><div class="res-big"><div class="lbl" data-t="pressure"></div><div class="val"><span id="rPress">–</span></div></div>
 <div class="res-small">
