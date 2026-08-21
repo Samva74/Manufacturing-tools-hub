@@ -424,6 +424,10 @@
           width: 46px;
           height: 46px
         }
+     body:not(.can-edit) .parameter-save-btn{
+    opacity:.55;
+    cursor:not-allowed;
+}
       }
     </style>
   </head>
@@ -553,11 +557,12 @@
 
     <textarea id="comments"></textarea>
 
-    <button
-    class="btn"
+   <button
+    class="btn parameter-save-btn"
     onclick="saveParameter()"
     data-t="saveParameter">
 </button>
+
 
 </section>
         </div>
@@ -1182,61 +1187,357 @@ function fillOperationList() {
       async function addMachine() {
         toast(canEdit() ? 'Ajout disponible dans prochaine itération' : 'Droit expert/admin requis')
       }
-      async function saveCalib() {
+      async function saveParameter() {
 
-    const selectedMachine = machines.find(
-        machine =>
-            String(machine.id) ===
-            String($('machine').value)
-    );
+    /* =========================================
+       1. CONTRÔLE DES DROITS
+       ========================================= */
 
-    await api(
-        'Laser_calibrations',
-        {
-            m: 'POST',
+    if (!canEdit()) {
 
-            b: {
+        toast(
+            TXT[lang].editPermissionRequired ||
+            TXT.fr.editPermissionRequired
+        );
 
-                material:
-                    $('material').value,
+        return;
 
-                operation:
-                    $('operation').value,
+    }
 
-                machine:
-                    selectedMachine
-                        ? selectedMachine.name
-                        : '',
 
-                power_percent:
-                    Number($('cTemp').value),
+    /* =========================================
+       2. RECHERCHE DU PARAMÈTRE ACTUEL
+       Machine + Matière + Opération
+       ========================================= */
 
-                speed_mm_s:
-                    Number($('cPress').value),
+    const parameter = sp();
 
-                passes:
-                    Number($('cDwell').value),
+    if (!parameter || !parameter.id) {
 
-                comments:
-                    $('comments').value,
+        toast(
+            TXT[lang].parameterNotFound ||
+            TXT.fr.parameterNotFound
+        );
 
-                created_by_user_id:
-                    user?.id || null,
+        return;
 
-                created_by_email:
-                    user?.email || null
+    }
+
+
+    /* =========================================
+       3. LECTURE DES VALEURS
+       ========================================= */
+
+    const powerValue =
+        $('cTemp').value.trim();
+
+    const speedValue =
+        $('cPress').value.trim();
+
+    const passesValue =
+        $('cDwell').value.trim();
+
+
+    /* =========================================
+       4. VALIDATION DES CHAMPS
+       ========================================= */
+
+    if (
+        powerValue === '' ||
+        speedValue === '' ||
+        passesValue === ''
+    ) {
+
+        toast(
+            TXT[lang].parameterInvalid ||
+            TXT.fr.parameterInvalid
+        );
+
+        return;
+
+    }
+
+
+    const newPower =
+        Number(powerValue);
+
+    const newSpeed =
+        Number(speedValue);
+
+    const newPasses =
+        Number(passesValue);
+
+
+    if (
+        !Number.isFinite(newPower) ||
+        !Number.isFinite(newSpeed) ||
+        !Number.isFinite(newPasses) ||
+
+        newPower < 0 ||
+        newPower > 100 ||
+
+        newSpeed < 0 ||
+
+        newPasses < 1 ||
+        !Number.isInteger(newPasses)
+    ) {
+
+        toast(
+            TXT[lang].parameterInvalid ||
+            TXT.fr.parameterInvalid
+        );
+
+        return;
+
+    }
+
+
+    /* =========================================
+       5. MÉMORISATION DES ANCIENNES VALEURS
+       POUR LA TRAÇABILITÉ
+       ========================================= */
+
+    const oldPower =
+        parameter.power_percent;
+
+    const oldSpeed =
+        parameter.speed_mm_s;
+
+    const oldPasses =
+        parameter.passes;
+
+    const oldQuality =
+        parameter.quality;
+
+
+    /* =========================================
+       6. DONNÉES À ENREGISTRER
+       ========================================= */
+
+    const updateData = {
+
+        power_percent:
+            newPower,
+
+        speed_mm_s:
+            newSpeed,
+
+        passes:
+            newPasses,
+
+        quality:
+            'validated',
+
+        updated_by_user_id:
+            user?.id || null,
+
+        updated_by_email:
+            user?.email || null,
+
+        updated_at:
+            new Date().toISOString()
+
+    };
+
+
+    try {
+
+        /* =====================================
+           7. MISE À JOUR DANS SUPABASE
+           ===================================== */
+
+        const savedRows = await api(
+            'laser_parameters',
+            {
+                q:
+                    '?id=eq.' +
+                    encodeURIComponent(
+                        parameter.id
+                    ),
+
+                m:
+                    'PATCH',
+
+                b:
+                    updateData
 
             }
+        );
+
+
+        /* =====================================
+           8. ACTUALISATION DE LA COPIE LOCALE
+           ===================================== */
+
+        const savedParameter =
+            Array.isArray(savedRows) &&
+            savedRows.length
+
+                ? savedRows[0]
+                : updateData;
+
+
+        Object.assign(
+            parameter,
+            savedParameter
+        );
+
+
+        /* =====================================
+           9. HISTORIQUE DES MODIFICATIONS
+           ===================================== */
+
+        if (oldPower !== newPower) {
+
+            await audit(
+                'laser_parameters',
+                parameter.id,
+                'update',
+                'power_percent',
+                oldPower,
+                newPower
+            );
 
         }
-    );
 
-    toast(
-        TXT[lang].calibrationSaved ||
-        TXT.fr.calibrationSaved
-    );
 
-    loadCalibs();
+        if (oldSpeed !== newSpeed) {
+
+            await audit(
+                'laser_parameters',
+                parameter.id,
+                'update',
+                'speed_mm_s',
+                oldSpeed,
+                newSpeed
+            );
+
+        }
+
+
+        if (oldPasses !== newPasses) {
+
+            await audit(
+                'laser_parameters',
+                parameter.id,
+                'update',
+                'passes',
+                oldPasses,
+                newPasses
+            );
+
+        }
+
+
+        if (oldQuality !== 'validated') {
+
+            await audit(
+                'laser_parameters',
+                parameter.id,
+                'update',
+                'quality',
+                oldQuality,
+                'validated'
+            );
+
+        }
+
+
+        /* =====================================
+           10. HISTORIQUE DE CALIBRATION
+           Le commentaire reste conservé dans
+           Laser_calibrations.
+           ===================================== */
+
+        const selectedMachine =
+            machines.find(
+                machine =>
+                    String(machine.id) ===
+                    String($('machine').value)
+            );
+
+
+        try {
+
+            await api(
+                'Laser_calibrations',
+                {
+                    m:
+                        'POST',
+
+                    b: {
+
+                        material:
+                            $('material').value,
+
+                        operation:
+                            $('operation').value,
+
+                        machine:
+                            selectedMachine
+                                ? selectedMachine.name
+                                : '',
+
+                        power_percent:
+                            newPower,
+
+                        speed_mm_s:
+                            newSpeed,
+
+                        passes:
+                            newPasses,
+
+                        comments:
+                            $('comments').value,
+
+                        created_by_user_id:
+                            user?.id || null,
+
+                        created_by_email:
+                            user?.email || null
+
+                    }
+
+                }
+            );
+
+        } catch (historyError) {
+
+            console.warn(
+                'Historique calibration non enregistré',
+                historyError
+            );
+
+        }
+
+
+        /* =====================================
+           11. RAFRAÎCHISSEMENT IMMÉDIAT
+           ===================================== */
+
+        calc();
+
+        await loadCalibs();
+
+
+        toast(
+            TXT[lang].parameterSaved ||
+            TXT.fr.parameterSaved
+        );
+
+    } catch (error) {
+
+        console.error(
+            'saveParameter',
+            error
+        );
+
+        toast(
+            TXT[lang].parameterSaveError ||
+            TXT.fr.parameterSaveError
+        );
+
+    }
 
 }
       async function loadCalibs() {
