@@ -54,15 +54,68 @@
     <a class="card" href="/cnc/"><img src="cnc/icon-192.png" alt="CNC"><h2>CNC Calculator</h2><p>Matières, outils et paramètres d’usinage.</p></a>
     <a class="card" href="/hot-stamping/"><img src="hot-stamping/icon-192.png" alt="Hot"><h2>Hot Stamping<br>Calculator</h2><p>Supports, folios et réglages de marquage.</p></a>
     <a class="card" href="/laser/"><img src="laser/icon-192.png" alt="Laser"><h2>Laser Calculator</h2><p>Matières, opérations et paramètres laser.</p></a>
+    <a
+  class="card admin-only"
+  href="/admin-users/"
+  id="userAdminCard"
+  style="display:none">
+
+  <img src="laser/icon-192.png" alt="Users">
+
+  <h2  </p>
+
+</a>
   </div>
 </div>
 <script>
 window.authReady.then(async()=>{
-  const u = await window.appAuth.getUser();
-  const r = await window.appAuth.getRole();
-  const btn = document.getElementById('loginButton');
-  if(u){ btn.textContent = u.email + ' · ' + r; btn.onclick = null; }
-  else { btn.textContent = 'Connexion'; btn.onclick = () => window.appAuth.showLogin(); }
+
+  const u =
+      await window.appAuth.getUser();
+
+  const r =
+      await window.appAuth.getRole();
+
+  const btn =
+      document.getElementById(
+          'loginButton'
+      );
+
+  if(u){
+
+      btn.textContent =
+          u.email + ' · ' + r;
+
+      btn.onclick = null;
+
+      if(r === 'admin'){
+
+          const adminCard =
+              document.getElementById(
+                  'userAdminCard'
+              );
+
+          if(adminCard){
+
+              adminCard.style.display =
+                  'block';
+
+          }
+
+      }
+
+  }
+  else{
+
+      btn.textContent =
+          'Connexion';
+
+      btn.onclick =
+          () =>
+              window.appAuth.showLogin();
+
+  }
+
 });
 </script>
 </body>
