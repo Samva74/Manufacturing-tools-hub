@@ -483,8 +483,17 @@ body:not(.can-edit) .parameter-save-btn{
 .modal-head h3{
     margin:0;
 }
-      
-      @media(max-width:900px) {
+      .modal-grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+@media(max-width:900px){
+
+    .modal-grid-2{
+        grid-template-columns:1fr;
+    }
 
   body{
     padding:12px;
