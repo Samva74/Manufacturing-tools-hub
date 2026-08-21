@@ -1,1163 +1,1189 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-    <title>Hot Stamping Calculator</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../auth-guard.js"></script>
-    <style>
-      :root {
-        --bg: #d8d8d3;
-        --card: #eeeeea;
-        --card2: #f6f6f2;
-        --line: #8d8d86;
-        --txt: #1d1d1b;
-        --muted: #5f5f58;
-        --accent: #1d1d1b;
-        --ok: #237a3b;
-        --soft: #e5e5df;
-        --valid: #d9eadb;
-        --warn: #a76b00
-      }
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hot Stamping Calculator</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../auth-guard.js"></script>
+<style>
+:root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--soft:#e5e5df;--valid:#d9eadb;--warn:#a76b00}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:18px}.wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:14px}.logo{width:76px;height:76px;border:2px solid var(--txt);border-radius:20px;background:#e0e1dd;display:grid;place-items:center}.logo img{width:56px;height:56px;border-radius:12px}.title h1{margin:0;font-size:31px}.title p{margin:4px 0 0;color:var(--muted);font-size:14px}.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:nowrap}.hub-btn,.role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}
+  .layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;gap:14px;align-items:start}.col{display:flex;flex-direction:column;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.12)}h2{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:18px}.dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}label{display:block;color:var(--muted);font-size:13px;font-weight:750;margin:10px 0 5px}.inputline{display:flex;gap:8px;align-items:stretch}
+  .row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:white;color:var(--txt);font-size:15px}textarea{min-height:76px;resize:vertical}.search-btn,.mini-btn{height:46px;min-width:46px;border-radius:14px;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}.search-btn{border:1px solid var(--line);background:white}.mini-btn{border:none;background:var(--accent);color:white}.res-big{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:13px;margin:10px 0}.res-big.valid{background:var(--valid);border-color:var(--ok)}.res-big .lbl{font-size:13px;color:var(--muted)}.res-big .val{font-size:30px;font-weight:900}.res-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0;gap:20px}.res-line span{color:var(--muted)}.res-line b{text-align:right}.note{background:rgba(29,29,27,.06);border-left:4px solid var(--accent);padding:10px;border-radius:12px;margin-top:10px;white-space:pre-line}.unit-wrap{position:relative}.unit-wrap input{padding-right:70px;font-weight:850}.unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-weight:850;color:var(--txt);pointer-events:none}.btn{width:100%;border:none;border-radius:13px;background:var(--accent);color:white;padding:13px;margin-top:10px;font-weight:850;cursor:pointer}.btn.secondary{background:var(--card2);color:var(--txt);border:1px solid var(--line)}.item{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}.item .s{color:var(--muted);font-size:13px}.status{font-size:13px;color:var(--muted);margin-top:10px}.lib{margin-top:14px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;z-index:9998;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal-panel{width:min(650px,100%);max-height:82vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}.modal-head{display:flex;justify-content:space-between}.close{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:8px 12px;font-weight:900}.result{padding:12px;border:1px solid var(--line);border-radius:14px;background:white;margin-top:8px;cursor:pointer}.result:hover{background:var(--valid)}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1d1b;color:white;padding:11px 14px;border-radius:999px;display:none;z-index:99}@media(max-width:860px){body{padding:12px}.top{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}.title h1{font-size:24px}.logo{width:64px;height:64px}.logo img{width:46px;height:46px}}
+.langs{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
 
-      * {
-        box-sizing: border-box
-      }
+.hub-btn,
+.langs button,
+.role-pill{
+  border:1px solid var(--line);
+  background:var(--card2);
+  border-radius:999px;
+  padding:10px 14px;
+  color:var(--txt);
+  font-weight:850;
+  text-decoration:none;
+  cursor:pointer;
+}
 
-      body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--txt);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        padding: 18px
-      }
+.langs button.active{
+  background:var(--accent);
+  color:white;
+}
 
-      .wrap {
-        max-width: 1180px;
-        margin: auto
-      }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    
+    <div class="brand">
+      <div class="logo"><img src="icon-192.png" alt="Hot"></div>
+      <div class="title"><h1>Hot Stamping Calculator</h1><p>Bibliothèque FPM complète : supports + folios + opérations + calibration</p></div>
+    </div>
+    
+    <div class="top-actions">
+      <button class="hub-btn" onclick="location.href='/'">
+        🏠 Hub
+      </button>
+      
+      <span class="role-pill"
+            id="rolePill">
+      </span>
+      
+      <div class="langs">
+        <button data-lang="fr"
+                onclick="setLang('fr')">
+          French
+        </button>
+        
+        <button data-lang="en"
+                onclick="setLang('en')">
+          English
+        </button>
+        <button data-lang="pt"
+                onclick="setLang('pt')">
+          Português
+        </button>
 
-      .top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 16px
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 14px
-      }
-
-      .logo {
-        width: 76px;
-        height: 76px;
-        border: 2px solid var(--txt);
-        border-radius: 20px;
-        background: #e0e1dd;
-        display: grid;
-        place-items: center
-      }
-
-      .logo img {
-        width: 56px;
-        height: 56px;
-        border-radius: 12px
-      }
-
-      .title h1 {
-        margin: 0;
-        font-size: 31px
-      }
-
-      .title p {
-        margin: 4px 0 0;
-        color: var(--muted);
-        font-size: 14px
-      }
-
-      .top-actions {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        flex-wrap: nowrap
-      }
-
-      .hub-btn,
-      .role-pill {
-        border: 1px solid var(--line);
-        background: var(--card2);
-        border-radius: 999px;
-        padding: 10px 14px;
-        color: var(--txt);
-        font-weight: 850;
-        text-decoration: none;
-        cursor: pointer
-      }
-
-      .layout {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        align-items: start
-      }
-
-      .col {
-        display: flex;
-        flex-direction: column;
-        gap: 14px
-      }
-
-      .card {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        padding: 16px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, .12)
-      }
-
-      h2 {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 0 0 12px;
-        font-size: 18px
-      }
-
-      .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--accent)
-      }
-
-      label {
-        display: block;
-        color: var(--muted);
-        font-size: 13px;
-        font-weight: 750;
-        margin: 10px 0 5px
-      }
-
-      .inputline {
-        display: flex;
-        gap: 8px;
-        align-items: stretch
-      }
-
-      .row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-
-      select,
-      input,
-      textarea {
-        width: 100%;
-        padding: 12px;
-        border-radius: 12px;
-        border: 1px solid var(--line);
-        background: white;
-        color: var(--txt);
-        font-size: 15px
-      }
-
-      textarea {
-        min-height: 76px;
-        resize: vertical
-      }
-
-      .search-btn,
-      .mini-btn {
-        height: 46px;
-        min-width: 46px;
-        border-radius: 14px;
-        font-size: 20px;
-        font-weight: 900;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer
-      }
-
-      .search-btn {
-        border: 1px solid var(--line);
-        background: white
-      }
-
-      .mini-btn {
-        border: none;
-        background: var(--accent);
-        color: white
-      }
-
-      .res-big {
-        border: 1px solid var(--line);
-        background: var(--soft);
-        border-radius: 18px;
-        padding: 13px;
-        margin: 10px 0
-      }
-
-      .res-big.valid {
-        background: var(--valid);
-        border-color: var(--ok)
-      }
-
-      .res-big .lbl {
-        font-size: 13px;
-        color: var(--muted)
-      }
-
-      .res-big .val {
-        font-size: 30px;
-        font-weight: 900
-      }
-
-      .res-line {
-        display: flex;
-        justify-content: space-between;
-        border-bottom: 1px solid var(--line);
-        padding: 9px 0;
-        gap: 20px
-      }
-
-      .res-line span {
-        color: var(--muted)
-      }
-
-      .res-line b {
-        text-align: right
-      }
-
-      .note {
-        background: rgba(29, 29, 27, .06);
-        border-left: 4px solid var(--accent);
-        padding: 10px;
-        border-radius: 12px;
-        margin-top: 10px;
-        white-space: pre-line
-      }
-
-      .unit-wrap {
-        position: relative
-      }
-
-      .unit-wrap input {
-        padding-right: 70px;
-        font-weight: 850
-      }
-
-      .unit {
-        position: absolute;
-        right: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-weight: 850;
-        color: var(--txt);
-        pointer-events: none
-      }
-
-      .btn {
-        width: 100%;
-        border: none;
-        border-radius: 13px;
-        background: var(--accent);
-        color: white;
-        padding: 13px;
-        margin-top: 10px;
-        font-weight: 850;
-        cursor: pointer
-      }
-
-      .btn.secondary {
-        background: var(--card2);
-        color: var(--txt);
-        border: 1px solid var(--line)
-      }
-
-      .item {
-        background: var(--card2);
-        border: 1px solid var(--line);
-        border-radius: 13px;
-        padding: 11px;
-        margin-top: 9px
-      }
-
-      .item .s {
-        color: var(--muted);
-        font-size: 13px
-      }
-
-      .status {
-        font-size: 13px;
-        color: var(--muted);
-        margin-top: 10px
-      }
-
-      .lib {
-        margin-top: 14px
-      }
-
-      .modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, .28);
-        display: none;
-        z-index: 9998;
-        align-items: center;
-        justify-content: center;
-        padding: 16px
-      }
-
-      .modal.open {
-        display: flex
-      }
-
-      .modal-panel {
-        width: min(650px, 100%);
-        max-height: 82vh;
-        overflow: auto;
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 22px;
-        padding: 16px
-      }
-
-      .modal-head {
-        display: flex;
-        justify-content: space-between
-      }
-
-      .close {
-        border: 1px solid var(--line);
-        background: var(--card2);
-        border-radius: 999px;
-        padding: 8px 12px;
-        font-weight: 900
-      }
-
-      .result {
-        padding: 12px;
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        background: white;
-        margin-top: 8px;
-        cursor: pointer
-      }
-
-      .result:hover {
-        background: var(--valid)
-      }
-
-      .toast {
-        position: fixed;
-        left: 50%;
-        bottom: 24px;
-        transform: translateX(-50%);
-        background: #1d1d1b;
-        color: white;
-        padding: 11px 14px;
-        border-radius: 999px;
-        display: none;
-        z-index: 99
-      }
-
-      @media(max-width:860px) {
-        body {
-          padding: 12px
-        }
-
-        .top {
-          align-items: flex-start;
-          flex-direction: column
-        }
-
-        .layout {
-          grid-template-columns: 1fr
-        }
-
-        .row {
-          grid-template-columns: 1fr
-        }
-
-        .title h1 {
-          font-size: 24px
-        }
-
-        .logo {
-          width: 64px;
-          height: 64px
-        }
-
-        .logo img {
-          width: 46px;
-          height: 46px
-        }
-      }
-
-      .langs {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-      }
-
-      .hub-btn,
-      .langs button,
-      .role-pill {
-        border: 1px solid var(--line);
-        background: var(--card2);
-        border-radius: 999px;
-        padding: 10px 14px;
-        color: var(--txt);
-        font-weight: 850;
-        text-decoration: none;
-        cursor: pointer;
-      }
-
-      .langs button.active {
-        background: var(--accent);
-        color: white;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <div class="top">
-        <div class="brand">
-          <div class="logo"><img src="icon-192.png" alt="Hot"></div>
-          <div class="title">
-            <h1>Hot Stamping Calculator</h1>
-            <p>Bibliothèque FPM complète : supports + folios + opérations + calibration</p>
-          </div>
-        </div>
-        <div class="top-actions"><button class="hub-btn" onclick="location.href='/'"> 🏠 Hub </button><span class="role-pill" id="rolePill"></span>
-          <div class="langs"><button data-lang="fr" onclick="setLang('fr')"> French </button><button data-lang="en" onclick="setLang('en')"> English </button><button data-lang="pt" onclick="setLang('pt')"> Português </button></div>
-        </div>
       </div>
-      <div class="layout">
-        <div class="col">
-          <section class="card">
-            <h2><span class="dot"></span><span data-t="machineInputs"> Entrées machine </span></h2><label data-t="machine"> Machine </label>
-            <div class="inputline"><select id="machine"></select><button class="search-btn"> 🔍 </button><button class="mini-btn" onclick="addMachine()"> + </button></div>
-            <div class="row">
-              <div><label data-t="maxTemperature"> Température max machine </label>
-                <div class="unit-wrap"><input id="machineTempMax" readonly><span class="unit"> °C </span></div>
-              </div>
-              <div><label data-t="maxPressure"> Pression max machine </label>
-                <div class="unit-wrap"><input id="machinePressureMax" readonly><span class="unit"> bar </span></div>
-              </div>
-            </div><label data-t="productionSite"> Site de production </label><input id="productionSite" readonly>
-          </section>
-          <section class="card">
-            <h2><span class="dot"></span><span data-t="library"> Bibliothèque </span></h2><label data-t="support">Support</label>
-            <div class="inputline"><select id="support"></select><button class="search-btn" onclick="searchSupport()"> 🔍 </button><button class="mini-btn" onclick="addSupport()"> + </button></div><label data-t="foil">Folio</label>
-            <div class="inputline"><select id="foil"></select><button class="search-btn" onclick="searchFoil()"> 🔍 </button><button class="mini-btn" onclick="addFoil()"> + </button></div><label data-t="operation"> Opération </label><select id="operation"></select>
-            <div class="status" id="status">Chargement...</div>
-            <div class="note" id="note"></div>
-          </section>
-        </div>
-        <div class="col">
-          <section class="card">
-            <h2><span class="dot"></span><span data-t="quickRead"> Lecture rapide </span></h2>
-            <div class="res-big valid">
-              <div class="lbl" data-t="tempRec"> Température recommandée </div>
-              <div class="val"><span id="tempRec">–</span></div>
-            </div>
-            <div class="res-big">
-              <div class="lbl" data-t="pressRec"> Pression recommandée </div>
-              <div class="val"><span id="pressRec">–</span></div>
-            </div>
-            <div class="res-line"><span data-t="timeRec"> Temps recommandé </span><b id="dwellRec">–</b></div>
-            <div class="res-line"><span data-t="tempRange"> Température min / rec / max </span><b id="tempRange">–</b></div>
-            <div class="res-line"><span data-t="pressRange"> Pression min / rec / max </span><b id="pressRange">–</b></div>
-            <div class="res-line"><span data-t="timeRange"> Temps min / rec / max </span><b id="dwellRange">–</b></div>
-          </section>
-          <section class="card">
-            <h2 class="nowrap-title"><span class="dot"></span><span data-t="calibration"> Calibration atelier </span></h2>
-            <div class="row">
-              <div><label data-t="tempValidated"> Température validée </label>
-                <div class="unit-wrap"><input id="cTemp" inputmode="numeric"><span class="unit">°C</span></div>
-              </div>
-              <div><label data-t="pressValidated"> Pression validée </label>
-                <div class="unit-wrap"><input id="cPress" inputmode="decimal"><span class="unit">bar</span></div>
-              </div>
-            </div><label data-t="timeValidated"> Temps validé </label>
-            <div class="unit-wrap"><input id="cDwell" inputmode="decimal"><span class="unit">s</span></div><label data-t="comments"> Commentaires / observations </label><textarea id="comments"></textarea><button class="btn" onclick="saveCalibration()"><span data-t="save"> 💾 Enregistrer calibration </span></button>
-          </section>
-        </div>
-      </div>
-      <section class="card lib">
-        <h2><span class="dot"></span><span data-t="supabaseLibrary"> Bibliothèque Supabase Hot Stamping </span></h2><button class="btn secondary" onclick="loadCalibrations()"><span data-t="reload"> ↻ Recharger calibrations </span></button>
-        <div class="status" id="libStatus">-</div>
-        <div id="calibs"></div>
+      
+    </div>
+      
+  </div>
+  
+  <div class="layout">
+    <div class="col">
+      <section class="card">
+
+  <h2>
+  <span class="dot"></span>
+  <span data-t="machineInputs">
+    Entrées machine
+  </span>
+</h2>
+
+<label data-t="machine">
+  Machine
+</label>
+
+<div class="inputline">
+
+  <select id="machine"></select>
+
+  <button class="search-btn">
+    🔍
+  </button>
+
+<button class="mini-btn"
+        onclick="addMachine()">
+  +
+</button>
+
+</div>
+
+<div class="row">
+
+  <div>
+
+    <label data-t="maxTemperature">
+      Température max machine
+    </label>
+
+    <div class="unit-wrap">
+
+      <input id="machineTempMax" readonly>
+
+      <span class="unit">
+        °C
+      </span>
+
+    </div>
+
+  </div>
+
+  <div>
+
+    <label data-t="maxPressure">
+      Pression max machine
+    </label>
+
+    <div class="unit-wrap">
+
+      <input id="machinePressureMax" readonly>
+
+      <span class="unit">
+        bar
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+<label data-t="productionSite">
+  Site de production
+</label>
+
+<input id="productionSite" readonly>
+</section>
+      
+      <section class="card">
+        <h2><span class="dot"></span>
+          <span data-t="library">
+            Bibliothèque
+          </span>
+        </h2>
+       <label data-t="support">Support</label>
+
+<div class="inputline">
+  <select id="support"></select>
+
+  <button class="search-btn"
+          onclick="searchSupport()">
+    🔍
+  </button>
+
+  <button class="mini-btn"
+          onclick="addSupport()">
+    +
+  </button>
+</div>
+<label data-t="foil">Folio</label>
+
+<div class="inputline">
+  <select id="foil"></select>
+
+  <button class="search-btn"
+          onclick="searchFoil()">
+    🔍
+  </button>
+
+  <button class="mini-btn"
+          onclick="addFoil()">
+    +
+  </button>
+</div>
+
+        <label data-t="operation">
+          Opération
+        </label>
+        <select id="operation"></select>
+        <div class="status" id="status">Chargement...</div>
+        <div class="note" id="note"></div>
       </section>
     </div>
-    <div class="modal" id="searchModal">
-      <div class="modal-panel">
-        <div class="modal-head">
-          <h3 id="searchTitle">Recherche</h3><button class="close" id="searchClose">×</button>
-        </div><label>Recherche</label><input id="searchInput" placeholder="Nom, fournisseur, référence">
-        <div id="searchResults"></div>
-      </div>
-    </div>
-    <!-- Modal Ajout Support -->
-    <div class="modal" id="supportModal">
-      <div class="modal-panel">
-        <div class="modal-head">
-          <h3>Ajouter un support</h3>
-          <button class="close" onclick="closeSupportModal()">×</button>
+    <div class="col">
+      <section class="card">
+        <h2><span class="dot"></span>
+          <span data-t="quickRead">
+          Lecture rapide
+          </span>
+        </h2>
+        <div class="res-big valid">
+          <div class="lbl" data-t="tempRec">
+            Température recommandée </div>
+          <div class="val"><span id="tempRec">–</span></div></div>
+        <div class="res-big">
+          <div class="lbl" data-t="pressRec">
+  Pression recommandée
+</div>
+          <div class="val"><span id="pressRec">–</span></div></div>
+        <div class="res-line">
+          <span data-t="timeRec">
+  Temps recommandé
+</span>
+          <b id="dwellRec">–</b></div>
+        <div class="res-line">
+          <span data-t="tempRange">
+  Température min / rec / max
+</span>
+          <b id="tempRange">–</b></div>
+        <div class="res-line">
+          <span data-t="pressRange">
+  Pression min / rec / max
+</span>
+
+          <b id="pressRange">–</b></div>
+        <div class="res-line">
+          <span data-t="timeRange">
+  Temps min / rec / max
+</span>
+          <b id="dwellRange">–</b></div>
+      </section>
+      <section class="card">
+        
+        <h2 class="nowrap-title">
+  <span class="dot"></span>
+  <span data-t="calibration">
+    Calibration atelier
+  </span>
+</h2>
+        <div class="row">
+          <div>
+            <label data-t="tempValidated">
+  Température validée
+</label>
+            <div class="unit-wrap"><input id="cTemp" inputmode="numeric"><span class="unit">°C</span></div></div>
+          <div>
+            <label data-t="pressValidated">
+  Pression validée
+</label>
+            <div class="unit-wrap"><input id="cPress" inputmode="decimal"><span class="unit">bar</span></div></div>
         </div>
-        <label>Code</label>
-        <input id="sCode">
-        <label>Nom FR</label>
-        <input id="sNameFr">
-        <label>Fournisseur</label>
-        <input id="sSupplier">
-        <label>Famille</label>
-        <input id="sFamily">
-        <label>Température min</label>
-        <input id="sTempMin" type="number">
-        <label>Température recommandée</label>
-        <input id="sTempRec" type="number">
-        <label>Température max</label>
-        <input id="sTempMax" type="number">
-        <label>Pression min</label>
-        <input id="sPressMin" type="number">
-        <label>Pression recommandée</label>
-        <input id="sPressRec" type="number">
-        <label>Pression max</label>
-        <input id="sPressMax" type="number">
-        <label>Temps min</label>
-        <input id="sDwellMin" type="number" step="0.01">
-        <label>Temps recommandé</label>
-        <input id="sDwellRec" type="number" step="0.01">
-        <label>Temps max</label>
-        <input id="sDwellMax" type="number" step="0.01">
-        <button class="btn" type="button" onclick="window.saveSupport()"> Enregistrer Support </button>
-      </div>
+        <label data-t="timeValidated">
+  Temps validé
+</label>
+        <div class="unit-wrap"><input id="cDwell" inputmode="decimal"><span class="unit">s</span></div>
+        <label data-t="comments">
+  Commentaires / observations
+</label>
+        <textarea id="comments"></textarea>
+        <button class="btn" onclick="saveCalibration()">
+          <span data-t="save">
+  💾 Enregistrer calibration
+</span>
+        </button>
+      </section>
     </div>
-    <!-- Modal Ajout Folio -->
-    <div class="modal" id="foilModal">
-      <div class="modal-panel">
-        <div class="modal-head">
-          <h3>Ajouter un folio</h3>
-          <button class="close" onclick="closeFoilModal()">×</button>
-        </div>
-        <label>Code folio</label>
-        <input id="fCode">
-        <label>Nom FR</label>
-        <input id="fLabelFr">
-        <label>Fournisseur</label>
-        <input id="fSupplier">
-        <label>Référence</label>
-        <input id="fReference">
-        <label>Δ Température</label>
-        <input id="fDeltaTemp" type="number">
-        <label>Facteur pression</label>
-        <input id="fPressureFactor" value="1" type="number" step="0.1">
-        <label>Facteur temps</label>
-        <input id="fDwellFactor" value="1" type="number" step="0.1">
-        <button class="btn" type="button" onclick="window.saveFoil()"> Enregistrer Folio </button>
-      </div>
+  </div>
+  <section class="card lib">
+    <h2><span class="dot"></span>
+      <span data-t="supabaseLibrary">
+  Bibliothèque Supabase Hot Stamping
+</span>
+    </h2>
+    <button class="btn secondary" onclick="loadCalibrations()">
+      <span data-t="reload">
+  ↻ Recharger calibrations
+</span>
+    </button>
+    <div class="status" id="libStatus">-</div>
+    <div id="calibs"></div>
+  </section>
+</div>
+<div class="modal" id="searchModal"><div class="modal-panel"><div class="modal-head"><h3 id="searchTitle">Recherche</h3><button class="close" id="searchClose">×</button></div><label>Recherche</label><input id="searchInput" placeholder="Nom, fournisseur, référence"><div id="searchResults"></div></div></div>
+<!-- Modal Ajout Support -->
+<div class="modal" id="supportModal">
+  <div class="modal-panel">
+
+    <div class="modal-head">
+      <h3>Ajouter un support</h3>
+      <button class="close" onclick="closeSupportModal()">×</button>
     </div>
-    <!-- Modal Ajout Machine -->
-    <div class="modal" id="machineModal">
-      <div class="modal-panel">
-        <div class="modal-head">
-          <h3>Ajouter une machine</h3>
-          <button class="close" onclick="closeMachineModal()"> × </button>
-        </div>
-        <label>Nom machine</label>
-        <input id="mName">
-        <label>Température max</label>
-        <input id="mTempMax" type="number">
-        <label>Pression max</label>
-        <input id="mPressMax" type="number">
-        <label>Site de production</label>
-        <input id="mSite">
-        <button class="btn" type="button" onclick="window.saveMachine()"> Enregistrer Machine </button>
-      </div>
+
+    <label>Code</label>
+    <input id="sCode">
+
+    <label>Nom FR</label>
+    <input id="sNameFr">
+
+    <label>Fournisseur</label>
+    <input id="sSupplier">
+
+    <label>Famille</label>
+    <input id="sFamily">
+
+    <label>Température min</label>
+    <input id="sTempMin" type="number">
+
+    <label>Température recommandée</label>
+    <input id="sTempRec" type="number">
+
+    <label>Température max</label>
+    <input id="sTempMax" type="number">
+
+    <label>Pression min</label>
+    <input id="sPressMin" type="number">
+
+    <label>Pression recommandée</label>
+    <input id="sPressRec" type="number">
+
+    <label>Pression max</label>
+    <input id="sPressMax" type="number">
+
+    <label>Temps min</label>
+<input id="sDwellMin"
+       type="number"
+       step="0.01">
+
+<label>Temps recommandé</label>
+<input id="sDwellRec"
+       type="number"
+       step="0.01">
+
+<label>Temps max</label>
+<input id="sDwellMax"
+       type="number"
+       step="0.01">
+
+    <button class="btn"
+        type="button"
+        onclick="window.saveSupport()">
+  Enregistrer Support
+</button>
+
+  </div>
+</div>
+
+
+<!-- Modal Ajout Folio -->
+<div class="modal" id="foilModal">
+  <div class="modal-panel">
+
+    <div class="modal-head">
+      <h3>Ajouter un folio</h3>
+      <button class="close" onclick="closeFoilModal()">×</button>
     </div>
-    <div class="toast" id="toast"></div>
-    <script>
-      (function() {
-          'use strict';
-          var SUPABASE_URL = 'https://erzuvpswagzwlrxgctaj.supabase.co';
-          var SUPABASE_KEY = 'sb_publishable_EERLI2l3AjQWkCLsMK3kbA_DMny2RFr';
-          var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-          var supports = [];
-          var foils = [];
-          var operations = [];
-          var machines = [];
-          var user = null;
-          var role = 'user';
-          const TXT = {
-            fr: {
-              machineInputs: 'Entrées machine',
-              machine: 'Machine',
-              maxTemperature: 'Température max machine',
-              maxPressure: 'Pression max machine',
-              productionSite: 'Site de production',
-              title: 'Hot Stamping Calculator',
-              library: 'Bibliothèque',
-              support: 'Support',
-              foil: 'Folio',
-              operation: 'Opération',
-              quickRead: 'Lecture rapide',
-              tempRec: 'Température recommandée',
-              pressRec: 'Pression recommandée',
-              timeRec: 'Temps recommandé',
-              tempRange: 'Température min / rec / max',
-              pressRange: 'Pression min / rec / max',
-              timeRange: 'Temps min / rec / max',
-              calibration: 'Calibration atelier',
-              tempValidated: 'Température validée',
-              pressValidated: 'Pression validée',
-              timeValidated: 'Temps validé',
-              comments: 'Commentaires / observations',
-              save: '💾 Enregistrer calibration',
-              supabaseLibrary: 'Bibliothèque Supabase Hot Stamping',
-              reload: '↻ Recharger calibrations'
-            },
-            en: {
-              machineInputs: 'Machine inputs',
-              machine: 'Machine',
-              maxTemperature: 'Max machine temperature',
-              maxPressure: 'Max machine pressure',
-              productionSite: 'Production site',
-              title: 'Hot Stamping Calculator',
-              library: 'Library',
-              support: 'Support',
-              foil: 'Foil',
-              operation: 'Operation',
-              quickRead: 'Quick Read',
-              tempRec: 'Recommended temperature',
-              pressRec: 'Recommended pressure',
-              timeRec: 'Recommended dwell time',
-              tempRange: 'Temperature min / rec / max',
-              pressRange: 'Pressure min / rec / max',
-              timeRange: 'Time min / rec / max',
-              calibration: 'Workshop calibration',
-              tempValidated: 'Validated temperature',
-              pressValidated: 'Validated pressure',
-              timeValidated: 'Validated time',
-              comments: 'Comments / observations',
-              save: '💾 Save calibration',
-              supabaseLibrary: 'Hot Stamping Supabase Library',
-              reload: '↻ Reload calibrations'
-            },
-            pt: {
-              machineInputs: 'Entradas da máquina',
-              machine: 'Máquina',
-              maxTemperature: 'Temperatura máxima da máquina',
-              maxPressure: 'Pressão máxima da máquina',
-              productionSite: 'Local de produção',
-              title: 'Calculadora Hot Stamping',
-              library: 'Biblioteca',
-              support: 'Material',
-              foil: 'Folio',
-              operation: 'Operação',
-              quickRead: 'Leitura rápida',
-              tempRec: 'Temperatura recomendada',
-              pressRec: 'Pressão recomendada',
-              timeRec: 'Tempo recomendado',
-              tempRange: 'Temperatura min / rec / max',
-              pressRange: 'Pressão min / rec / max',
-              timeRange: 'Tempo min / rec / max',
-              calibration: 'Calibração oficina',
-              tempValidated: 'Temperatura validada',
-              pressValidated: 'Pressão validada',
-              timeValidated: 'Tempo validado',
-              comments: 'Comentários / observações',
-              save: '💾 Guardar calibração',
-              supabaseLibrary: 'Biblioteca Supabase Hot Stamping',
-              reload: '↻ Recarregar calibrações'
-            }
-          };
-          let currentLang = localStorage.getItem('hotStampingLang') || 'fr';
-          window.setLang = function(lang) {
-            currentLang = lang;
-            localStorage.setItem('hotStampingLang', lang);
-            document.querySelectorAll('.langs button').forEach(function(btn) {
-              btn.classList.remove('active');
-            });
-            var activeButton = document.querySelector('.langs button[data-lang="' + lang + '"]');
-            if (activeButton) {
-              activeButton.classList.add('active');
-            }
-            applyTranslations();
-          };
 
-          function applyTranslations() {
-            const T = TXT[currentLang];
-            document.title = T.title;
-            document.querySelector('h1').textContent = T.title;
-            document.querySelectorAll('[data-t]').forEach(function(elm) {
-              const key = elm.dataset.t;
-              if (T[key]) {
-                elm.textContent = T[key];
-              }
-            });
-          }
+    <label>Code folio</label>
+    <input id="fCode">
 
-          function el(id) {
-            return document.getElementById(id);
-          }
+    <label>Nom FR</label>
+    <input id="fLabelFr">
 
-          function text(v) {
-            return v === null || v === undefined ? '' : String(v);
-          }
+    <label>Fournisseur</label>
+    <input id="fSupplier">
 
-          function num(v, def) {
-            var n = Number(v);
-            return Number.isFinite(n) ? n : def;
-          }
+    <label>Référence</label>
+    <input id="fReference">
 
-          function factor(v) {
-            var n = Number(v);
-            return Number.isFinite(n) && n > 0 ? n : 1;
-          }
+    <label>Δ Température</label>
+    <input id="fDeltaTemp" type="number">
 
-          function toast(msg) {
-            var t = el('toast');
-            t.textContent = msg;
-            t.style.display = 'block';
-            setTimeout(function() {
-              t.style.display = 'none';
-            }, 2200);
-          }
-          async function token() {
-            var s = (await sb.auth.getSession()).data.session;
-            return s && s.access_token ? s.access_token : SUPABASE_KEY;
-          }
-          async function api(table, query, opt) {
-            var url = SUPABASE_URL + '/rest/v1/' + table + (query || '');
-            var o = opt || {};
-            o.headers = o.headers || {};
-            o.headers.apikey = SUPABASE_KEY;
-            o.headers.Authorization = 'Bearer ' + await token();
-            if (o.body) {
-              o.headers['Content-Type'] = 'application/json';
-              o.headers.Prefer = 'return=representation';
-            }
-            var r = await fetch(url, o);
-            if (!r.ok) {
-              throw new Error(await r.text());
-            }
-            return await r.json();
-          }
+    <label>Facteur pression</label>
+    <input id="fPressureFactor"
+           value="1"
+           type="number"
+           step="0.1">
 
-          function supportLabel(s) {
-            return text(s.name_fr) || text(s.name_en) || text(s.code);
-          }
+    <label>Facteur temps</label>
+    <input id="fDwellFactor"
+           value="1"
+           type="number"
+           step="0.1">
 
-          function foilLabel(f) {
-            return text(f.label_fr) || text(f.label_en) || text(f.foil_code) || text(f.id);
-          }
+    <button class="btn"
+        type="button"
+        onclick="window.saveFoil()">
+  Enregistrer Folio
+</button>
 
-          function opLabel(o) {
-            return text(o.label_fr) || text(o.operation_code);
-          }
+  </div>
+</div>
 
-          function validSupport(s) {
-            return s && s.code && s.temperature_rec !== null && s.temperature_rec !== undefined;
-          }
+<!-- Modal Ajout Machine -->
+<div class="modal" id="machineModal">
 
-          function validFoil(f) {
-            return f && (f.foil_code || f.id);
-          }
+  <div class="modal-panel">
 
-          function fillSelect(sel, items, labelFn, valueFn) {
-            sel.innerHTML = '';
-            items.forEach(function(x) {
-              var opt = document.createElement('option');
-              opt.value = valueFn(x);
-              opt.textContent = labelFn(x);
-              sel.appendChild(opt);
-            });
-          }
-          async function initAuth() {
-            if (window.authReady) {
-              await window.authReady;
-              user = await window.appAuth.getUser();
-              role = await window.appAuth.getRole();
-              el('rolePill').textContent = (user && user.email ? user.email : '');
-            }
-          }
-          async function loadData() {
-            supports = await api('hot_supports', '?select=*&order=name_fr.asc&limit=5000');
-            foils = await api('hot_foils', '?select=*&order=label_fr.asc&limit=5000');
-            operations = await api('hot_operations', '?select=*&order=operation_code.asc&limit=100');
-            machines = await api('hot_machines', '?select=*&order=name.asc');
-            if (!operations.length) {
-              operations = [{
-                operation_code: 'standard',
-                label_fr: 'Standard',
-                temp_factor: 1,
-                pressure_factor: 1,
-                dwell_factor: 1
-              }];
-            }
-            fillLists();
-          }
+    <div class="modal-head">
+      <h3>Ajouter une machine</h3>
 
-          function fillLists() {
-            var usable = supports.filter(validSupport);
-            if (!usable.length) {
-              usable = supports;
-            }
-            fillSelect(el('machine'), machines, function(m) {
-              return m.name;
-            }, function(m) {
-              return m.name;
-            });
-            fillSelect(el('support'), usable, supportLabel, function(s) {
-              return s.code;
-            });
-            fillSelect(el('foil'), foils.filter(validFoil), foilLabel, function(f) {
-              return f.foil_code || f.id;
-            });
-            fillSelect(el('operation'), operations, opLabel, function(o) {
-              return o.operation_code;
-            });
-            el('status').textContent = usable.length + ' supports utilisables · ' + foils.length + ' folios · ' + operations.length + ' opérations';
-            el('libStatus').textContent = supports.length + ' supports totaux · ' + foils.length + ' folios totaux';
-            calc();
-          }
+      <button class="close"
+              onclick="closeMachineModal()">
+        ×
+      </button>
+    </div>
 
-          function selectedSupport() {
-            var code = el('support').value;
-            return supports.find(function(s) {
-              return s.code === code;
-            });
-          }
+    <label>Nom machine</label>
+    <input id="mName">
 
-          function selectedFoil() {
-            var code = el('foil').value;
-            return foils.find(function(f) {
-              return f.foil_code === code || f.id === code;
-            });
-          }
+    <label>Température max</label>
+    <input id="mTempMax" type="number">
 
-          function selectedOperation() {
-            var code = el('operation').value;
-            return operations.find(function(o) {
-              return o.operation_code === code;
-            }) || {
-              temp_factor: 1,
-              pressure_factor: 1,
-              dwell_factor: 1,
-              label_fr: 'Standard'
-            };
-          }
+    <label>Pression max</label>
+    <input id="mPressMax" type="number">
 
-          function selectedMachine() {
-            var name = el('machine').value;
-            return machines.find(function(m) {
-              return m.name === name;
-            });
-          }
+    <label>Site de production</label>
+    <input id="mSite">
 
-          function clearValues() {
-            ['tempRec', 'pressRec', 'dwellRec', 'tempRange', 'pressRange', 'dwellRange'].forEach(function(id) {
-              el(id).textContent = '–';
-            });
-          }
+    <button class="btn"
+            type="button"
+            onclick="window.saveMachine()">
+      Enregistrer Machine
+    </button>
 
-          function calc() {
-            var machine = selectedMachine();
-            if (machine) {
-              el('machineTempMax').value = machine.temperature_max || '';
-              el('machinePressureMax').value = machine.pressure_max || '';
-              el('productionSite').value = machine.site || '';
-            }
-            var s = selectedSupport(),
-              f = selectedFoil(),
-              o = selectedOperation();
-            if (!s || !f) {
-              clearValues();
-              return;
-            }
-            var baseT = [num(s.temperature_min, 0), num(s.temperature_rec, 0), num(s.temperature_max, 0)];
-            var baseP = [num(s.pressure_min, 0), num(s.pressure_rec, 0), num(s.pressure_max, 0)];
-            var baseD = [num(s.dwell_time_min, 0), num(s.dwell_time_rec, 0), num(s.dwell_time_max, 0)];
-            var dt = num(f.temperature_delta, 0);
-            var pf = factor(f.pressure_factor);
-            var df = factor(f.dwell_factor);
-            if ((!s.temperature_rec) && f.temperature_rec) {
-              baseT = [num(f.temperature_min, 0), num(f.temperature_rec, 0), num(f.temperature_max, 0)];
-              baseP = [num(f.pressure_min, 0), num(f.pressure_rec, 0), num(f.pressure_max, 0)];
-              baseD = [num(f.dwell_time_min, 0), num(f.dwell_time_rec, 0), num(f.dwell_time_max, 0)];
-              dt = 0;
-              pf = 1;
-              df = 1;
-            }
-            var tf = factor(o.temp_factor);
-            var opf = factor(o.pressure_factor);
-            var odf = factor(o.dwell_factor);
-            var t = baseT.map(function(x) {
-              return Math.round((x + dt) * tf);
-            });
-            var p = baseP.map(function(x) {
-              return (x * pf * opf).toFixed(1);
-            });
-            var d = baseD.map(function(x) {
-              return (x * df * odf).toFixed(2);
-            });
-            el('tempRec').textContent = t[1] + ' °C';
-            el('pressRec').textContent = p[1] + ' bar';
-            el('dwellRec').textContent = d[1] + ' s';
-            el('tempRange').textContent = t.join(' / ') + ' °C';
-            el('pressRange').textContent = p.join(' / ') + ' bar';
-            el('dwellRange').textContent = d.join(' / ') + ' s';
-            el('cTemp').value = t[1];
-            el('cPress').value = p[1];
-            el('cDwell').value = d[1];
-            var lines = [];
-            if (s.family) lines.push(s.family);
-            if (s.supplier) lines.push('Support : ' + s.supplier + (s.collection ? ' · ' + s.collection : ''));
-            if (s.note) lines.push(s.note);
-            if (f.supplier) lines.push('Folio : ' + f.supplier + (f.reference ? ' · ' + f.reference : ''));
-            lines.push('Folio : ΔT ' + dt + ' °C · P× ' + pf + ' · t× ' + df);
-            el('note').textContent = lines.join('\n');
-          }
+  </div>
 
-          function modal(title, items, titleFn, subFn, searchFn, pick) {
-            var m = el('searchModal'),
-              q = el('searchInput'),
-              list = el('searchResults');
-            el('searchTitle').textContent = title;
-            q.value = '';
+</div>
+  
+  <div class="toast" id="toast"></div>
+<script>
+(function(){
+'use strict';
+  
+var SUPABASE_URL='https://erzuvpswagzwlrxgctaj.supabase.co';
+var SUPABASE_KEY='sb_publishable_EERLI2l3AjQWkCLsMK3kbA_DMny2RFr';
+var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+var supports=[];
+  var foils=[];
+  var operations=[];
+  var machines=[];
+  var user=null;var role='user';
+const TXT = {
 
-            function render() {
-              var term = q.value.toLowerCase().trim();
-              var rows = items.filter(function(x) {
-                return !term || searchFn(x).toLowerCase().indexOf(term) >= 0;
-              }).slice(0, 120);
-              list.innerHTML = '';
-              if (!rows.length) {
-                list.innerHTML = ' < p > Aucun résultat. < /p>';return;}rows.forEach(function(x){var div=document.createElement('div');div.className='result';var b=document.createElement('b');b.textContent=titleFn(x);div.appendChild(b);var small=document.createElement('div');small.textContent=subFn(x)||'';div.appendChild(small);div.onclick=function(){pick(x);m.classList.remove('open');calc();};list.appendChild(div);});}q.oninput=render;el('searchClose').onclick=function(){m.classList.remove('open');};m.classList.add('open');setTimeout(function(){q.focus();},50);render();}
-                window.searchSupport = function() {
-                  modal('Recherche support', supports.filter(validSupport), supportLabel, function(s) {
-                    return [s.supplier, s.collection, s.family].filter(Boolean).join(' · ');
-                  }, function(s) {
-                    return [s.code, s.name_fr, s.supplier, s.collection, s.family, s.note].join(' ');
-                  }, function(s) {
-                    el('support').value = s.code;
-                  });
-                };
-                window.searchFoil = function() {
-                  modal('Recherche folio', foils.filter(validFoil), foilLabel, function(f) {
-                    return [f.supplier, f.reference, f.color, f.foil_type].filter(Boolean).join(' · ');
-                  }, function(f) {
-                    return [f.foil_code, f.label_fr, f.supplier, f.reference, f.color, f.foil_type].join(' ');
-                  }, function(f) {
-                    el('foil').value = f.foil_code || f.id;
-                  });
-                };
-                window.saveCalibration = async function() {
-                  try {
-                    var s = selectedSupport();
-                    var f = selectedFoil();
-                    await api('Hot_Stamping_calibrations', '', {
-                      method: 'POST',
-                      body: JSON.stringify({
-                        material: s ? s.code : null,
-                        foil: f ? (f.foil_code || f.id) : null,
-                        temperature: num(el('cTemp').value, null),
-                        pressure: num(el('cPress').value, null),
-                        dwell_time: num(el('cDwell').value, null),
-                        comments: el('comments').value,
-                        created_by_user_id: user ? user.id : null,
-                        created_by_email: user ? user.email : null
-                      })
-                    });
-                    toast('Calibration enregistrée');
-                    loadCalibrations();
-                  } catch (e) {
-                    console.error('Erreur calibration :', e);
-                    alert(e.message);
-                    toast('Erreur calibration');
-                  }
-                };
-                window.saveSupport = async function() {
-                  try {
-                    var code = el('sCode').value.trim();
-                    var nameFr = el('sNameFr').value.trim();
-                    if (!code) {
-                      alert('Le code du support est obligatoire.');
-                      el('sCode').focus();
-                      return;
-                    }
-                    if (!nameFr) {
-                      alert('Le nom du support est obligatoire.');
-                      el('sNameFr').focus();
-                      return;
-                    }
-                    const payload = {
-                      code: code,
-                      name_fr: nameFr,
-                      supplier: el('sSupplier').value.trim() || null,
-                      family: el('sFamily').value.trim() || null,
-                      created_by_user_id: user ? user.id : null,
-                      created_by_email: user ? user.email : null,
-                      temperature_min: num(el('sTempMin').value, null),
-                      temperature_rec: num(el('sTempRec').value, null),
-                      temperature_max: num(el('sTempMax').value, null),
-                      pressure_min: num(el('sPressMin').value, null),
-                      pressure_rec: num(el('sPressRec').value, null),
-                      pressure_max: num(el('sPressMax').value, null),
-                      dwell_time_min: num(el('sDwellMin').value, null),
-                      dwell_time_rec: num(el('sDwellRec').value, null),
-                      dwell_time_max: num(el('sDwellMax').value, null)
-                    };
-                    console.log('INSERT SUPPORT', payload);
-                    await api('hot_supports', '', {
-                      method: 'POST',
-                      body: JSON.stringify(payload)
-                    });
-                    toast('Support ajouté');
-                    closeSupportModal();
-                    await loadData();
-                    el('support').value = code;
-                    calc();
-                    ['sCode', 'sNameFr', 'sSupplier', 'sFamily', 'sTempMin', 'sTempRec', 'sTempMax', 'sPressMin', 'sPressRec', 'sPressMax', 'sDwellMin', 'sDwellRec', 'sDwellMax'].forEach(function(id) {
-                      el(id).value = '';
-                    });
-                  } catch (e) {
-                    console.error('Erreur ajout support :', e);
-                    alert('Impossible d’enregistrer le support dans Supabase.\n\n' + e.message);
-                    toast('Erreur ajout support');
-                  }
-                };
-                window.saveFoil = async function() {
-                  try {
-                    var code = el('fCode').value.trim();
-                    var labelFr = el('fLabelFr').value.trim();
-                    if (!code) {
-                      alert('Le code du folio est obligatoire.');
-                      el('fCode').focus();
-                      return;
-                    }
-                    if (!labelFr) {
-                      alert('Le nom du folio est obligatoire.');
-                      el('fLabelFr').focus();
-                      return;
-                    }
-                    const payload = {
-                      foil_code: code,
-                      label_fr: labelFr,
-                      supplier: el('fSupplier').value.trim() || null,
-                      reference: el('fReference').value.trim() || null,
-                      created_by_user_id: user ? user.id : null,
-                      created_by_email: user ? user.email : null,
-                      temperature_delta: num(el('fDeltaTemp').value, 0),
-                      pressure_factor: num(el('fPressureFactor').value, 1),
-                      dwell_factor: num(el('fDwellFactor').value, 1)
-                    };
-                    console.log('INSERT FOLIO', payload);
-                    await api('hot_foils', '', {
-                      method: 'POST',
-                      body: JSON.stringify(payload)
-                    });
-                    toast('Folio ajouté');
-                    closeFoilModal();
-                    await loadData();
-                    el('foil').value = code;
-                    calc();
-                    ['fCode', 'fLabelFr', 'fSupplier', 'fReference', 'fDeltaTemp'].forEach(function(id) {
-                      el(id).value = '';
-                    });
-                    el('fPressureFactor').value = '1';
-                    el('fDwellFactor').value = '1';
-                  } catch (e) {
-                    console.error('Erreur ajout folio :', e);
-                    alert('Impossible d’enregistrer le folio dans Supabase.\n\n' + e.message);
-                    toast('Erreur ajout folio');
-                  }
-                };
-                window.saveMachine = async function() {
-                  try {
-                    const payload = {
-                      name: el('mName').value,
-                      temperature_max: num(el('mTempMax').value, null),
-                      pressure_max: num(el('mPressMax').value, null),
-                      site: el('mSite').value,
-                      created_by_user_id: user ? user.id : null,
-                      created_by_email: user ? user.email : null
-                    };
-                    console.log('INSERT MACHINE', payload);
-                    await api('hot_machines', '', {
-                      method: 'POST',
-                      body: JSON.stringify(payload)
-                    });
-                    toast('Machine ajoutée');
-                    closeMachineModal();
-                    await loadData();
-                    ['mName', 'mTempMax', 'mPressMax', 'mSite'].forEach(function(id) {
-                      el(id).value = '';
-                    });
-                  } catch (e) {
-                    console.error(e);
-                    alert(e.message);
-                    toast('Erreur ajout machine');
-                  }
-                };
-                window.loadCalibrations = async function() {
-                      var h = el('calibs');
-                      h.innerHTML = '';
-                      try {
-                        var rows = await api('Hot_Stamping_calibrations', '?select=*&order=created_at.desc&limit=20');
-                        if (!rows.length) {
-                          h.innerHTML = ' < p > Aucune calibration. < /p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML=' < b > '+text(r.material)+'·
-                          '+text(r.foil)+' < /b> < div class = "s" > '+text(r.temperature)+'°
-                          C· '+text(r.pressure)+'
-                          bar· '+text(r.dwell_time)+'
-                          s < br > '+text(r.created_by_email||r.operator||'
-                          ')+' < /div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML=' < p > Calibrations non chargées. < /p>';}};
-                          window.addSupport = function() {
-                            document.getElementById('supportModal').classList.add('open');
-                          };
-                          window.addFoil = function() {
-                            window.addMachine = function() {
-                              document.getElementById('machineModal').classList.add('open');
-                            };
-                            window.closeMachineModal = function() {
-                              document.getElementById('machineModal').classList.remove('open');
-                            };
-                            document.getElementById('foilModal').classList.add('open');
-                          };
-                          window.closeSupportModal = function() {
-                            document.getElementById('supportModal').classList.remove('open');
-                          };
-                          window.closeFoilModal = function() {
-                            document.getElementById('foilModal').classList.remove('open');
-                          };
-                          async function init() {
-                            try {
-                              await initAuth();
-                              applyTranslations();
-                              window.setLang(currentLang);
-                              await loadData();
-                              ['machine', 'support', 'foil', 'operation'].forEach(function(id) {
-                                el(id).addEventListener('change', calc);
-                              });
-                              loadCalibrations();
-                            } catch (e) {
-                              console.error(e);
-                              el('status').textContent = 'Erreur chargement Supabase : ' + e.message;
-                              toast('Erreur chargement Supabase');
-                            }
-                          }
-                          init();
-                        })();
-    </script>
-  </body>
+fr:{
+machineInputs:'Entrées machine',
+machine:'Machine',
+maxTemperature:'Température max machine',
+maxPressure:'Pression max machine',
+productionSite:'Site de production',
+title:'Hot Stamping Calculator',
+library:'Bibliothèque',
+support:'Support',
+foil:'Folio',
+operation:'Opération',
+quickRead:'Lecture rapide',
+
+tempRec:'Température recommandée',
+pressRec:'Pression recommandée',
+timeRec:'Temps recommandé',
+
+tempRange:'Température min / rec / max',
+pressRange:'Pression min / rec / max',
+timeRange:'Temps min / rec / max',
+
+calibration:'Calibration atelier',
+
+tempValidated:'Température validée',
+pressValidated:'Pression validée',
+timeValidated:'Temps validé',
+
+comments:'Commentaires / observations',
+
+save:'💾 Enregistrer calibration',
+
+supabaseLibrary:'Bibliothèque Supabase Hot Stamping',
+
+reload:'↻ Recharger calibrations'
+},
+
+en:{
+machineInputs:'Machine inputs',
+machine:'Machine',
+maxTemperature:'Max machine temperature',
+maxPressure:'Max machine pressure',
+productionSite:'Production site',
+title:'Hot Stamping Calculator',
+library:'Library',
+support:'Support',
+foil:'Foil',
+operation:'Operation',
+quickRead:'Quick Read',
+
+tempRec:'Recommended temperature',
+pressRec:'Recommended pressure',
+timeRec:'Recommended dwell time',
+
+tempRange:'Temperature min / rec / max',
+pressRange:'Pressure min / rec / max',
+timeRange:'Time min / rec / max',
+
+calibration:'Workshop calibration',
+
+tempValidated:'Validated temperature',
+pressValidated:'Validated pressure',
+timeValidated:'Validated time',
+
+comments:'Comments / observations',
+
+save:'💾 Save calibration',
+
+supabaseLibrary:'Hot Stamping Supabase Library',
+
+reload:'↻ Reload calibrations'
+},
+
+pt:{
+machineInputs:'Entradas da máquina',
+machine:'Máquina',
+maxTemperature:'Temperatura máxima da máquina',
+maxPressure:'Pressão máxima da máquina',
+productionSite:'Local de produção',
+title:'Calculadora Hot Stamping',
+library:'Biblioteca',
+support:'Material',
+foil:'Folio',
+operation:'Operação',
+quickRead:'Leitura rápida',
+
+tempRec:'Temperatura recomendada',
+pressRec:'Pressão recomendada',
+timeRec:'Tempo recomendado',
+
+tempRange:'Temperatura min / rec / max',
+pressRange:'Pressão min / rec / max',
+timeRange:'Tempo min / rec / max',
+
+calibration:'Calibração oficina',
+
+tempValidated:'Temperatura validada',
+pressValidated:'Pressão validada',
+timeValidated:'Tempo validado',
+
+comments:'Comentários / observações',
+
+save:'💾 Guardar calibração',
+
+supabaseLibrary:'Biblioteca Supabase Hot Stamping',
+
+reload:'↻ Recarregar calibrações'
+}
+
+};
+let currentLang =
+   localStorage.getItem('hotStampingLang')
+   || 'fr';
+
+window.setLang = function(lang){
+
+   currentLang = lang;
+
+   localStorage.setItem(
+      'hotStampingLang',
+      lang
+   );
+
+   document
+      .querySelectorAll('.langs button')
+      .forEach(function(btn){
+
+         btn.classList.remove('active');
+
+      });
+
+   var activeButton =
+      document.querySelector(
+         '.langs button[data-lang="'+lang+'"]'
+      );
+
+   if(activeButton){
+
+      activeButton.classList.add('active');
+
+   }
+
+   applyTranslations();
+
+};
+
+function applyTranslations(){
+
+   const T = TXT[currentLang];
+
+   document.title = T.title;
+
+   document.querySelector('h1').textContent =
+      T.title;
+
+   document
+      .querySelectorAll('[data-t]')
+      .forEach(function(elm){
+
+         const key =
+            elm.dataset.t;
+
+         if(T[key]){
+
+            elm.textContent =
+               T[key];
+
+         }
+
+      });
+
+}
+function el(id){return document.getElementById(id);}function text(v){return v===null||v===undefined?'':String(v);}function num(v,def){var n=Number(v);return Number.isFinite(n)?n:def;}function factor(v){var n=Number(v);return Number.isFinite(n)&&n>0?n:1;}function toast(msg){var t=el('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}async function token(){var s=(await sb.auth.getSession()).data.session;return s&&s.access_token?s.access_token:SUPABASE_KEY;}async function api(table,query,opt){var url=SUPABASE_URL+'/rest/v1/'+table+(query||'');var o=opt||{};o.headers=o.headers||{};o.headers.apikey=SUPABASE_KEY;o.headers.Authorization='Bearer '+await token();if(o.body){o.headers['Content-Type']='application/json';o.headers.Prefer='return=representation';}var r=await fetch(url,o);if(!r.ok){throw new Error(await r.text());}return await r.json();}
+function supportLabel(s){return text(s.name_fr)||text(s.name_en)||text(s.code);}function foilLabel(f){return text(f.label_fr)||text(f.label_en)||text(f.foil_code)||text(f.id);}function opLabel(o){return text(o.label_fr)||text(o.operation_code);}function validSupport(s){return s&&s.code&&s.temperature_rec!==null&&s.temperature_rec!==undefined;}function validFoil(f){return f&&(f.foil_code||f.id);}function fillSelect(sel,items,labelFn,valueFn){sel.innerHTML='';items.forEach(function(x){var opt=document.createElement('option');opt.value=valueFn(x);opt.textContent=labelFn(x);sel.appendChild(opt);});}
+async function initAuth(){if(window.authReady){await window.authReady;user=await window.appAuth.getUser();role=await window.appAuth.getRole();el('rolePill').textContent=(user&&user.email?user.email:'');}}
+async function loadData(){
+  supports=
+  await api(
+    'hot_supports',
+    '?select=*&order=name_fr.asc&limit=5000'
+  );
+  foils=
+  await api(
+    'hot_foils',
+    '?select=*&order=label_fr.asc&limit=5000'
+  );
+  operations=
+  await api(
+    'hot_operations',
+    '?select=*&order=operation_code.asc&limit=100'
+  );
+  machines =
+  await api(
+    'hot_machines',
+    '?select=*&order=name.asc'
+  );
+if(!operations.length){operations=[{operation_code:'standard',label_fr:'Standard',temp_factor:1,pressure_factor:1,dwell_factor:1}];}fillLists();}
+function fillLists(){var usable=supports.filter(validSupport);if(!usable.length){usable=supports;}
+      fillSelect(
+  el('machine'),
+  machines,
+  function(m){
+     return m.name;
+  },
+  function(m){
+     return m.name;
+  }
+);
+      fillSelect(
+        el('support'),
+        usable,supportLabel,
+        function(s){
+          return s.code;
+  }
+);
+      fillSelect(
+        el('foil'),
+        foils.filter(validFoil),foilLabel,
+        function(f){
+          return f.foil_code||f.id;
+  }
+);
+      fillSelect(
+        el('operation'),
+        operations,opLabel,
+        function(o){
+          return o.operation_code;
+  }
+);
+      el('status').textContent=usable.length+' supports utilisables · '+foils.length+' folios · '+operations.length+' opérations';el('libStatus').textContent=supports.length+' supports totaux · '+foils.length+' folios totaux';
+calc();}
+function selectedSupport(){var code=el('support').value;return supports.find(function(s){return s.code===code;});}
+function selectedFoil(){var code=el('foil').value;return foils.find(function(f){return f.foil_code===code||f.id===code;});}
+function selectedOperation(){var code=el('operation').value;return operations.find(function(o){return o.operation_code===code;})||{temp_factor:1,pressure_factor:1,dwell_factor:1,label_fr:'Standard'};}
+function selectedMachine(){
+
+  var name =
+     el('machine').value;
+
+  return machines.find(
+     function(m){
+        return m.name===name;
+     }
+  );
+
+}
+function clearValues(){['tempRec','pressRec','dwellRec','tempRange','pressRange','dwellRange'].forEach(function(id){el(id).textContent='–';});}
+function calc(){
+
+  var machine =
+      selectedMachine();
+
+  if(machine){
+
+     el('machineTempMax').value =
+        machine.temperature_max || '';
+
+     el('machinePressureMax').value =
+        machine.pressure_max || '';
+
+     el('productionSite').value =
+        machine.site || '';
+
+  }
+
+  var s=selectedSupport(),
+      f=selectedFoil(),
+      o=selectedOperation();
+if(!s||!f){clearValues();return;}var baseT=[num(s.temperature_min,0),num(s.temperature_rec,0),num(s.temperature_max,0)];var baseP=[num(s.pressure_min,0),num(s.pressure_rec,0),num(s.pressure_max,0)];var baseD=[num(s.dwell_time_min,0),num(s.dwell_time_rec,0),num(s.dwell_time_max,0)];var dt=num(f.temperature_delta,0);var pf=factor(f.pressure_factor);var df=factor(f.dwell_factor);if((!s.temperature_rec)&&f.temperature_rec){baseT=[num(f.temperature_min,0),num(f.temperature_rec,0),num(f.temperature_max,0)];baseP=[num(f.pressure_min,0),num(f.pressure_rec,0),num(f.pressure_max,0)];baseD=[num(f.dwell_time_min,0),num(f.dwell_time_rec,0),num(f.dwell_time_max,0)];dt=0;pf=1;df=1;}var tf=factor(o.temp_factor);var opf=factor(o.pressure_factor);var odf=factor(o.dwell_factor);var t=baseT.map(function(x){return Math.round((x+dt)*tf);});var p=baseP.map(function(x){return (x*pf*opf).toFixed(1);});var d=baseD.map(function(x){return (x*df*odf).toFixed(2);});el('tempRec').textContent=t[1]+' °C';el('pressRec').textContent=p[1]+' bar';el('dwellRec').textContent=d[1]+' s';el('tempRange').textContent=t.join(' / ')+' °C';el('pressRange').textContent=p.join(' / ')+' bar';el('dwellRange').textContent=d.join(' / ')+' s';el('cTemp').value=t[1];el('cPress').value=p[1];el('cDwell').value=d[1];var lines=[];if(s.family)lines.push(s.family);if(s.supplier)lines.push('Support : '+s.supplier+(s.collection?' · '+s.collection:''));if(s.note)lines.push(s.note);if(f.supplier)lines.push('Folio : '+f.supplier+(f.reference?' · '+f.reference:''));lines.push('Folio : ΔT '+dt+' °C · P× '+pf+' · t× '+df);el('note').textContent=lines.join('\n');}
+function modal(title,items,titleFn,subFn,searchFn,pick){var m=el('searchModal'),q=el('searchInput'),list=el('searchResults');el('searchTitle').textContent=title;q.value='';function render(){var term=q.value.toLowerCase().trim();var rows=items.filter(function(x){return !term||searchFn(x).toLowerCase().indexOf(term)>=0;}).slice(0,120);list.innerHTML='';if(!rows.length){list.innerHTML='<p>Aucun résultat.</p>';return;}rows.forEach(function(x){var div=document.createElement('div');div.className='result';var b=document.createElement('b');b.textContent=titleFn(x);div.appendChild(b);var small=document.createElement('div');small.textContent=subFn(x)||'';div.appendChild(small);div.onclick=function(){pick(x);m.classList.remove('open');calc();};list.appendChild(div);});}q.oninput=render;el('searchClose').onclick=function(){m.classList.remove('open');};m.classList.add('open');setTimeout(function(){q.focus();},50);render();}
+window.searchSupport=function(){modal('Recherche support',supports.filter(validSupport),supportLabel,function(s){return [s.supplier,s.collection,s.family].filter(Boolean).join(' · ');},function(s){return [s.code,s.name_fr,s.supplier,s.collection,s.family,s.note].join(' ');},function(s){el('support').value=s.code;});};
+window.searchFoil=function(){modal('Recherche folio',foils.filter(validFoil),foilLabel,function(f){return [f.supplier,f.reference,f.color,f.foil_type].filter(Boolean).join(' · ');},function(f){return [f.foil_code,f.label_fr,f.supplier,f.reference,f.color,f.foil_type].join(' ');},function(f){el('foil').value=f.foil_code||f.id;});};
+window.saveCalibration = async function(){
+
+  try{
+
+    var s = selectedSupport();
+    var f = selectedFoil();
+
+    await api(
+      'Hot_Stamping_calibrations',
+      '',
+      {
+        method:'POST',
+        body:JSON.stringify({
+
+          material:
+            s ? s.code : null,
+
+          foil:
+            f ? (f.foil_code || f.id) : null,
+
+          temperature:
+            num(el('cTemp').value, null),
+
+          pressure:
+            num(el('cPress').value, null),
+
+          dwell_time:
+            num(el('cDwell').value, null),
+
+          comments:
+            el('comments').value,
+
+          created_by_user_id:
+            user ? user.id : null,
+
+          created_by_email:
+            user ? user.email : null
+
+        })
+      }
+    );
+
+    toast('Calibration enregistrée');
+
+    loadCalibrations();
+
+  }
+  catch(e){
+
+    console.error('Erreur calibration :', e);
+
+    alert(e.message);
+
+    toast('Erreur calibration');
+
+  }
+
+};
+
+
+window.saveSupport = async function(){
+
+  try{
+
+    var code = el('sCode').value.trim();
+    var nameFr = el('sNameFr').value.trim();
+
+    if(!code){
+
+      alert('Le code du support est obligatoire.');
+      el('sCode').focus();
+      return;
+
+    }
+
+    if(!nameFr){
+
+      alert('Le nom du support est obligatoire.');
+      el('sNameFr').focus();
+      return;
+
+    }
+
+const payload = {
+
+  code: code,
+
+  name_fr: nameFr,
+
+  supplier:
+    el('sSupplier').value.trim() || null,
+
+  family:
+    el('sFamily').value.trim() || null,
+
+  created_by_user_id:
+  user ? user.id : null,
+
+created_by_email:
+  user ? user.email : null,
+
+  temperature_min:
+    num(el('sTempMin').value, null),
+
+  temperature_rec:
+    num(el('sTempRec').value, null),
+
+  temperature_max:
+    num(el('sTempMax').value, null),
+
+  pressure_min:
+    num(el('sPressMin').value, null),
+
+  pressure_rec:
+    num(el('sPressRec').value, null),
+
+  pressure_max:
+    num(el('sPressMax').value, null),
+
+  dwell_time_min:
+    num(el('sDwellMin').value, null),
+
+  dwell_time_rec:
+    num(el('sDwellRec').value, null),
+
+  dwell_time_max:
+    num(el('sDwellMax').value, null)
+
+};
+
+    console.log('INSERT SUPPORT', payload);
+
+    await api(
+      'hot_supports',
+      '',
+      {
+        method:'POST',
+        body:JSON.stringify(payload)
+      }
+    );
+
+    toast('Support ajouté');
+
+    closeSupportModal();
+
+    await loadData();
+
+    el('support').value = code;
+
+    calc();
+
+    [
+'sCode',
+'sNameFr',
+'sSupplier',
+'sFamily',
+
+'sTempMin',
+'sTempRec',
+'sTempMax',
+
+'sPressMin',
+'sPressRec',
+'sPressMax',
+
+'sDwellMin',
+'sDwellRec',
+'sDwellMax'
+]
+      .forEach(function(id){
+
+      el(id).value = '';
+
+    });
+
+  }
+  catch(e){
+
+    console.error('Erreur ajout support :', e);
+
+    alert(
+      'Impossible d’enregistrer le support dans Supabase.\n\n'
+      + e.message
+    );
+
+    toast('Erreur ajout support');
+
+  }
+
+};
+
+
+window.saveFoil = async function(){
+
+  try{
+
+    var code = el('fCode').value.trim();
+    var labelFr = el('fLabelFr').value.trim();
+
+    if(!code){
+
+      alert('Le code du folio est obligatoire.');
+      el('fCode').focus();
+      return;
+
+    }
+
+    if(!labelFr){
+
+      alert('Le nom du folio est obligatoire.');
+      el('fLabelFr').focus();
+      return;
+
+    }
+
+    const payload = {
+
+      foil_code:
+        code,
+
+      label_fr:
+        labelFr,
+
+      supplier:
+        el('fSupplier').value.trim() || null,
+
+      reference:
+        el('fReference').value.trim() || null,
+
+created_by_user_id:
+user ? user.id : null,
+ 
+created_by_email:
+user ? user.email : null,
+
+      temperature_delta:
+        num(el('fDeltaTemp').value, 0),
+
+      pressure_factor:
+        num(el('fPressureFactor').value, 1),
+
+      dwell_factor:
+        num(el('fDwellFactor').value, 1)
+
+    };
+
+    console.log('INSERT FOLIO', payload);
+
+    await api(
+      'hot_foils',
+      '',
+      {
+        method:'POST',
+        body:JSON.stringify(payload)
+      }
+    );
+
+    toast('Folio ajouté');
+
+    closeFoilModal();
+
+    await loadData();
+
+    el('foil').value = code;
+
+    calc();
+
+    [
+      'fCode',
+      'fLabelFr',
+      'fSupplier',
+      'fReference',
+      'fDeltaTemp'
+    ].forEach(function(id){
+
+      el(id).value = '';
+
+    });
+
+    el('fPressureFactor').value = '1';
+    el('fDwellFactor').value = '1';
+
+  }
+  catch(e){
+
+    console.error('Erreur ajout folio :', e);
+
+    alert(
+      'Impossible d’enregistrer le folio dans Supabase.\n\n'
+      + e.message
+    );
+
+    toast('Erreur ajout folio');
+
+  }
+
+};
+
+window.saveMachine = async function(){
+
+  try{
+
+    const payload = {
+
+      name:
+        el('mName').value,
+
+      temperature_max:
+        num(el('mTempMax').value, null),
+
+      pressure_max:
+        num(el('mPressMax').value, null),
+
+      site:
+        el('mSite').value,
+
+      created_by_user_id:
+        user ? user.id : null,
+
+      created_by_email:
+        user ? user.email : null
+
+    };
+
+    console.log(
+      'INSERT MACHINE',
+      payload
+    );
+
+    await api(
+      'hot_machines',
+      '',
+      {
+        method:'POST',
+        body:JSON.stringify(payload)
+      }
+    );
+
+    toast('Machine ajoutée');
+
+    closeMachineModal();
+
+    await loadData();
+
+    [
+      'mName',
+      'mTempMax',
+      'mPressMax',
+      'mSite'
+    ].forEach(function(id){
+
+      el(id).value='';
+
+    });
+
+  }
+  catch(e){
+
+    console.error(e);
+
+    alert(e.message);
+
+    toast('Erreur ajout machine');
+
+  }
+
+};
+  
+window.loadCalibrations=async function(){
+  var h=el('calibs');h.innerHTML='';try{var rows=
+  await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
+window.addSupport=function(){
+
+ document
+   .getElementById('supportModal')
+   .classList
+   .add('open');
+
+};
+
+window.addFoil=function(){
+
+window.addMachine = function(){
+
+  document
+    .getElementById('machineModal')
+    .classList
+    .add('open');
+
+};
+
+window.closeMachineModal = function(){
+
+  document
+    .getElementById('machineModal')
+    .classList
+    .remove('open');
+
+};
+
+ document
+   .getElementById('foilModal')
+   .classList
+   .add('open');
+
+};
+
+window.closeSupportModal=function(){
+
+ document
+   .getElementById('supportModal')
+   .classList
+   .remove('open');
+
+};
+
+window.closeFoilModal=function(){
+
+ document
+   .getElementById('foilModal')
+   .classList
+   .remove('open');
+
+};
+  async function init(){
+try{
+  await initAuth();
+  applyTranslations();
+  window.setLang(currentLang);
+  await loadData();
+    ['machine','support','foil','operation']
+    .forEach(function(id){
+      
+      el(id).addEventListener(
+        'change',
+        calc
+      );
+  });
+  loadCalibrations();
+}
+catch(e){
+  console.error(e);
+  el('status').textContent=
+    'Erreur chargement Supabase : '
+    +e.message;
+  
+  toast(
+    'Erreur chargement Supabase'
+  );
+  
+ }
+  
+}
+  
+init();
+  
+})();
+</script>
+</body>
 </html>
