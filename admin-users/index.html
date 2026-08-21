@@ -319,14 +319,31 @@ select{
 
     </div>
 
+    <div
+    style="
+        display:flex;
+        gap:10px;
+        flex-wrap:wrap;
+        margin-top:12px;
+    ">
+
     <button
         id="copyCredentialsBtn"
-        class="btn"
-        style="margin-top:12px;">
+        class="btn">
 
         📋 Copier les identifiants
 
     </button>
+
+    <button
+        id="prepareMailBtn"
+        class="btn secondary">
+
+        📧 Préparer l'email
+
+    </button>
+
+</div>
 
 </div>
     </div>
@@ -1065,6 +1082,58 @@ https://manufacturing-tools-hub.vercel.app`;
 
     alert(
         'Identifiants copiés'
+    );
+
+};
+
+document
+.getElementById(
+    'prepareMailBtn'
+)
+.onclick =
+async()=>{
+
+    const email =
+        document.getElementById(
+            'lastEmail'
+        ).textContent;
+
+    const password =
+        document.getElementById(
+            'lastPassword'
+        ).textContent;
+
+    const mailText =
+
+`Bonjour,
+
+Votre accès Manufacturing Tools Hub est disponible.
+
+Adresse email :
+${email}
+
+Mot de passe :
+${password}
+
+Lien :
+https://manufacturing-tools-hub.vercel.app
+
+Applications disponibles :
+
+• CNC Calculator
+• Hot Stamping Calculator
+• Laser Calculator
+
+Nous vous recommandons de modifier votre mot de passe après votre première connexion.
+
+Cordialement`;
+
+    await navigator.clipboard.writeText(
+        mailText
+    );
+
+    alert(
+        'Email préparé et copié dans le presse-papiers.'
     );
 
 };
