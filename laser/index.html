@@ -130,17 +130,22 @@
         color: white
       }
 
-      .layout{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px
-      }
+     .layout{
+    display:grid;
+    grid-template-columns:48% 52%;
+    gap:14px;
+    align-items:start;
+}
 
       .col{
         display: flex;
         flex-direction: column;
         gap: 14px
       }
+
+      .col{
+    align-self:start;
+}
 
       .card{
         background: var(--card);
@@ -479,6 +484,12 @@ body:not(.can-edit) .parameter-save-btn{
   }
 
 }
+
+.status{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:10px;
+}
       
     </style>
   </head>
@@ -548,6 +559,9 @@ body:not(.can-edit) .parameter-save-btn{
             <div class="inputline"><select id="material"></select><button class="search-btn" onclick="searchSupport()">🔍</button><button class="mini-plus" onclick="addSupport()">+</button></div><label data-t="operation"></label>
             <div class="inputline"><select id="operation"></select><button class="search-btn" onclick="searchFoil()">🔍</button><button class="mini-plus" onclick="editFoil()">✎</button></div>
             <div class="note" id="note"></div>
+            <div class="status" id="status">
+            Chargement...
+            </div>
           </section>
         </div>
         <div class="col">
@@ -619,7 +633,11 @@ body:not(.can-edit) .parameter-save-btn{
         </div>
       </div>
       <section class="card lib">
-        <h2><span class="dot"></span><span data-t="library"></span></h2><button class="btn secondary" onclick="loadCalibs()" data-t="reload"></button>
+        <h2>
+          <span class="dot"></span>
+          <span data-t="library"></span>
+        </h2>
+        <button class="btn secondary" onclick="loadCalibs()" data-t="reload"></button>
         <div id="calibs"></div>
       </section>
       <div class="foot" data-t="foot"></div>
