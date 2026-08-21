@@ -93,16 +93,30 @@ async function showAuthModal() {
 }
 
 async function requireAuth() {
+
   await domReady();
-  const session = (await authClient.auth.getSession()).data.session;
+
+  const session =
+      (await authClient.auth.getSession()).data.session;
+
   if (session) {
-    window.currentUser = session.user;
-    window.currentRole = await getUserRole(session.user);
-    return session;
+
+      window.currentUser = session.user;
+
+      window.currentRole =
+          await getUserRole(session.user);
+
+      return session;
+
   }
+
   window.currentUser = null;
   window.currentRole = null;
+
+  await showAuthModal();
+  document.body.style.overflow = 'hidden';
   return null;
+
 }
 
 window.authReady = requireAuth();
