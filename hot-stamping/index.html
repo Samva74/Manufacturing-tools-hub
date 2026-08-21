@@ -806,7 +806,6 @@ window.saveCalibration = async function(){
 
     toast('Calibration enregistrée');
 
-    loadCalibrations();
 
   }
   catch(e){
@@ -1200,7 +1199,7 @@ try{
         calc
       );
   });
-  loadCalibrations();
+
 }
 catch(e){
   console.error(e);
