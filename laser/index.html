@@ -988,7 +988,7 @@ body:not(.can-edit) .parameter-save-btn{
        ========================================= */      
 
 function fillThicknessList() {
-
+console.log('fillThicknessList OK');
     const thicknessSelect =
         $('thickness');
 
@@ -1067,7 +1067,10 @@ function fillThicknessList() {
     ].sort(
         (a,b) => a-b
     );
-
+console.log(
+    'EPAISSEURS',
+    availableThicknesses
+);
     thicknessSelect.innerHTML = '';
 
     availableThicknesses.forEach(
