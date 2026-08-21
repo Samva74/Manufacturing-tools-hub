@@ -714,6 +714,7 @@
           score:'Rainage laser',
           kiss_cut:'Découpe partielle',
           de_engrave:'Dégravage',
+          calibrationSaved: 'Calibration enregistrée',
         },
         
         en: {
@@ -746,6 +747,7 @@
           score:'Laser scoring',
           kiss_cut:'Kiss cutting',
           de_engrave:'Surface stripping',
+          calibrationSaved: 'Calibration saved',
         },
         pt: {
           title: 'Laser Calculator',
@@ -777,6 +779,7 @@
           score:'Vinco a laser',
           kiss_cut:'Meio-corte',
           de_engrave:'Desgravação',
+          calibrationSaved: 'Calibração guardada',
         }
       };
       let materials = [],
@@ -802,67 +805,319 @@
       }
 
       function fillLists() {
-        let sm = $('machine'),
-          vm = sm.value;
-        sm.innerHTML = '';
-        machines.forEach(m => sm.add(new Option(m.name, m.name)));
-        if (vm) sm.value = vm;
-        let mat = $('material'),
-          v = mat.value;
-        mat.innerHTML = '';
-        materials.forEach(m => mat.add(new Option(loc(m, 'name'), m.code)));
-        if (materials.find(x => x.code === v)) mat.value = v;
-        let op = $('operation'),
-          vo = op.value;
-        op.innerHTML = '';
-        [...new Set(
-    params
-        .filter(p => p.material_code === $('material').value)
-        .map(p => p.operation)
-)].forEach(o => {
 
-    const label =
-        TXT[lang][o] ||
-        TXT.fr[o] ||
-        o;
+    /* =========================================
+       MACHINE
+       La valeur du menu est maintenant l’ID
+       Supabase de la machine.
+       ========================================= */
 
-    op.add(
-        new Option(label, o)
+    const machineSelect = $('machine');
+    const previousMachineId = machineSelect.value;
+
+    machineSelect.innerHTML = '';
+
+    machines.forEach(machine => {
+
+        const option = new Option(
+            machine.name,
+            String(machine.id)
+        );
+
+        machineSelect.add(option);
+
+    });
+
+    if (
+        previousMachineId &&
+        machines.some(
+            machine =>
+                String(machine.id) === previousMachineId
+        )
+    ) {
+        machineSelect.value = previousMachineId;
+    }
+
+
+    /* =========================================
+       MATIÈRE
+       ========================================= */
+
+    const materialSelect = $('material');
+    const previousMaterialCode = materialSelect.value;
+
+    materialSelect.innerHTML = '';
+
+    materials.forEach(material => {
+
+        const option = new Option(
+            loc(material, 'name'),
+            material.code
+        );
+
+        materialSelect.add(option);
+
+    });
+
+    if (
+        previousMaterialCode &&
+        materials.some(
+            material =>
+                material.code === previousMaterialCode
+        )
+    ) {
+        materialSelect.value = previousMaterialCode;
+    }
+
+
+    /* =========================================
+       OPÉRATIONS DISPONIBLES
+       Filtrées par machine + matière
+       ========================================= */
+
+    fillOperationList();
+
+}
+
+function fillOperationList() {
+
+    const operationSelect = $('operation');
+
+    const selectedMachineId = $('machine').value;
+    const selectedMaterialCode = $('material').value;
+
+    const previousOperation = operationSelect.value;
+
+    operationSelect.innerHTML = '';
+
+
+    /* =========================================
+       Paramètres correspondant à la machine
+       et à la matière sélectionnées
+       ========================================= */
+
+    const availableOperations = [
+
+        ...new Set(
+
+            params
+
+                .filter(parameter => {
+
+                    return (
+                        String(parameter.machine_id) ===
+                            String(selectedMachineId) &&
+
+                        parameter.material_code ===
+                            selectedMaterialCode
+                    );
+
+                })
+
+                .map(parameter => parameter.operation)
+
+        )
+
+    ];
+
+
+    /* =========================================
+       Création des options traduites
+       ========================================= */
+
+    availableOperations.forEach(operationCode => {
+
+        const translatedLabel =
+            TXT[lang][operationCode] ||
+            TXT.fr[operationCode] ||
+            operationCode;
+
+        operationSelect.add(
+            new Option(
+                translatedLabel,
+                operationCode
+            )
+        );
+
+    });
+
+
+    /* =========================================
+       Conservation de l’opération sélectionnée
+       lorsque celle-ci reste disponible
+       ========================================= */
+
+    const operationStillExists = [
+        ...operationSelect.options
+    ].some(
+        option =>
+            option.value === previousOperation
     );
 
-});
-        if ([...op.options].some(o => o.value === vo)) op.value = vo
-      }
+    if (operationStillExists) {
+        operationSelect.value = previousOperation;
+    }
 
+}
+      
       function sp() {
-        return params.find(p => p.material_code === $('material').value && p.operation === $('operation').value)
-      }
+
+    const selectedMachineId = $('machine').value;
+    const selectedMaterialCode = $('material').value;
+    const selectedOperation = $('operation').value;
+
+    return params.find(parameter => {
+
+        return (
+            String(parameter.machine_id) ===
+                String(selectedMachineId) &&
+
+            parameter.material_code ===
+                selectedMaterialCode &&
+
+            parameter.operation ===
+                selectedOperation
+        );
+
+    });
+
+}
 
       function calc() {
-        let p = sp();
-        if (!p) return;
-        $('rTemp').textContent = (p.power_percent || '–') + ' %';
-        $('rPress').textContent = (p.speed_mm_s || '–') + ' mm/s';
-        $('rDwell').textContent = p.passes || '–';
-        $('cTemp').value = p.power_percent || '';
-        $('cPress').value = p.speed_mm_s || '';
-        $('cDwell').value = p.passes || '';
-        let m = materials.find(x => x.code === $('material').value);
-        $('note').textContent = m ? m.note || '' : ''
-      }
 
+    const parameter = sp();
+
+
+    /* =========================================
+       Aucun réglage trouvé
+       ========================================= */
+
+    if (!parameter) {
+
+        $('rTemp').textContent = '–';
+        $('rPress').textContent = '–';
+        $('rDwell').textContent = '–';
+
+        $('cTemp').value = '';
+        $('cPress').value = '';
+        $('cDwell').value = '';
+
+        const selectedMaterial = materials.find(
+            material =>
+                material.code === $('material').value
+        );
+
+        $('note').textContent =
+            selectedMaterial
+                ? selectedMaterial.note || ''
+                : '';
+
+        return;
+
+    }
+
+
+    /* =========================================
+       Lecture rapide
+       ========================================= */
+
+    $('rTemp').textContent =
+        parameter.power_percent !== null &&
+        parameter.power_percent !== undefined
+
+            ? parameter.power_percent + ' %'
+            : '–';
+
+
+    $('rPress').textContent =
+        parameter.speed_mm_s !== null &&
+        parameter.speed_mm_s !== undefined
+
+            ? parameter.speed_mm_s + ' mm/s'
+            : '–';
+
+
+    $('rDwell').textContent =
+        parameter.passes !== null &&
+        parameter.passes !== undefined
+
+            ? parameter.passes
+            : '–';
+
+
+    /* =========================================
+       Calibration atelier
+       ========================================= */
+
+    $('cTemp').value =
+        parameter.power_percent ?? '';
+
+    $('cPress').value =
+        parameter.speed_mm_s ?? '';
+
+    $('cDwell').value =
+        parameter.passes ?? '';
+
+
+    /* =========================================
+       Note matière
+       ========================================= */
+
+    const selectedMaterial = materials.find(
+        material =>
+            material.code === $('material').value
+    );
+
+    $('note').textContent =
+        selectedMaterial
+            ? selectedMaterial.note || ''
+            : '';
+
+}
+      
       function searchMachine() {
-        openSearch('Recherche machine', machines.map(m => ({
-          title: m.name,
-          sub: 'Machine',
-          search: m.name,
-          value: m.name
-        })), v => {
-          $('machine').value = v;
-          calc()
-        })
-      }
 
+    openSearch(
+
+        'Recherche machine',
+
+        machines.map(machine => ({
+
+            title: machine.name,
+
+            sub:
+                (machine.watt
+                    ? machine.watt + ' W'
+                    : '') +
+
+                (machine.site
+                    ? ' · ' + machine.site
+                    : ''),
+
+            search: [
+                machine.name,
+                machine.watt,
+                machine.lens,
+                machine.site
+            ].join(' '),
+
+            value: String(machine.id)
+
+        })),
+
+        machineId => {
+
+            $('machine').value = machineId;
+
+            fillOperationList();
+
+            calc();
+
+        }
+
+    );
+
+}
       function searchSupport() {
         searchMaterial()
       }
@@ -910,23 +1165,62 @@
         toast(canEdit() ? 'Ajout disponible dans prochaine itération' : 'Droit expert/admin requis')
       }
       async function saveCalib() {
-        await api('Laser_calibrations', {
-          m: 'POST',
-          b: {
-            material: $('material').value,
-            operation: $('operation').value,
-            machine: $('machine').value,
-            power_percent: +$('cTemp').value,
-            speed_mm_s: +$('cPress').value,
-            passes: +$('cDwell').value,
-            comments: $('comments').value,
-            created_by_user_id: user.id,
-            created_by_email: user.email
-          }
-        });
-        toast('Calibration enregistrée');
-        loadCalibs()
-      }
+
+    const selectedMachine = machines.find(
+        machine =>
+            String(machine.id) ===
+            String($('machine').value)
+    );
+
+    await api(
+        'Laser_calibrations',
+        {
+            m: 'POST',
+
+            b: {
+
+                material:
+                    $('material').value,
+
+                operation:
+                    $('operation').value,
+
+                machine:
+                    selectedMachine
+                        ? selectedMachine.name
+                        : '',
+
+                power_percent:
+                    Number($('cTemp').value),
+
+                speed_mm_s:
+                    Number($('cPress').value),
+
+                passes:
+                    Number($('cDwell').value),
+
+                comments:
+                    $('comments').value,
+
+                created_by_user_id:
+                    user?.id || null,
+
+                created_by_email:
+                    user?.email || null
+
+            }
+
+        }
+    );
+
+    toast(
+        TXT[lang].calibrationSaved ||
+        TXT.fr.calibrationSaved
+    );
+
+    loadCalibs();
+
+}
       async function loadCalibs() {
         let h = $('calibs');
         h.innerHTML = '';
@@ -953,7 +1247,34 @@
         await loadLibraries();
         refreshText();
         loadCalibs();
-        ['machine', 'material', 'operation'].forEach(id => $(id).addEventListener('input', calc))
+        $('machine').addEventListener(
+    'change',
+    () => {
+
+        fillOperationList();
+
+        calc();
+
+    }
+);
+
+
+$('material').addEventListener(
+    'change',
+    () => {
+
+        fillOperationList();
+
+        calc();
+
+    }
+);
+
+
+$('operation').addEventListener(
+    'change',
+    calc
+);
       }
       init();
     </script>
