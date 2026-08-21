@@ -1,4 +1,4 @@
-v<!doctype html>
+<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8">
@@ -98,6 +98,33 @@ v<!doctype html>
         text-decoration: none
       }
 
+.role-pill{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    height:42px;
+
+    font-size:15px;
+
+    padding:8px 12px;
+}
+
+.hub-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    height:42px;
+
+    min-width:95px;
+}
+
+.langs button{
+    height:42px;
+    min-width:95px;
+}
+      
       .langs button.active{
         background: var(--accent);
         color: white
@@ -406,38 +433,53 @@ body:not(.can-edit) .parameter-save-btn{
     white-space: pre-wrap;
 }
       @media(max-width:860px) {
-        body {
-          padding: 12px
-        }
 
-        .top {
-          align-items: flex-start;
-          flex-direction: column
-        }
+  body{
+    padding:12px;
+  }
 
-        .layout {
-          grid-template-columns: 1fr
-        }
+  .top{
+    align-items:flex-start;
+    flex-direction:column;
+  }
 
-        .row {
-          grid-template-columns: 1fr
-        }
+  .layout{
+    grid-template-columns:1fr;
+  }
 
-        .title h1 {
-          font-size: 24px
-        }
+  .row{
+    grid-template-columns:1fr;
+  }
 
-        .logo {
-          width: 64px;
-          height: 64px
-        }
+  .title h1{
+    font-size:24px;
+  }
 
-        .logo svg {
-          width: 46px;
-          height: 46px
-        }
-     
-      }
+  .logo{
+    width:64px;
+    height:64px;
+  }
+
+  .logo svg{
+    width:46px;
+    height:46px;
+  }
+
+  .role-pill{
+    height:40px;
+    font-size:14px;
+  }
+
+  .hub-btn{
+    height:40px;
+  }
+
+  .langs button{
+    height:40px;
+  }
+
+}
+      
     </style>
   </head>
   <body>
