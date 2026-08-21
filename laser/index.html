@@ -554,10 +554,10 @@
     <textarea id="comments"></textarea>
 
     <button
-        class="btn"
-        onclick="saveCalib()"
-        data-t="save">
-    </button>
+    class="btn"
+    onclick="saveParameter()"
+    data-t="saveParameter">
+</button>
 
 </section>
         </div>
@@ -715,6 +715,12 @@
           kiss_cut:'Découpe partielle',
           de_engrave:'Dégravage',
           calibrationSaved: 'Calibration enregistrée',
+          saveParameter: '💾 Sauvegarder le paramètre',
+          parameterSaved: 'Paramètre sauvegardé',
+          parameterNotFound: 'Aucun paramètre correspondant',
+          parameterInvalid: 'Vérifie les valeurs saisies',
+          editPermissionRequired: 'Droit expert ou administrateur requis',
+          parameterSaveError: 'Impossible de sauvegarder le paramètre',
         },
         
         en: {
@@ -748,6 +754,12 @@
           kiss_cut:'Kiss cutting',
           de_engrave:'Surface stripping',
           calibrationSaved: 'Calibration saved',
+          saveParameter: '💾 Save parameter',
+          parameterSaved: 'Parameter saved',
+          parameterNotFound: 'No matching parameter found',
+          parameterInvalid: 'Check the entered values',
+          editPermissionRequired: 'Expert or administrator permission required',
+          parameterSaveError: 'Unable to save parameter',
         },
         pt: {
           title: 'Laser Calculator',
@@ -780,6 +792,12 @@
           kiss_cut:'Meio-corte',
           de_engrave:'Desgravação',
           calibrationSaved: 'Calibração guardada',
+          saveParameter: '💾 Guardar parâmetro',
+          parameterSaved: 'Parâmetro guardado',
+          parameterNotFound: 'Nenhum parâmetro correspondente',
+          parameterInvalid: 'Verifique os valores introduzidos',
+          editPermissionRequired: 'É necessária permissão de especialista ou administrador',
+          parameterSaveError: 'Não foi possível guardar o parâmetro',
         }
       };
       let materials = [],
