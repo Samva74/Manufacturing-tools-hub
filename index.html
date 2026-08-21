@@ -39,15 +39,19 @@
   .card p{font-size:28px;line-height:1.35;color:var(--muted);margin:0}
   
 @media(max-width:900px){
-  body{padding:16px}
+  html,
+body{
+    overflow-x:hidden;
+    width:100%;
+}
   .top{flex-direction:column}
   .actions{margin-top:10px}
   .grid{grid-template-columns:1fr}
 
   .card{
-    min-height:70px;
-    padding:14px;
-  }
+    width:100%;
+    max-width:100%;
+}
 
   .card img{
     width:55px;
