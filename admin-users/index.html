@@ -198,6 +198,19 @@ select{
 .hub-btn:hover{
     background:white;
 }
+
+.password-display{
+    font-family:Consolas,Monaco,monospace;
+    font-size:16px;
+    font-weight:900;
+    color:#1d1d1b;
+    background:#f6f6f2;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    margin-top:6px;
+}
+    
 </style>
     
 </head>
@@ -297,7 +310,12 @@ select{
         <br><br>
 
         Mot de passe :
-        <span id="lastPassword"></span>
+
+<div
+    class="password-display"
+    id="lastPassword">
+
+</div>
 
     </div>
 
