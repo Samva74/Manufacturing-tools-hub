@@ -654,7 +654,104 @@ ${newPassword}`
     }
 
 }
-    
+
+async function changeUserRole(
+    userId,
+    email,
+    currentRole
+){
+
+    const enteredRole =
+        prompt(
+`Modifier le rôle de :
+
+${email}
+
+Rôles autorisés :
+user
+expert
+admin`,
+            currentRole || 'user'
+        );
+
+    if(enteredRole === null){
+        return;
+    }
+
+    const newRole =
+        enteredRole
+            .trim()
+            .toLowerCase();
+
+    if(
+        !['user','expert','admin']
+        .includes(newRole)
+    ){
+        alert('Rôle invalide');
+        return;
+    }
+
+    const session =
+        (
+            await sb.auth.getSession()
+        ).data.session;
+
+    const response =
+        await fetch(
+
+            SUPABASE_URL +
+            '/functions/v1/admin-manage-user',
+
+            {
+
+                method:'POST',
+
+                headers:{
+                    'Content-Type':
+                        'application/json',
+
+                    apikey:
+                        SUPABASE_KEY,
+
+                    Authorization:
+                        'Bearer ' +
+                        session.access_token
+                },
+
+                body:JSON.stringify({
+
+                    action:'change-role',
+                    userId:userId,
+                    role:newRole
+
+                })
+
+            }
+
+        );
+
+    const result =
+        await response.json();
+
+    if(!response.ok){
+
+        alert(
+            result.error ||
+            'Erreur'
+        );
+
+        return;
+
+    }
+
+    alert(
+        'Rôle modifié avec succès'
+    );
+
+    await loadUsers();
+
+}
+
 async function createUser(){
 
     const email =
