@@ -1911,26 +1911,33 @@ if (!parameter || !parameter.id) {
 
     const updateData = {
 
-        power_percent:
-            newPower,
+    thickness_mm:
+        $('thickness').value === ''
+            ? null
+            : Number(
+                $('thickness').value
+            ),
 
-        speed_mm_s:
-            newSpeed,
+    power_percent:
+        newPower,
 
-        passes:
-            newPasses,
+    speed_mm_s:
+        newSpeed,
 
-        quality:
-            'validated',
+    passes:
+        newPasses,
 
-        updated_by_user_id:
-            user?.id || null,
+    quality:
+        'validated',
 
-        updated_by_email:
-            user?.email || null,
+    updated_by_user_id:
+        user?.id || null,
 
-        updated_at:
-            new Date().toISOString()
+    updated_by_email:
+        user?.email || null,
+
+    updated_at:
+        new Date().
 
     };
 
@@ -2062,19 +2069,26 @@ if (!parameter || !parameter.id) {
 
                     b: {
 
-                        material:
-                            $('material').value,
+    material:
+        $('material').value,
 
-                        operation:
-                            $('operation').value,
+    thickness_mm:
+        $('thickness').value === ''
+            ? null
+            : Number(
+                $('thickness').value
+            ),
 
-                        machine:
-                            selectedMachine
-                                ? selectedMachine.name
-                                : '',
+    operation:
+        $('operation').value,
 
-                        power_percent:
-                            newPower,
+    machine:
+        selectedMachine
+            ? selectedMachine.name
+            : '',
+
+    power_percent:
+        newPower,
 
                         speed_mm_s:
                             newSpeed,
