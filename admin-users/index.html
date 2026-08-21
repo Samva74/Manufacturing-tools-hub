@@ -369,6 +369,25 @@ if(roleBtn){
     roleBtn.onclick =
         async()=>{
 
+            alert(
+                'Bouton Modifier rôle détecté'
+            );
+
+            await changeUserRole(
+                user.user_id,
+                user.email,
+                user.role
+            );
+
+        };
+
+}
+
+if(roleBtn){
+
+    roleBtn.onclick =
+        async()=>{
+
             await changeUserRole(
                 user.user_id,
                 user.email,
