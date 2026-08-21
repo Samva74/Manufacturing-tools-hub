@@ -987,43 +987,7 @@ body:not(.can-edit) .parameter-save-btn{
        Epaisseurs
        ========================================= */      
 
-function fillThicknessList() {
-console.log('fillThicknessList exécutée');
-console.log('machine=', $('machine').value);
-console.log('matiere=', $('material').value);
-console.log('fillThicknessList OK');
-    const thicknessSelect =
-        $('thickness');
 
-    const selectedMachineId =
-        String(
-            $('machine').value || ''
-        );
-
-    const selectedMaterialCode =
-        $('material').value;
-
-    const previousThickness =
-        thicknessSelect.value;
-
-    let matchingParameters =
-        params.filter(
-            parameter => {
-
-                return (
-
-                    String(
-                        parameter.machine_id || ''
-                    ) === selectedMachineId
-
-                    &&
-
-                    parameter.material_code ===
-                        selectedMaterialCode
-
-                );
-
-            }
         );
 
     if (!matchingParameters.length) {
@@ -1070,10 +1034,7 @@ console.log('fillThicknessList OK');
     ].sort(
         (a,b) => a-b
     );
-console.log(
-    'EPAISSEURS',
-    availableThicknesses
-);
+
   console.log(
     'matchingParameters',
     matchingParameters
@@ -1115,15 +1076,61 @@ console.log(
 
 }
 
-    /* =========================================
-       OPÉRATIONS DISPONIBLES
-       Filtrées par machine + matière
-       ========================================= */
+/* ============*============================
+   RE*PLISSAGE DU MENU ÉPAISSEUR
+   ====*==================================*= */
 
-    fillOperationList();
+fillThicknessList();
+
+
+/* ==*==================================*===
+   OPÉ**TIONS DISPONIBLES
+  *Filtrées par machine + matière
+   *==================================*===== */
+
+fillOperationList();
 
 }
+function fillThicknessList() {
 
+  alert('fillThicknessList');
+  
+console.log('fillThicknessList exécutée');
+console.log('machine=', $('machine').value);
+console.log('matiere=', $('material').value);
+
+    const thicknessSelect =
+        $('thickness');
+
+    const selectedMachineId =
+        String(
+            $('machine').value || ''
+        );
+
+    const selectedMaterialCode =
+        $('material').value;
+
+    const previousThickness =
+        thicknessSelect.value;
+
+    let matchingParameters =
+        params.filter(
+            parameter => {
+
+                return (
+
+                    String(
+                        parameter.machine_id || ''
+                    ) === selectedMachineId
+
+                    &&
+
+                    parameter.material_code ===
+                        selectedMaterialCode
+
+                );
+
+            }
 function fillOperationList() {
 
     const operationSelect = $('operation');
@@ -2179,9 +2186,11 @@ if (!parameter || !parameter.id) {
         await loadLibraries();
         refreshText();
         // loadCalibs();
-        $('machine').addEventListener(
+$('machine').addEventListener(
     'change',
     () => {
+
+        fillThicknessList();
 
         fillOperationList();
 
@@ -2189,12 +2198,13 @@ if (!parameter || !parameter.id) {
 
     }
 );
-
 
 $('material').addEventListener(
     'change',
     () => {
 
+        fillThicknessList();
+
         fillOperationList();
 
         calc();
@@ -2202,7 +2212,17 @@ $('material').addEventListener(
     }
 );
 
+$('thickness').addEventListener(
+    'change',
+    () => {
 
+        fillOperationList();
+
+        calc();
+
+    }
+);
+        
 $('operation').addEventListener(
     'change',
     calc
