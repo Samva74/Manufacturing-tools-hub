@@ -439,6 +439,21 @@ body:not(.can-edit) .parameter-save-btn{
     font-size: 13px;
     white-space: pre-wrap;
 }
+.setup-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.setup-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.section-plus{
+    display:flex !important;
+}      
       @media(max-width:900px) {
 
   body{
@@ -549,19 +564,41 @@ body:not(.can-edit) .parameter-save-btn{
       
       <div class="layout">
         <div class="col">
+          
           <section class="card">
-            <h2><span class="dot"></span><span data-t="machineInputs"></span></h2><label data-t="machine"></label>
-            <div class="inputline">
-              <select id="machine"></select>
-              <button
-                class="search-btn"
-                onclick="searchMachine()">
-                🔍
-              </button>
-            </div>
-          </section>
-          <section class="card">
-            <h2><span class="dot"></span><span data-t="materialOperation"></span></h2>
+            <h2 class="setup-head">
+
+    <div class="setup-title">
+
+        <span class="dot"></span>
+
+        <span>Laser Setup</span>
+
+    </div>
+
+    <button
+        class="mini-plus section-plus"
+        type="button"
+        onclick="addLaserParameter()">
+
+        +
+
+    </button>
+
+</h2>
+        <label data-t="machine"></label>
+
+<div class="inputline">
+
+    <select id="machine"></select>
+
+    <button
+        class="search-btn"
+        onclick="searchMachine()">
+        🔍
+    </button>
+
+</div>
             <label data-t="material"></label>
             <div class="inputline">
               <select id="material"></select>
