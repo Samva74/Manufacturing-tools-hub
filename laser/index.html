@@ -1,4 +1,4 @@
-<!doctype html>
+v<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8">
@@ -396,6 +396,14 @@
 body:not(.can-edit) .parameter-save-btn{
     opacity:.55;
     cursor:not-allowed;
+}
+      .calibration-comments {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    color: var(--txt);
+    font-size: 13px;
+    white-space: pre-wrap;
 }
       @media(max-width:860px) {
         body {
@@ -1833,12 +1841,128 @@ if (!parameter || !parameter.id) {
             h.innerHTML = '<p>Aucune calibration.</p>';
             return
           }
-          rows.forEach(r => {
-            let d = document.createElement('div');
-            d.className = 'item';
-            d.innerHTML = `<b>${r.material||''} · ${r.operation||''}</b><div class="s">${r.power_percent||'-'}% · ${r.speed_mm_s||'-'} mm/s<br>${r.created_by_email||r.operator||''}</div>`;
-            h.appendChild(d)
-          })
+          rows.forEach(row => {
+
+    const material = materials.find(
+        item =>
+            item.code === row.material
+    );
+
+    const materialLabel =
+
+        material
+            ? loc(material, 'name')
+            : row.material || '';
+
+
+    const operationLabel =
+
+        TXT[lang][row.operation] ||
+
+        TXT.fr[row.operation] ||
+
+        row.operation ||
+
+        '';
+
+
+    const machineLabel =
+        row.machine || '';
+
+
+    const powerLabel =
+
+        row.power_percent !== null &&
+        row.power_percent !== undefined
+
+            ? row.power_percent + ' %'
+            : '–';
+
+
+    const speedLabel =
+
+        row.speed_mm_s !== null &&
+        row.speed_mm_s !== undefined
+
+            ? row.speed_mm_s + ' mm/s'
+            : '–';
+
+
+    const passesLabel =
+
+        row.passes !== null &&
+        row.passes !== undefined
+
+            ? row.passes +
+              ' ' +
+              (
+                  TXT[lang].passesUnit ||
+                  TXT.fr.passesUnit
+              )
+
+            : '–';
+
+
+    const item =
+        document.createElement('div');
+
+
+    item.className =
+        'item';
+
+
+    item.innerHTML = `
+
+        <b>
+            ${materialLabel}
+            ·
+            ${operationLabel}
+        </b>
+
+        <div class="s">
+
+            ${machineLabel}
+
+            <br>
+
+            ${powerLabel}
+            ·
+            ${speedLabel}
+            ·
+            ${passesLabel}
+
+            <br>
+
+            ${row.created_by_email || row.operator || ''}
+
+        </div>
+
+    `;
+
+
+    if (row.comments) {
+
+        const comments =
+            document.createElement('div');
+
+        comments.className =
+            'calibration-comments';
+
+        comments.textContent =
+            row.comments;
+
+        item.appendChild(
+            comments
+        );
+
+    }
+
+
+    $('calibs').appendChild(
+        item
+    );
+
+});
         } catch (e) {
           h.innerHTML = '<p>Supabase non chargé.</p>'
         }
