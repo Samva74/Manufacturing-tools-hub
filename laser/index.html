@@ -1239,22 +1239,7 @@ function fillOperationList() {
 
                 !parameter.machine_id
 
-                &&
-
-                parameter.material_code ===
-                    selectedMaterialCode
-
-                &&
-
-                Number(
-                    parameter.thickness_mm
-                ) === Number(
-                    selectedThickness
-                )
-
-            );
-
-        }
+            
     );
 
 }
@@ -1385,9 +1370,8 @@ function fillOperationList() {
 
         return (
 
-            String(
-                parameter.machine_id || ''
-            ) === selectedMachineId
+            String(parameter.machine_id || '') ===
+                selectedMachineId
 
             &&
 
@@ -1396,11 +1380,8 @@ function fillOperationList() {
 
             &&
 
-            Number(
-                parameter.thickness_mm
-            ) === Number(
-                selectedThickness
-            )
+            Number(parameter.thickness_mm) ===
+                Number(selectedThickness)
 
             &&
 
