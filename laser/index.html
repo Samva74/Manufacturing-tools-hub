@@ -439,21 +439,51 @@ body:not(.can-edit) .parameter-save-btn{
     font-size: 13px;
     white-space: pre-wrap;
 }
-.setup-head{
+    .setup-head{
     display:flex;
     justify-content:space-between;
     align-items:center;
 }
 
-.setup-title{
+    .setup-title{
     display:flex;
     align-items:center;
     gap:8px;
 }
 
-.section-plus{
+    .section-plus{
     display:flex !important;
-}      
+}     
+
+    .creation-fields{
+    margin-top:10px;
+    padding:12px;
+    border:1px dashed var(--line);
+    border-radius:14px;
+    background:rgba(29,29,27,.04);
+}
+
+.check-line{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--txt);
+    cursor:pointer;
+}
+
+.check-line input{
+    width:auto;
+    margin:0;
+}
+
+.modal-panel h3{
+    margin:18px 0 8px;
+}
+
+.modal-head h3{
+    margin:0;
+}
+      
       @media(max-width:900px) {
 
   body{
@@ -703,6 +733,298 @@ body:not(.can-edit) .parameter-save-btn{
       </div>
     
     </div>
+
+    <!-- =========================================
+     MODAL AJOUT COMPLET LASER
+     ========================================= -->
+
+<div class="modal" id="laserParameterModal">
+
+  <div class="modal-panel">
+
+    <div class="modal-head">
+
+      <h3>
+        Ajouter un paramètre Laser
+      </h3>
+
+      <button
+          class="close"
+          type="button"
+          onclick="closeLaserParameterModal()">
+        ×
+      </button>
+
+    </div>
+
+
+    <!-- MACHINE -->
+
+    <h3>Machine</h3>
+
+    <label>
+      Machine existante
+    </label>
+
+    <select id="newParameterMachine"></select>
+
+    <label class="check-line">
+
+      <input
+          id="createNewMachine"
+          type="checkbox"
+          onchange="toggleNewMachineFields()">
+
+      Créer une nouvelle machine
+
+    </label>
+
+    <div
+        id="newMachineFields"
+        class="creation-fields"
+        style="display:none">
+
+      <label>
+        Nom de la machine
+      </label>
+
+      <input
+          id="newLaserMachineName"
+          placeholder="Exemple : Trotec Speedy 400">
+
+      <label>
+        Puissance
+      </label>
+
+      <div class="input-unit">
+
+        <input
+            id="newLaserMachineWatt"
+            type="number"
+            min="1"
+            step="1">
+
+        <span class="unit">
+          W
+        </span>
+
+      </div>
+
+      <label>
+        Lentille
+      </label>
+
+      <input
+          id="newLaserMachineLens"
+          placeholder="Exemple : 2 pouces">
+
+      <label>
+        Site de production
+      </label>
+
+      <input
+          id="newLaserMachineSite"
+          placeholder="Exemple : Carouge">
+
+    </div>
+
+
+    <!-- MATIÈRE -->
+
+    <h3>Matière</h3>
+
+    <label>
+      Matière existante
+    </label>
+
+    <select id="newParameterMaterial"></select>
+
+    <label class="check-line">
+
+      <input
+          id="createNewMaterial"
+          type="checkbox"
+          onchange="toggleNewMaterialFields()">
+
+      Créer une nouvelle matière
+
+    </label>
+
+    <div
+        id="newMaterialFields"
+        class="creation-fields"
+        style="display:none">
+
+      <label>
+        Code matière
+      </label>
+
+      <input
+          id="newLaserMaterialCode"
+          placeholder="Exemple : pmma_cast">
+
+      <label>
+        Nom français
+      </label>
+
+      <input
+          id="newLaserMaterialNameFr">
+
+      <label>
+        Nom anglais
+      </label>
+
+      <input
+          id="newLaserMaterialNameEn">
+
+      <label>
+        Nom portugais
+      </label>
+
+      <input
+          id="newLaserMaterialNamePt">
+
+      <label>
+        Famille
+      </label>
+
+      <input
+          id="newLaserMaterialFamily"
+          placeholder="Exemple : Acrylic">
+
+      <label>
+        Note
+      </label>
+
+      <textarea id="newLaserMaterialNote"></textarea>
+
+    </div>
+
+
+    <!-- PARAMÈTRE -->
+
+    <h3>Paramètre Laser</h3>
+
+    <label>
+      Épaisseur
+    </label>
+
+    <div class="input-unit">
+
+      <input
+          id="newParameterThickness"
+          type="number"
+          min="0.01"
+          step="0.01">
+
+      <span class="unit">
+        mm
+      </span>
+
+    </div>
+
+    <label>
+      Opération
+    </label>
+
+    <select id="newParameterOperation">
+
+      <option value="cut">
+        Découpe
+      </option>
+
+      <option value="engrave">
+        Gravure
+      </option>
+
+      <option value="mark">
+        Marquage
+      </option>
+
+      <option value="score">
+        Rainage laser
+      </option>
+
+      <option value="kiss_cut">
+        Découpe partielle
+      </option>
+
+      <option value="de_engrave">
+        Dégravage
+      </option>
+
+    </select>
+
+    <label>
+      Puissance
+    </label>
+
+    <div class="input-unit">
+
+      <input
+          id="newParameterPower"
+          type="number"
+          min="0"
+          max="100"
+          step="0.1">
+
+      <span class="unit">
+        %
+      </span>
+
+    </div>
+
+    <label>
+      Vitesse
+    </label>
+
+    <div class="input-unit">
+
+      <input
+          id="newParameterSpeed"
+          type="number"
+          min="0"
+          step="0.1">
+
+      <span class="unit">
+        mm/s
+      </span>
+
+    </div>
+
+    <label>
+      Nombre de passes
+    </label>
+
+    <input
+        id="newParameterPasses"
+        type="number"
+        min="1"
+        step="1"
+        value="1">
+
+    <label>
+      Commentaires / observations
+    </label>
+
+    <textarea id="newParameterComments"></textarea>
+
+
+    <!-- ENREGISTREMENT -->
+
+    <button
+        class="btn"
+        type="button"
+        onclick="saveNewLaserParameter()">
+
+      💾 Enregistrer le paramètre Laser
+
+    </button>
+
+  </div>
+
+</div>
+    
     <div class="toast" id="toast"></div>
     <div class="modal" id="searchModal">
       <div class="modal-panel">
@@ -2331,6 +2653,84 @@ if (!parameter || !parameter.id) {
           h.innerHTML = '<p>Supabase non chargé.</p>'
         }
       }
+
+function addLaserParameter() {
+
+    $('laserParameterModal')
+        .classList.add('open');
+
+    fillLaserParameterModal();
+
+}
+
+function closeLaserParameterModal() {
+
+    $('laserParameterModal')
+        .classList.remove('open');
+
+}
+
+function toggleNewMachineFields() {
+
+    $('newMachineFields').style.display =
+
+        $('createNewMachine').checked
+
+            ? 'block'
+
+            : 'none';
+
+}
+
+function toggleNewMaterialFields() {
+
+    $('newMaterialFields').style.display =
+
+        $('createNewMaterial').checked
+
+            ? 'block'
+
+            : 'none';
+
+}
+
+function fillLaserParameterModal() {
+
+    const machineSelect =
+        $('newParameterMachine');
+
+    machineSelect.innerHTML = '';
+
+    machines.forEach(machine => {
+
+        machineSelect.add(
+            new Option(
+                machine.name,
+                machine.id
+            )
+        );
+
+    });
+
+
+    const materialSelect =
+        $('newParameterMaterial');
+
+    materialSelect.innerHTML = '';
+
+    materials.forEach(material => {
+
+        materialSelect.add(
+            new Option(
+                loc(material,'name'),
+                material.code
+            )
+        );
+
+    });
+
+}
+      
       async function init() {
         await initAuth();
         await loadLibraries();
