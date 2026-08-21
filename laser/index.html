@@ -392,7 +392,11 @@
       .result:hover {
         background: var(--valid)
       }
-
+      
+body:not(.can-edit) .parameter-save-btn{
+    opacity:.55;
+    cursor:not-allowed;
+}
       @media(max-width:860px) {
         body {
           padding: 12px
@@ -424,10 +428,7 @@
           width: 46px;
           height: 46px
         }
-     body:not(.can-edit) .parameter-save-btn{
-    opacity:.55;
-    cursor:not-allowed;
-}
+     
       }
     </style>
   </head>
@@ -726,6 +727,7 @@
           parameterInvalid: 'Vérifie les valeurs saisies',
           editPermissionRequired: 'Droit expert ou administrateur requis',
           parameterSaveError: 'Impossible de sauvegarder le paramètre',
+          noOperation: 'Aucune opération disponible',
         },
         
         en: {
@@ -765,6 +767,7 @@
           parameterInvalid: 'Check the entered values',
           editPermissionRequired: 'Expert or administrator permission required',
           parameterSaveError: 'Unable to save parameter',
+          noOperation: 'No operation available',
         },
         pt: {
           title: 'Laser Calculator',
@@ -803,6 +806,7 @@
           parameterInvalid: 'Verifique os valores introduzidos',
           editPermissionRequired: 'É necessária permissão de especialista ou administrador',
           parameterSaveError: 'Não foi possível guardar o parâmetro',
+          noOperation: 'Nenhuma operação disponível',
         }
       };
       let materials = [],
@@ -906,38 +910,79 @@ function fillOperationList() {
 
     const operationSelect = $('operation');
 
-    const selectedMachineId = $('machine').value;
-    const selectedMaterialCode = $('material').value;
+    const selectedMachineId =
+        String($('machine').value || '');
 
-    const previousOperation = operationSelect.value;
+    const selectedMaterialCode =
+        $('material').value;
+
+    const previousOperation =
+        operationSelect.value;
 
     operationSelect.innerHTML = '';
 
 
     /* =========================================
-       Paramètres correspondant à la machine
-       et à la matière sélectionnées
+       1. PARAMÈTRES DE LA MACHINE SÉLECTIONNÉE
+       ========================================= */
+
+    let matchingParameters = params.filter(
+        parameter => {
+
+            return (
+                String(parameter.machine_id || '') ===
+                    selectedMachineId &&
+
+                parameter.material_code ===
+                    selectedMaterialCode
+            );
+
+        }
+    );
+
+
+    /* =========================================
+       2. REPLI SUR LES ANCIENS PARAMÈTRES
+       SANS MACHINE
+
+       Ce repli est utilisé uniquement lorsqu’aucun
+       paramètre spécifique à la machine n’existe.
+       ========================================= */
+
+    if (!matchingParameters.length) {
+
+        matchingParameters = params.filter(
+            parameter => {
+
+                return (
+                    !parameter.machine_id &&
+
+                    parameter.material_code ===
+                        selectedMaterialCode
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================
+       3. OPÉRATIONS UNIQUES
        ========================================= */
 
     const availableOperations = [
 
         ...new Set(
 
-            params
+            matchingParameters
 
-                .filter(parameter => {
+                .map(
+                    parameter =>
+                        parameter.operation
+                )
 
-                    return (
-                        String(parameter.machine_id) ===
-                            String(selectedMachineId) &&
-
-                        parameter.material_code ===
-                            selectedMaterialCode
-                    );
-
-                })
-
-                .map(parameter => parameter.operation)
+                .filter(Boolean)
 
         )
 
@@ -945,64 +990,146 @@ function fillOperationList() {
 
 
     /* =========================================
-       Création des options traduites
+       4. AUCUNE OPÉRATION DISPONIBLE
        ========================================= */
 
-    availableOperations.forEach(operationCode => {
-
-        const translatedLabel =
-            TXT[lang][operationCode] ||
-            TXT.fr[operationCode] ||
-            operationCode;
+    if (!availableOperations.length) {
 
         operationSelect.add(
             new Option(
-                translatedLabel,
-                operationCode
+                TXT[lang].noOperation ||
+                TXT.fr.noOperation,
+                ''
             )
         );
 
-    });
+        operationSelect.disabled = true;
+
+        calc();
+
+        return;
+
+    }
+
+
+    operationSelect.disabled = false;
 
 
     /* =========================================
-       Conservation de l’opération sélectionnée
-       lorsque celle-ci reste disponible
+       5. AJOUT DES OPÉRATIONS TRADUITES
        ========================================= */
 
-    const operationStillExists = [
+    availableOperations.forEach(
+        operationCode => {
+
+            const translatedLabel =
+
+                TXT[lang][operationCode] ||
+
+                TXT.fr[operationCode] ||
+
+                operationCode;
+
+
+            operationSelect.add(
+                new Option(
+                    translatedLabel,
+                    operationCode
+                )
+            );
+
+        }
+    );
+
+
+    /* =========================================
+       6. CONSERVATION DE L’ANCIEN CHOIX
+       ========================================= */
+
+    const previousOperationStillExists = [
+
         ...operationSelect.options
+
     ].some(
         option =>
             option.value === previousOperation
     );
 
-    if (operationStillExists) {
-        operationSelect.value = previousOperation;
+
+    if (previousOperationStillExists) {
+
+        operationSelect.value =
+            previousOperation;
+
+    } else {
+
+        operationSelect.selectedIndex = 0;
+
     }
 
 }
       
-      function sp() {
+     function sp() {
 
-    const selectedMachineId = $('machine').value;
-    const selectedMaterialCode = $('material').value;
-    const selectedOperation = $('operation').value;
+    const selectedMachineId =
+        String($('machine').value || '');
 
-    return params.find(parameter => {
+    const selectedMaterialCode =
+        $('material').value;
 
-        return (
-            String(parameter.machine_id) ===
-                String(selectedMachineId) &&
+    const selectedOperation =
+        $('operation').value;
 
-            parameter.material_code ===
-                selectedMaterialCode &&
 
-            parameter.operation ===
-                selectedOperation
-        );
+    /* =========================================
+       1. PARAMÈTRE SPÉCIFIQUE À LA MACHINE
+       ========================================= */
 
-    });
+    const machineParameter = params.find(
+        parameter => {
+
+            return (
+                String(parameter.machine_id || '') ===
+                    selectedMachineId &&
+
+                parameter.material_code ===
+                    selectedMaterialCode &&
+
+                parameter.operation ===
+                    selectedOperation
+            );
+
+        }
+    );
+
+
+    if (machineParameter) {
+
+        return machineParameter;
+
+    }
+
+
+    /* =========================================
+       2. REPLI SUR UN ANCIEN PARAMÈTRE
+       SANS MACHINE
+       ========================================= */
+
+    return params.find(
+        parameter => {
+
+            return (
+                !parameter.machine_id &&
+
+                parameter.material_code ===
+                    selectedMaterialCode &&
+
+                parameter.operation ===
+                    selectedOperation
+            );
+
+        }
+    );
 
 }
 
@@ -1150,34 +1277,167 @@ function fillOperationList() {
       }
 
       function searchMaterial() {
-        openSearch('Recherche matière', materials.map(m => ({
-          title: loc(m, 'name'),
-          sub: m.code + ' · ' + (m.family || ''),
-          search: [m.code, loc(m, 'name'), m.family, m.note].join(' '),
-          value: m.code
-        })), v => {
-          $('material').value = v;
-          fillLists();
-          calc()
-        })
-      }
+
+    openSearch(
+
+        'Recherche matière',
+
+        materials.map(
+            material => ({
+
+                title:
+                    loc(material, 'name'),
+
+                sub:
+                    material.code +
+                    ' · ' +
+                    (material.family || ''),
+
+                search: [
+
+                    material.code,
+                    loc(material, 'name'),
+                    material.family,
+                    material.note
+
+                ].join(' '),
+
+                value:
+                    material.code
+
+            })
+        ),
+
+        materialCode => {
+
+            $('material').value =
+                materialCode;
+
+            fillOperationList();
+
+            calc();
+
+        }
+
+    );
+
+}
 
       function searchParam() {
-        openSearch('Recherche paramètre', params.map(p => ({
-          title: p.material_code + ' · ' + p.operation,
-          sub: `${p.power_percent}% · ${p.speed_mm_s} mm/s`,
-          search: [p.material_code, p.operation, p.power_percent, p.speed_mm_s].join(' '),
-          value: String(p.id)
-        })), v => {
-          let p = params.find(x => String(x.id) === v);
-          if (p) {
-            $('material').value = p.material_code;
-            fillLists();
-            $('operation').value = p.operation;
-            calc()
-          }
-        })
-      }
+
+    const selectedMachineId =
+        String($('machine').value || '');
+
+
+    let searchableParameters = params.filter(
+        parameter =>
+            String(parameter.machine_id || '') ===
+            selectedMachineId
+    );
+
+
+    if (!searchableParameters.length) {
+
+        searchableParameters = params.filter(
+            parameter =>
+                !parameter.machine_id
+        );
+
+    }
+
+
+    openSearch(
+
+        'Recherche paramètre',
+
+        searchableParameters.map(
+            parameter => ({
+
+                title:
+
+                    (
+                        loc(
+                            materials.find(
+                                material =>
+                                    material.code ===
+                                    parameter.material_code
+                            ) || {},
+                            'name'
+                        ) ||
+
+                        parameter.material_code
+
+                    ) +
+
+                    ' · ' +
+
+                    (
+                        TXT[lang][parameter.operation] ||
+                        TXT.fr[parameter.operation] ||
+                        parameter.operation
+                    ),
+
+                sub:
+
+                    (
+                        parameter.power_percent ?? '–'
+                    ) +
+
+                    '% · ' +
+
+                    (
+                        parameter.speed_mm_s ?? '–'
+                    ) +
+
+                    ' mm/s',
+
+                search: [
+
+                    parameter.material_code,
+                    parameter.operation,
+                    parameter.power_percent,
+                    parameter.speed_mm_s
+
+                ].join(' '),
+
+                value:
+                    String(parameter.id)
+
+            })
+        ),
+
+        parameterId => {
+
+            const parameter =
+                params.find(
+                    item =>
+                        String(item.id) ===
+                        String(parameterId)
+                );
+
+
+            if (!parameter) {
+
+                return;
+
+            }
+
+
+            $('material').value =
+                parameter.material_code;
+
+            fillOperationList();
+
+            $('operation').value =
+                parameter.operation;
+
+            calc();
+
+        }
+
+    );
+
+}
       async function editFoil() {
         toast(canEdit() ? 'Édition disponible dans prochaine itération' : 'Droit expert/admin requis')
       }
