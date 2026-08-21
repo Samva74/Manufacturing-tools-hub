@@ -309,30 +309,104 @@ async function loadUsers(){
 
         div.innerHTML = `
 
-            <div class="email">
-                ${user.email}
-            </div>
+    <div class="email">
+        ${user.email}
+    </div>
 
-            <div class="role">
-                ${user.role}
-            </div>
+    <div class="role">
+        ${user.role}
+    </div>
 
-            <div class="created">
-                Créé le :
-                ${
-                    user.created_at
-                    ? new Date(
-                        user.created_at
-                    ).toLocaleDateString(
-                        'fr-FR'
-                    )
-                    : '-'
-                }
-            </div>
+    <div class="created">
+        Créé le :
+        ${
+            user.created_at
+            ? new Date(
+                user.created_at
+            ).toLocaleDateString(
+                'fr-FR'
+            )
+            : '-'
+        }
+    </div>
 
-        `;
+    <div style="
+        display:flex;
+        gap:8px;
+        margin-top:12px;
+        flex-wrap:wrap;
+    ">
+
+        <button
+            class="role-btn"
+            data-user-id="${user.user_id}"
+            data-email="${user.email}">
+
+            🛡️ Modifier rôle
+
+        </button>
+
+        <button
+            class="pwd-btn"
+            data-user-id="${user.user_id}"
+            data-email="${user.email}">
+
+            🔑 Réinitialiser MDP
+
+        </button>
+
+    </div>
+
+`;
 
         users.appendChild(div);
+
+const roleBtn =
+    div.querySelector('.role-btn');
+
+if(roleBtn){
+
+    roleBtn.onclick = ()=>{
+
+        const newRole =
+            prompt(
+                'Nouveau rôle (user, expert, admin)',
+                user.role
+            );
+
+        if(!newRole){
+            return;
+        }
+
+        alert(
+            'Le changement de rôle sera connecté à admin-manage-user.'
+        );
+
+    };
+
+}
+
+const pwdBtn =
+    div.querySelector('.pwd-btn');
+
+if(pwdBtn){
+
+    pwdBtn.onclick = ()=>{
+
+        alert(
+
+`Réinitialisation du mot de passe
+
+Utilisateur :
+${user.email}
+
+Cette fonction sera reliée à admin-manage-user dans l'étape suivante.`
+
+        );
+
+    };
+
+}
 
     });
 
@@ -437,8 +511,16 @@ async function createUser(){
     }
 
     alert(
-        'Utilisateur créé'
-    );
+`Utilisateur créé avec succès
+
+Email :
+${email}
+
+Mot de passe :
+${password}
+
+⚠️ Copiez ces informations avant de fermer cette fenêtre.`
+);
 
     document
         .getElementById('email')
