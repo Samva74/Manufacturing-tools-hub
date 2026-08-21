@@ -77,28 +77,42 @@
   }
 
   .card{
+    width:100%;
+    max-width:100%;
+
+    min-height:auto !important;
+    height:auto !important;
+
     display:flex;
+    flex-direction:row;
     align-items:center;
+
     gap:12px;
+    padding:12px;
+}
+  
+  .card-text{
+    flex:1;
 }
   
   .app-icon{
-      width:50px;
-      height:50px;
-      min-width:50px;
+      width:44px;
+      height:44px;
+      min-width:44px;
 
       margin-bottom:0;
   }
 
   .app-icon svg{
-      width:30px;
-      height:30px;
+      width:26px;
+      height:26px;
   }
 
   .card h2{
-      font-size:20px;
-      margin:0 0 4px 0;
-  }
+    font-size:18px;
+    margin:0 0 3px 0;
+    line-height:1.1;
+}
 
   .card p{
       font-size:12px;
@@ -124,7 +138,6 @@
 <div class="grid">
 
   <a class="card" href="/cnc/">
-
     <div class="app-icon">
       <svg viewBox="0 0 100 100" fill="none" stroke="#1d1d1b"
            stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
@@ -136,13 +149,11 @@
     </div>
 
     <h2>CNC Calculator</h2>
-
     <p>Matières, outils et paramètres d’usinage.</p>
 
   </a>
 
   <a class="card" href="/hot-stamping/">
-
     <div class="app-icon">
       <svg viewBox="0 0 100 100"
            fill="none"
@@ -160,36 +171,34 @@
     </div>
 
     <h2>Hot Stamping<br>Calculator</h2>
-
     <p>Supports, folios et réglages de marquage.</p>
 
   </a>
 
-  <a class="card" href="/laser/">
-
+  <a class="card" href="/laser-icon">
     <div class="app-icon">
-      <svg viewBox="0 0 100 100" fill="none" stroke="#1d1d1b"
-           stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 100 100"
+           fill="none"
+           stroke="#1d1d1b"
+           stroke-width="8"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        
         <path d="M20 76 L48 48"/>
         <path d="M48 48 L32 22"/>
         <path d="M48 48 H78"/>
         <path d="M70 48 V76"/>
         <path d="M56 76 H86"/>
+        
       </svg>
     </div>
 
     <h2>Laser Calculator</h2>
-
     <p>Matières, opérations et paramètres laser.</p>
 
   </a>
 
-<a
-    class="card admin-only"
-    href="/admin-users/"
-    id="userAdminCard"
-    style="display:none">
-
+ <a class="card admin-only" href="/admin-users/">
     <div class="app-icon">
 
         <svg viewBox="0 0 100 100"
@@ -211,16 +220,12 @@
             <path d="M84 62 H90"/>
 
         </svg>
-
     </div>
 
     <div class="card-text">
 
         <h2>Gestion<br>Utilisateurs</h2>
-
-        <p>
-            Comptes, rôles et permissions.
-        </p>
+        <p>Comptes, rôles et permissions.</p>
 
     </div>
 
