@@ -127,5 +127,233 @@ Créer utilisateur
 
 </div>
 
+<script>
+
+const SUPABASE_URL =
+'https://erzuvpswagzwlrxgctaj.supabase.co';
+
+const SUPABASE_KEY =
+'sb_publishable_EERLI2l3AjQWkCLsMK3kbA_DMny2RFr';
+
+const sb =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+function generatePassword(){
+
+    const chars =
+        'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$';
+
+    let pwd = '';
+
+    for(let i=0;i<12;i++){
+
+        pwd += chars[
+            Math.floor(
+                Math.random()*chars.length
+            )
+        ];
+
+    }
+
+    document.getElementById('password').value =
+        pwd;
+
+}
+
+async function loadUsers(){
+
+    const token =
+        (
+            await sb.auth.getSession()
+        ).data.session?.access_token;
+
+    const r = await fetch(
+
+        SUPABASE_URL +
+        '/rest/v1/user_roles?select=*' +
+        '&order=email.asc',
+
+        {
+            headers:{
+                apikey:SUPABASE_KEY,
+                Authorization:
+                    'Bearer ' + token
+            }
+        }
+
+    );
+
+    const rows =
+        await r.json();
+
+    const users =
+        document.getElementById(
+            'users'
+        );
+
+    users.innerHTML = '';
+
+    rows.forEach(user=>{
+
+        const div =
+            document.createElement(
+                'div'
+            );
+
+        div.className =
+            'item';
+
+        div.innerHTML =
+            '<b>' +
+            user.email +
+            '</b><br>' +
+            user.role;
+
+        users.appendChild(div);
+
+    });
+
+}
+
+async function createUser(){
+
+    const email =
+        document
+            .getElementById('email')
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById('password')
+            .value;
+
+    const role =
+        document
+            .getElementById('role')
+            .value;
+
+    if(!email){
+
+        alert(
+            'Adresse email obligatoire'
+        );
+
+        return;
+
+    }
+
+    if(!password){
+
+        alert(
+            'Génère un mot de passe'
+        );
+
+        return;
+
+    }
+
+    const session =
+        (
+            await sb.auth.getSession()
+        ).data.session;
+
+    const response =
+        await fetch(
+
+            SUPABASE_URL +
+            '/functions/v1/admin-create-user',
+
+            {
+
+                method:'POST',
+
+                headers:{
+                    'Content-Type':
+                        'application/json',
+
+                    Authorization:
+                        'Bearer ' +
+                        session.access_token
+                },
+
+                body:JSON.stringify({
+
+                    email,
+                    password,
+                    role
+
+                })
+
+            }
+
+        );
+
+    const result =
+        await response.json();
+
+    if(!response.ok){
+
+        alert(
+            result.error ||
+            'Erreur'
+        );
+
+        return;
+
+    }
+
+    alert(
+        'Utilisateur créé'
+    );
+
+    loadUsers();
+
+}
+
+document
+.getElementById(
+    'generateBtn'
+)
+.onclick =
+generatePassword;
+
+document
+.getElementById(
+    'createBtn'
+)
+.onclick =
+createUser;
+
+window.authReady.then(
+async()=>{
+
+    const role =
+        await window
+        .appAuth
+        .getRole();
+
+    if(role !== 'admin'){
+
+        alert(
+            'Accès réservé aux administrateurs'
+        );
+
+        location.href='/';
+
+        return;
+
+    }
+
+    generatePassword();
+
+    loadUsers();
+
+});
+
+</script>
 </body>
 </html>
