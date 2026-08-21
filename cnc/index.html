@@ -9,7 +9,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../auth-guard.js"></script>
 <style>
-:root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--soft:#e5e5df;--valid:#d9eadb;--err:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:18px}.wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:14px}.logo{width:76px;height:76px;border:2px solid var(--txt);border-radius:20px;background:#e0e1dd;display:grid;place-items:center}.logo svg{width:54px;height:54px}.title h1{margin:0;font-size:31px}.title p{margin:4px 0 0;color:var(--muted);font-size:14px}.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.hub-btn,.langs button,.role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}.langs button.active{background:var(--accent);color:white}
+:root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--soft:#e5e5df;--valid:#d9eadb;--err:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:18px}
+    .wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:14px}.logo{width:76px;height:76px;border:2px solid var(--txt);border-radius:20px;background:#e0e1dd;display:grid;place-items:center}.logo svg{width:54px;height:54px}.title h1{margin:0;font-size:31px}.title p{margin:4px 0 0;color:var(--muted);font-size:14px}.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.hub-btn,.langs button,.role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}.langs button.active{background:var(--accent);color:white}
     .layout{
     display:grid;
     grid-template-columns:48% 52%;
@@ -284,11 +285,6 @@
     </div>
   </div>
 
-  <section class="card lib">
-    <h2><span class="dot"></span><span data-t="library">Bibliothèque Supabase CNC</span></h2>
-    <button class="btn secondary" onclick="loadCalibs()" data-t="reload">↻ Recharger Supabase</button>
-    <div id="calibs"></div>
-  </section>
   <div class="foot" data-t="foot">Bibliothèque CNC issue du fichier Excel V3 corrigé.</div>
 </div>
 
