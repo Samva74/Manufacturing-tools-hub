@@ -148,7 +148,56 @@ select{
     }
 
 }
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+}
 
+.hub-btn{
+    border:1px solid var(--line);
+    background:var(--card2);
+    color:var(--txt);
+    border-radius:999px;
+    padding:10px 18px;
+    text-decoration:none;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.hub-btn:hover{
+    background:white;
+}
+.hub-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    height:40px;
+    padding:0 16px;
+
+    border:1px solid var(--line);
+    border-radius:999px;
+
+    background:var(--card2);
+
+    color:var(--txt);
+
+    text-decoration:none;
+
+    font-size:20px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.hub-btn:hover{
+    background:white;
+}
 </style>
     
 </head>
@@ -159,10 +208,24 @@ select{
 
 <div class="card">
 
-<h2>
-    <span class="dot"></span>
-    Gestion Utilisateurs
-</h2>
+<div class="topbar">
+
+    <h2>
+        <span class="dot"></span>
+        Gestion Utilisateurs
+    </h2>
+
+    <a
+    class="hub-btn"
+    href="/"
+    title="Retour au Hub">
+
+    🏠 Hub
+
+</a>
+
+</div>
+
 
 <div class="layout">
 
