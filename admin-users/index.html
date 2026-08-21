@@ -366,45 +366,34 @@ const roleBtn =
 
 if(roleBtn){
 
-    roleBtn.onclick = ()=>{
+    roleBtn.onclick =
+        async()=>{
 
-        const newRole =
-            prompt(
-                'Nouveau rôle (user, expert, admin)',
+            await changeUserRole(
+                user.user_id,
+                user.email,
                 user.role
             );
 
-        if(!newRole){
-            return;
-        }
-
-        alert(
-            'Le changement de rôle sera connecté à admin-manage-user.'
-        );
-
-    };
+        };
 
 }
+
 
 const pwdBtn =
     div.querySelector('.pwd-btn');
 
 if(pwdBtn){
 
-    pwdBtn.onclick = ()=>{
+    pwdBtn.onclick =
+        async()=>{
 
-        alert(
+            await resetUserPassword(
+                user.user_id,
+                user.email
+            );
 
-`Réinitialisation du mot de passe
-
-Utilisateur :
-${user.email}
-
-Cette fonction sera reliée à admin-manage-user dans l'étape suivante.`
-
-        );
-
-    };
+        };
 
 }
 
@@ -412,6 +401,260 @@ Cette fonction sera reliée à admin-manage-user dans l'étape suivante.`
 
 }
 
+/* =========================================================
+   GÉNÉRATION D'UN MOT DE PASSE SÉCURISÉ
+   ========================================================= */
+
+function createRandomPassword(){
+
+    const upper =
+        'ABCDEFGHJKLMNPQRSTUVWXYZ';
+
+    const lower =
+        'abcdefghijkmnopqrstuvwxyz';
+
+    const numbers =
+        '23456789';
+
+    const symbols =
+        '!@#$%';
+
+
+    const allCharacters =
+        upper +
+        lower +
+        numbers +
+        symbols;
+
+
+    let password =
+
+        upper[
+            Math.floor(
+                Math.random() *
+                upper.length
+            )
+        ] +
+
+        lower[
+            Math.floor(
+                Math.random() *
+                lower.length
+            )
+        ] +
+
+        numbers[
+            Math.floor(
+                Math.random() *
+                numbers.length
+            )
+        ] +
+
+        symbols[
+            Math.floor(
+                Math.random() *
+                symbols.length
+            )
+        ];
+
+
+    while(password.length < 14){
+
+        password +=
+
+            allCharacters[
+                Math.floor(
+                    Math.random() *
+                    allCharacters.length
+                )
+            ];
+
+    }
+
+
+    /*
+       Mélange les caractères.
+    */
+
+    return password
+
+        .split('')
+
+        .sort(
+            () =>
+                Math.random() - 0.5
+        )
+
+        .join('');
+
+}
+
+
+/* =========================================================
+   APPEL DE L'EDGE FUNCTION ADMINISTRATEUR
+   ========================================================= */
+
+async function callAdminManageUser(
+    requestBody
+){
+
+    const session =
+        (
+            await sb.auth.getSession()
+        ).data.session;
+
+
+    if(!session){
+
+        throw new Error(
+            'Session administrateur expirée. Reconnecte-toi.'
+        );
+
+    }
+
+
+    const response =
+        await fetch(
+
+            SUPABASE_URL +
+            '/functions/v1/admin-manage-user',
+
+            {
+                method:
+                    'POST',
+
+                headers:{
+
+                    'Content-Type':
+                        'application/json',
+
+                    apikey:
+                        SUPABASE_KEY,
+
+                    Authorization:
+                        'Bearer ' +
+                        session.access_token
+
+                },
+
+                body:
+                    JSON.stringify(
+                        requestBody
+                    )
+            }
+
+        );
+
+
+    let result = {};
+
+
+    try{
+
+        result =
+            await response.json();
+
+    }catch(error){
+
+        console.error(
+            'Réponse admin-manage-user invalide',
+            error
+        );
+
+    }
+
+
+    if(!response.ok){
+
+        throw new Error(
+
+            result.error ||
+
+            result.details ||
+
+            'Opération administrateur impossible'
+
+        );
+
+    }
+
+
+    return result;
+
+}
+
+/* =========================================================
+   CHANGEMENT DU RÔLE
+   ========================================================= */
+
+async function resetUserPassword(
+    userId,
+    email
+){
+
+    const confirmed =
+        confirm(
+
+`Réinitialiser le mot de passe ?
+
+Utilisateur :
+${email}
+
+L'ancien mot de passe ne fonctionnera plus.
+
+Le compte et son historique seront conservés.`
+
+        );
+
+    if(!confirmed){
+        return;
+    }
+
+    const newPassword =
+        createRandomPassword();
+
+    try{
+
+        await callAdminManageUser({
+
+            action:
+                'reset-password',
+
+            userId:
+                userId,
+
+            password:
+                newPassword
+
+        });
+
+        alert(
+
+`Mot de passe réinitialisé
+
+Email :
+${email}
+
+Nouveau mot de passe :
+${newPassword}`
+
+        );
+
+    }catch(error){
+
+        console.error(
+            'resetUserPassword',
+            error
+        );
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+    
 async function createUser(){
 
     const email =
