@@ -1177,13 +1177,16 @@ function fillOperationList() {
     const operationSelect = $('operation');
 
     const selectedMachineId =
-        String($('machine').value || '');
+    String($('machine').value || '');
 
     const selectedMaterialCode =
-        $('material').value;
+    $('material').value;
+
+    const selectedThickness =
+    $('thickness').value;
 
     const previousOperation =
-        operationSelect.value;
+    operationSelect.value;
 
     operationSelect.innerHTML = '';
 
@@ -1192,20 +1195,32 @@ function fillOperationList() {
        1. PARAMÈTRES DE LA MACHINE SÉLECTIONNÉE
        ========================================= */
 
-    let matchingParameters = params.filter(
-        parameter => {
+   let matchingParameters = params.filter(
+    parameter => {
 
-            return (
-                String(parameter.machine_id || '') ===
-                    selectedMachineId &&
+        return (
 
-                parameter.material_code ===
-                    selectedMaterialCode
-            );
+            String(
+                parameter.machine_id || ''
+            ) === selectedMachineId
 
-        }
-    );
+            &&
 
+            parameter.material_code ===
+                selectedMaterialCode
+
+            &&
+
+            Number(
+                parameter.thickness_mm
+            ) === Number(
+                selectedThickness
+            )
+
+        );
+
+    }
+);
 
     /* =========================================
        2. REPLI SUR LES ANCIENS PARAMÈTRES
@@ -1215,23 +1230,34 @@ function fillOperationList() {
        paramètre spécifique à la machine n’existe.
        ========================================= */
 
-    if (!matchingParameters.length) {
+  if (!matchingParameters.length) {
 
-        matchingParameters = params.filter(
-            parameter => {
+    matchingParameters = params.filter(
+        parameter => {
 
-                return (
-                    !parameter.machine_id &&
+            return (
 
-                    parameter.material_code ===
-                        selectedMaterialCode
-                );
+                !parameter.machine_id
 
-            }
-        );
+                &&
 
-    }
+                parameter.material_code ===
+                    selectedMaterialCode
 
+                &&
+
+                Number(
+                    parameter.thickness_mm
+                ) === Number(
+                    selectedThickness
+                )
+
+            );
+
+        }
+    );
+
+}
 
     /* =========================================
        3. OPÉRATIONS UNIQUES
@@ -1338,13 +1364,16 @@ function fillOperationList() {
      function sp() {
 
     const selectedMachineId =
-        String($('machine').value || '');
+    String($('machine').value || '');
 
     const selectedMaterialCode =
-        $('material').value;
+    $('material').value;
+
+    const selectedThickness =
+    $('thickness').value;
 
     const selectedOperation =
-        $('operation').value;
+    $('operation').value;
 
 
     /* =========================================
@@ -1352,28 +1381,36 @@ function fillOperationList() {
        ========================================= */
 
     const machineParameter = params.find(
-        parameter => {
+    parameter => {
 
-            return (
-                String(parameter.machine_id || '') ===
-                    selectedMachineId &&
+        return (
 
-                parameter.material_code ===
-                    selectedMaterialCode &&
+            String(
+                parameter.machine_id || ''
+            ) === selectedMachineId
 
-                parameter.operation ===
-                    selectedOperation
-            );
+            &&
 
-        }
-    );
+            parameter.material_code ===
+                selectedMaterialCode
 
+            &&
 
-    if (machineParameter) {
+            Number(
+                parameter.thickness_mm
+            ) === Number(
+                selectedThickness
+            )
 
-        return machineParameter;
+            &&
+
+            parameter.operation ===
+                selectedOperation
+
+        );
 
     }
+);
 
 
     /* =========================================
@@ -1382,21 +1419,34 @@ function fillOperationList() {
        ========================================= */
 
     return params.find(
-        parameter => {
+    parameter => {
 
-            return (
-                !parameter.machine_id &&
+        return (
 
-                parameter.material_code ===
-                    selectedMaterialCode &&
+            !parameter.machine_id
 
-                parameter.operation ===
-                    selectedOperation
-            );
+            &&
 
-        }
-    );
+            parameter.material_code ===
+                selectedMaterialCode
 
+            &&
+
+            Number(
+                parameter.thickness_mm
+            ) === Number(
+                selectedThickness
+            )
+
+            &&
+
+            parameter.operation ===
+                selectedOperation
+
+        );
+
+    }
+);
 }
 
       function calc() {
@@ -2272,6 +2322,7 @@ $('operation').addEventListener(
     calc
 );
       }
+      
       init();
     </script>
   </body>
