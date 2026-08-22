@@ -753,9 +753,7 @@ body:not(.can-edit) .parameter-save-btn{
 
     <div class="modal-head">
 
-      <h3>
-        Ajouter un paramètre Laser
-      </h3>
+      <h3 data-t="addLaserParameterTitle"></h3>
 
       <button
           class="close"
@@ -922,10 +920,12 @@ body:not(.can-edit) .parameter-save-btn{
     <!-- PARAMÈTRE -->
 
     <h3>Paramètre Laser</h3>
+    
+    <div class="modal-grid-2">
 
-    <label>
-      Épaisseur matière
-    </label>
+    <div>
+
+    <label data-t="materialThickness"></label>
 
     <div class="input-unit">
 
@@ -941,6 +941,10 @@ body:not(.can-edit) .parameter-save-btn{
 
     </div>
 
+        </div>
+
+    <div>
+      
     <label>
       Opération
     </label>
@@ -973,6 +977,10 @@ body:not(.can-edit) .parameter-save-btn{
 
     </select>
 
+        </div>
+
+</div>
+      
     <label>
       Puissance
     </label>
@@ -1033,10 +1041,8 @@ body:not(.can-edit) .parameter-save-btn{
     <button
         class="btn"
         type="button"
-        onclick="saveNewLaserParameter()">
-
-      💾 Enregistrer le paramètre Laser
-
+        onclick="saveNewLaserParameter()"
+        data-t="saveLaserParameter">
     </button>
 
   </div>
@@ -1199,6 +1205,13 @@ body:not(.can-edit) .parameter-save-btn{
           parameterSaveError: 'Impossible de sauvegarder le paramètre',
           noOperation: 'Aucune opération disponible',
           legacyParameter: 'Ce réglage générique ne peut pas être modifié. Sélectionne une machine précise.',
+          addLaserParameterTitle: 'Ajouter un paramètre Laser',
+          newMachine: 'Créer une nouvelle machine',
+          newMaterial: 'Créer une nouvelle matière',
+          materialThickness: 'Épaisseur matière',
+          laserParameter: 'Paramètre Laser',
+          passesCount: 'Nombre de passes',
+          saveLaserParameter: '💾 Enregistrer le paramètre Laser',
         },
         
         en: {
@@ -1241,6 +1254,13 @@ body:not(.can-edit) .parameter-save-btn{
           parameterSaveError: 'Unable to save parameter',
           noOperation: 'No operation available',
           legacyParameter: 'This generic setting cannot be edited. Select a specific machine.',
+          addLaserParameterTitle: 'Add Laser Parameter',
+          newMachine: 'Create New Machine',
+          newMaterial: 'Create New Material',
+          materialThickness: 'Material Thickness',
+          laserParameter: 'Laser Parameter',
+          passesCount: 'Number of Passes',
+          saveLaserParameter: '💾 Save Laser Parameter',
         },
         pt: {
           title: 'Laser Calculator',
@@ -1282,6 +1302,13 @@ body:not(.can-edit) .parameter-save-btn{
           parameterSaveError: 'Não foi possível guardar o parâmetro',
           noOperation: 'Nenhuma operação disponível',
           legacyParameter: 'Este parâmetro genérico não pode ser alterado. Selecione uma máquina específica.',
+          addLaserParameterTitle: 'Adicionar parâmetro Laser',
+          newMachine: 'Criar nova máquina',
+          newMaterial: 'Criar novo material',
+          materialThickness: 'Espessura do material',
+          laserParameter: 'Parâmetro Laser',
+          passesCount: 'Número de passagens',
+          saveLaserParameter: '💾 Guardar parâmetro Laser',
         }
       };
       let materials = [],
