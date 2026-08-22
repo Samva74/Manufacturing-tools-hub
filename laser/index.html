@@ -1788,6 +1788,11 @@ function fillOperationList() {
     }
 );
 
+if (machineParameter) {
+
+    return machineParameter;
+
+}
        
     /* =========================================
        2. REPLI SUR UN ANCIEN PARAMÈTRE
@@ -2742,6 +2747,17 @@ function fillLaserParameterModal() {
 
 async function saveNewLaserParameter() {
 
+    if (!canEdit()) {
+
+        toast(
+            TXT[lang].editPermissionRequired ||
+            TXT.fr.editPermissionRequired
+        );
+
+        return;
+
+    }
+
     try {
 
         let machineId =
@@ -2751,151 +2767,575 @@ async function saveNewLaserParameter() {
             $('newParameterMaterial').value;
 
 
-        /* ==========================
-           NOUVELLE MACHINE
-           ========================== */
+        /* =========================================
+           VALEURS DU PARAMÈTRE
+           ========================================= */
 
-        if ($('createNewMachine*).checked) {
+        const thickness =
+            Number(
+                $('newParameterThickness').value
+            );
 
-            const ro*s =
+        const operation =
+            $('newParameterOperation').value;
+
+        const power =
+            Number(
+                $('newParameterPower').value
+            );
+
+        const speed =
+            Number(
+                $('newParameterSpeed').value
+            );
+
+        const passes =
+            Number(
+                $('newParameterPasses').value
+            );
+
+
+        /* =========================================
+           VALIDATION DU PARAMÈTRE
+           ========================================= */
+
+        if (
+            !Number.isFinite(thickness) ||
+            thickness <= 0
+        ) {
+
+            toast(
+                'Renseigne une épaisseur valide'
+            );
+
+            $('newParameterThickness').focus();
+
+            return;
+
+        }
+
+        if (!operation) {
+
+            toast(
+                'Sélectionne une opération'
+            );
+
+            return;
+
+        }
+
+        if (
+            !Number.isFinite(power) ||
+            power < 0 ||
+            power > 100
+        ) {
+
+            toast(
+                'La puissance doit être comprise entre 0 et 100 %'
+            );
+
+            $('newParameterPower').focus();
+
+            return;
+
+        }
+
+        if (
+            !Number.isFinite(speed) ||
+            speed < 0
+        ) {
+
+            toast(
+                'Renseigne une vitesse valide'
+            );
+
+            $('newParameterSpeed').focus();
+
+            return;
+
+        }
+
+        if (
+            !Number.isInteger(passes) ||
+            passes < 1
+        ) {
+
+            toast(
+                'Le nombre de passes doit être un nombre entier supérieur à zéro'
+            );
+
+            $('newParameterPasses').focus();
+
+            return;
+
+        }
+
+
+        /* =========================================
+           CRÉATION D’UNE NOUVELLE MACHINE
+           ========================================= */
+
+        if ($('createNewMachine').checked) {
+
+            const machineName =
+                $('newLaserMachineName')
+                    .value
+                    .trim();
+
+            const machineWatt =
+                Number(
+                    $('newLaserMachineWatt').value
+                );
+
+            if (!machineName) {
+
+                toast(
+                    'Le nom de la machine est obligatoire'
+                );
+
+                $('newLaserMachineName').focus();
+
+                return;
+
+            }
+
+            if (
+                !Number.isFinite(machineWatt) ||
+                machineWatt <= 0
+            ) {
+
+                toast(
+                    'La puissance de la machine doit être supérieure à zéro'
+                );
+
+                $('newLaserMachineWatt').focus();
+
+                return;
+
+            }
+
+            const machineRows =
                 await api(
-   *                'laser_machines',
-*                   {
-             *          m:'POST',
-              *         b:{
-                     *      name:
-                      *         $('newLaserMachineName').*alue,
+                    'laser_machines',
+                    {
+                        m: 'POST',
+
+                        b: {
+
+                            name:
+                                machineName,
 
                             watt:
-                                Number(
-                                    $('newLaserMachineWatt').value || 0
-                                ),
+                                machineWatt,
 
                             lens:
-                                $('newLaserMachineLens').value,
+                                $('newLaserMachineLens')
+                                    .value
+                                    .trim() || null,
 
                             site:
-                                $('newLaserMachineSite').value
+                                $('newLaserMachineSite')
+                                    .value
+                                    .trim() || null,
+
+                            created_by_user_id:
+                                user?.id || null,
+
+                            created_by_email:
+                                user?.email || null
+
                         }
+
                     }
                 );
 
-            machineId = rows[0].id;
+            if (
+                !Array.isArray(machineRows) ||
+                !machineRows.length ||
+                !machineRows[0].id
+            ) {
+
+                throw new Error(
+                    'La machine a été créée sans identifiant exploitable'
+                );
+
+            }
+
+            machineId =
+                String(
+                    machineRows[0].id
+                );
 
         }
 
 
-        /* ==========================
-           NOUVELLE MATIÈRE
-           ========================== */
+        /* =========================================
+           VALIDATION MACHINE EXISTANTE
+           ========================================= */
 
-        if ($('createNewMateria*').checked) {
+        if (!machineId) {
 
-            await a*i(
-                'laser_material*',
+            toast(
+                'Sélectionne une machine'
+            );
+
+            return;
+
+        }
+
+
+        /* =========================================
+           CRÉATION D’UNE NOUVELLE MATIÈRE
+           ========================================= */
+
+        if ($('createNewMaterial').checked) {
+
+            const materialNameFr =
+                $('newLaserMaterialNameFr')
+                    .value
+                    .trim();
+
+            const enteredCode =
+                $('newLaserMaterialCode')
+                    .value
+                    .trim();
+
+            materialCode =
+                enteredCode
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(
+                        /[\u0300-\u036f]/g,
+                        ''
+                    )
+                    .replace(
+                        /[^a-z0-9]+/g,
+                        '_'
+                    )
+                    .replace(
+                        /^_+|_+$/g,
+                        ''
+                    );
+
+            if (!materialCode) {
+
+                toast(
+                    'Le code matière est obligatoire'
+                );
+
+                $('newLaserMaterialCode').focus();
+
+                return;
+
+            }
+
+            if (!materialNameFr) {
+
+                toast(
+                    'Le nom français de la matière est obligatoire'
+                );
+
+                $('newLaserMaterialNameFr').focus();
+
+                return;
+
+            }
+
+            await api(
+                'laser_materials',
                 {
-             *      m:'POST',
-                  * b:{
-                        code:*                            $('new*aserMaterialCode').value,
+                    m: 'POST',
 
-       *                name_fr:
-         *                  $('newLaserMater*alNameFr').value,
+                    b: {
 
-               *        name_en:
-                            $('newLaserMaterialNameEn').value,
+                        code:
+                            materialCode,
+
+                        name_fr:
+                            materialNameFr,
+
+                        name_en:
+                            $('newLaserMaterialNameEn')
+                                .value
+                                .trim() || null,
 
                         name_pt:
-                            $('newLaserMaterialNamePt').value,
+                            $('newLaserMaterialNamePt')
+                                .value
+                                .trim() || null,
 
                         family:
-                            $('newLaserMaterialFamily').value,
+                            $('newLaserMaterialFamily')
+                                .value
+                                .trim() || null,
 
                         note:
-                            $('newLaserMaterialNote').value
+                            $('newLaserMaterialNote')
+                                .value
+                                .trim() || null,
+
+                        created_by_user_id:
+                            user?.id || null,
+
+                        created_by_email:
+                            user?.email || null
+
                     }
+
                 }
             );
 
-            materialCode =
-                $('newLaserMaterialCode').value;
+        }
+
+
+        /* =========================================
+           VALIDATION MATIÈRE EXISTANTE
+           ========================================= */
+
+        if (!materialCode) {
+
+            toast(
+                'Sélectionne une matière'
+            );
+
+            return;
 
         }
 
 
-        /* ==========================
-           PARAMÈTRE LASER
-           ========================== */
+        /* =========================================
+           CONTRÔLE D’UN DOUBLON
+           ========================================= */
 
-        await api(
-            *laser_parameters',
-            {
- *              m:'POST',
-          *     b:{
-                    machi*e_id:
-                        mach*neId,
+        const existingParameter =
+            params.find(
+                parameter => {
 
-                    materia*_code:
-                        mat*rialCode,
+                    return (
 
-                    thi*kness_mm:
-                        *umber(
-                           *$('newParameterThickness').value
- *                      ),
+                        String(
+                            parameter.machine_id || ''
+                        ) === String(machineId)
 
-        *           operation:
-            *           $('newParameterOperatio*').value,
+                        &&
 
-                    pow*r_percent:
-                       *Number(
-                          * $('newParameterPower').value
-    *                   ),
+                        parameter.material_code ===
+                            materialCode
 
-           *        speed_mm_s:
-              *         Number(
-                 *          $('newParameterSpeed').v*lue
-                        ),
+                        &&
 
-  *                 passes:
-         *              Number(
-            *               $('newParameterPass*s').value
-                        *,
+                        Number(
+                            parameter.thickness_mm
+                        ) === thickness
 
-                    quality:
-  *                     'validated',
-*                    updated_by_user_id:
-                        user?.id || null,
+                        &&
 
-                    updated_by_email:
-                        user?.email || null,
+                        parameter.operation ===
+                            operation
 
-                    updated_at:
-                        new Date().toISOString()
+                    );
+
                 }
-            }
+            );
+
+        if (existingParameter) {
+
+            toast(
+                'Ce paramètre existe déjà. Modifie-le depuis Calibration atelier.'
+            );
+
+            return;
+
+        }
+
+
+        /* =========================================
+           CRÉATION DU PARAMÈTRE LASER
+           ========================================= */
+
+        const parameterRows =
+            await api(
+                'laser_parameters',
+                {
+                    m: 'POST',
+
+                    b: {
+
+                        machine_id:
+                            machineId,
+
+                        material_code:
+                            materialCode,
+
+                        thickness_mm:
+                            thickness,
+
+                        operation:
+                            operation,
+
+                        power_percent:
+                            power,
+
+                        speed_mm_s:
+                            speed,
+
+                        passes:
+                            passes,
+
+                        quality:
+                            'validated',
+
+                        created_by_user_id:
+                            user?.id || null,
+
+                        created_by_email:
+                            user?.email || null,
+
+                        updated_by_user_id:
+                            user?.id || null,
+
+                        updated_by_email:
+                            user?.email || null,
+
+                        updated_at:
+                            new Date().toISOString()
+
+                    }
+
+                }
+            );
+
+
+        /* =========================================
+           TRAÇABILITÉ
+           ========================================= */
+
+        const newParameterId =
+            Array.isArray(parameterRows) &&
+            parameterRows.length
+
+                ? parameterRows[0].id
+
+                : '';
+
+        await audit(
+            'laser_parameters',
+            newParameterId,
+            'create',
+            'parameter',
+            '',
+            [
+                machineId,
+                materialCode,
+                thickness + ' mm',
+                operation,
+                power + ' %',
+                speed + ' mm/s',
+                passes + ' passes'
+            ].join(' · ')
         );
 
+
+        /* =========================================
+           RECHARGEMENT DES BIBLIOTHÈQUES
+           ========================================= */
 
         await loadLibraries();
 
         fillLists();
 
+
+        /* Sélection du nouveau paramètre */
+
+        $('machine').value =
+            String(machineId);
+
+        $('material').value =
+            materialCode;
+
+        fillThicknessList();
+
+        $('thickness').value =
+            String(thickness);
+
+        fillOperationList();
+
+        $('operation').value =
+            operation;
+
+        calc();
+
+
+        /* =========================================
+           FERMETURE ET NETTOYAGE
+           ========================================= */
+
         closeLaserParameterModal();
+
+        resetLaserParameterModal();
 
         toast(
             'Paramètre Laser créé'
         );
 
-    } catch(error) {
+    } catch (error) {
 
         console.error(
+            'saveNewLaserParameter',
             error
         );
 
         toast(
-            'Erreur création paramètre'
+            'Erreur création paramètre Laser'
         );
 
     }
+
+}
+
+function resetLaserParameterModal() {
+
+    $('createNewMachine').checked = false;
+
+    $('createNewMaterial').checked = false;
+
+    $('newMachineFields').style.display = 'none';
+
+    $('newMaterialFields').style.display = 'none';
+
+    [
+        'newLaserMachineName',
+        'newLaserMachineWatt',
+        'newLaserMachineLens',
+        'newLaserMachineSite',
+        'newLaserMaterialCode',
+        'newLaserMaterialNameFr',
+        'newLaserMaterialNameEn',
+        'newLaserMaterialNamePt',
+        'newLaserMaterialFamily',
+        'newLaserMaterialNote',
+        'newParameterThickness',
+        'newParameterPower',
+        'newParameterSpeed',
+        'newParameterComments'
+    ].forEach(
+        id => {
+
+            const element =
+                $(id);
+
+            if (element) {
+
+                element.value = '';
+
+            }
+
+        }
+    );
+
+    $('newParameterPasses').value = '1';
+
+    $('newParameterOperation').value = 'cut';
 
 }
       
