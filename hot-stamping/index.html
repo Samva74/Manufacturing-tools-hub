@@ -111,7 +111,30 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
   background:var(--accent);
   color:white;
 }
+.status{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:10px;
+}
 
+.status-validated{
+    background:#d9eadb;
+    color:#237a3b;
+    border:1px solid #237a3b;
+}
+
+.status-pending{
+    background:#fff3cd;
+    color:#856404;
+    border:1px solid #856404;
+}
+
+.status-missing{
+    background:#ececec;
+    color:#666;
+    border:1px solid #bdbdbd;
+}
+  
 </style>
 </head>
 <body>
@@ -298,6 +321,10 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
           Lecture rapide
           </span>
         </h2>
+        <div
+    id="parameterStatus"
+    class="status-banner">
+</div>
         <div class="res-big valid">
           <div class="lbl" data-t="tempRec">
             Température recommandée </div>
@@ -807,7 +834,34 @@ function calc(){
   var s=selectedSupport(),
       f=selectedFoil(),
       o=selectedOperation();
-if(!s||!f){clearValues();return;}var baseT=[num(s.temperature_min,0),num(s.temperature_rec,0),num(s.temperature_max,0)];var baseP=[num(s.pressure_min,0),num(s.pressure_rec,0),num(s.pressure_max,0)];var baseD=[num(s.dwell_time_min,0),num(s.dwell_time_rec,0),num(s.dwell_time_max,0)];var dt=num(f.temperature_delta,0);var pf=factor(f.pressure_factor);var df=factor(f.dwell_factor);if((!s.temperature_rec)&&f.temperature_rec){baseT=[num(f.temperature_min,0),num(f.temperature_rec,0),num(f.temperature_max,0)];baseP=[num(f.pressure_min,0),num(f.pressure_rec,0),num(f.pressure_max,0)];baseD=[num(f.dwell_time_min,0),num(f.dwell_time_rec,0),num(f.dwell_time_max,0)];dt=0;pf=1;df=1;}var tf=factor(o.temp_factor);var opf=factor(o.pressure_factor);var odf=factor(o.dwell_factor);var t=baseT.map(function(x){return Math.round((x+dt)*tf);});var p=baseP.map(function(x){return (x*pf*opf).toFixed(1);});var d=baseD.map(function(x){return (x*df*odf).toFixed(2);});el('tempRec').textContent=t[1]+' °C';el('pressRec').textContent=p[1]+' bar';el('dwellRec').textContent=d[1]+' s';el('tempRange').textContent=t.join(' / ')+' °C';el('pressRange').textContent=p.join(' / ')+' bar';el('dwellRange').textContent=d.join(' / ')+' s';el('cTemp').value=t[1];el('cPress').value=p[1];el('cDwell').value=d[1];var lines=[];if(s.family)lines.push(s.family);if(s.supplier)lines.push('Support : '+s.supplier+(s.collection?' · '+s.collection:''));if(s.note)lines.push(s.note);if(f.supplier)lines.push('Folio : '+f.supplier+(f.reference?' · '+f.reference:''));lines.push('Folio : ΔT '+dt+' °C · P× '+pf+' · t× '+df);el('note').textContent=lines.join('\n');}
+  
+if(!s||!f){
+
+    $('parameterStatus').textContent =
+        '⚪ Aucun paramètre trouvé';
+
+    clearValues();
+
+    return;
+}
+
+  if(
+    s.quality === 'validated' ||
+    f.quality === 'validated'
+){
+
+    $('parameterStatus').textContent =
+        '✅ Paramètre validé atelier';
+
+}
+else{
+
+    $('parameterStatus').textContent =
+        '🟠 Paramètre à valider';
+
+}
+  
+  var baseT=[num(s.temperature_min,0),num(s.temperature_rec,0),num(s.temperature_max,0)];var baseP=[num(s.pressure_min,0),num(s.pressure_rec,0),num(s.pressure_max,0)];var baseD=[num(s.dwell_time_min,0),num(s.dwell_time_rec,0),num(s.dwell_time_max,0)];var dt=num(f.temperature_delta,0);var pf=factor(f.pressure_factor);var df=factor(f.dwell_factor);if((!s.temperature_rec)&&f.temperature_rec){baseT=[num(f.temperature_min,0),num(f.temperature_rec,0),num(f.temperature_max,0)];baseP=[num(f.pressure_min,0),num(f.pressure_rec,0),num(f.pressure_max,0)];baseD=[num(f.dwell_time_min,0),num(f.dwell_time_rec,0),num(f.dwell_time_max,0)];dt=0;pf=1;df=1;}var tf=factor(o.temp_factor);var opf=factor(o.pressure_factor);var odf=factor(o.dwell_factor);var t=baseT.map(function(x){return Math.round((x+dt)*tf);});var p=baseP.map(function(x){return (x*pf*opf).toFixed(1);});var d=baseD.map(function(x){return (x*df*odf).toFixed(2);});el('tempRec').textContent=t[1]+' °C';el('pressRec').textContent=p[1]+' bar';el('dwellRec').textContent=d[1]+' s';el('tempRange').textContent=t.join(' / ')+' °C';el('pressRange').textContent=p.join(' / ')+' bar';el('dwellRange').textContent=d.join(' / ')+' s';el('cTemp').value=t[1];el('cPress').value=p[1];el('cDwell').value=d[1];var lines=[];if(s.family)lines.push(s.family);if(s.supplier)lines.push('Support : '+s.supplier+(s.collection?' · '+s.collection:''));if(s.note)lines.push(s.note);if(f.supplier)lines.push('Folio : '+f.supplier+(f.reference?' · '+f.reference:''));lines.push('Folio : ΔT '+dt+' °C · P× '+pf+' · t× '+df);el('note').textContent=lines.join('\n');}
 function modal(title,items,titleFn,subFn,searchFn,pick){var m=el('searchModal'),q=el('searchInput'),list=el('searchResults');el('searchTitle').textContent=title;q.value='';function render(){var term=q.value.toLowerCase().trim();var rows=items.filter(function(x){return !term||searchFn(x).toLowerCase().indexOf(term)>=0;}).slice(0,120);list.innerHTML='';if(!rows.length){list.innerHTML='<p>Aucun résultat.</p>';return;}rows.forEach(function(x){var div=document.createElement('div');div.className='result';var b=document.createElement('b');b.textContent=titleFn(x);div.appendChild(b);var small=document.createElement('div');small.textContent=subFn(x)||'';div.appendChild(small);div.onclick=function(){pick(x);m.classList.remove('open');calc();};list.appendChild(div);});}q.oninput=render;el('searchClose').onclick=function(){m.classList.remove('open');};m.classList.add('open');setTimeout(function(){q.focus();},50);render();}
 window.searchSupport=function(){modal('Recherche support',supports.filter(validSupport),supportLabel,function(s){return [s.supplier,s.collection,s.family].filter(Boolean).join(' · ');},function(s){return [s.code,s.name_fr,s.supplier,s.collection,s.family,s.note].join(' ');},function(s){el('support').value=s.code;});};
 window.searchFoil=function(){modal('Recherche folio',foils.filter(validFoil),foilLabel,function(f){return [f.supplier,f.reference,f.color,f.foil_type].filter(Boolean).join(' · ');},function(f){return [f.foil_code,f.label_fr,f.supplier,f.reference,f.color,f.foil_type].join(' ');},function(f){el('foil').value=f.foil_code||f.id;});};
