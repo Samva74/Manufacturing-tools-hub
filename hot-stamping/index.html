@@ -36,7 +36,7 @@ body{
     display:flex;
     gap:8px;
     align-items:center;
-    flex-wrap:wrap;
+    flex-wrap:nowrap;
 }
   .hub-btn,
   .role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}
@@ -761,9 +761,8 @@ function el(id){return document.getElementById(id);}
   function toast(msg){var t=el('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}
   function goHub(){
 
-    alert(
-        window.location.href
-    );
+    window.location.href =
+        '/';
 
 }
   async function token(){var s=(await sb.auth.getSession()).data.session;return s&&s.access_token?s.access_token:SUPABASE_KEY;}
