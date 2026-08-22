@@ -161,7 +161,7 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
     width:100%;
     flex-wrap:wrap;
     justify-content:flex-start;
-  }
+}
   
 </style>
 </head>
@@ -759,12 +759,13 @@ function el(id){return document.getElementById(id);}
   function num(v,def){var n=Number(v);return Number.isFinite(n)?n:def;}
   function factor(v){var n=Number(v);return Number.isFinite(n)&&n>0?n:1;}
   function toast(msg){var t=el('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}
-  function goHub(){
+  
+  window.goHub = function(){
 
     window.location.href =
-        '/';
+        window.location.origin;
 
-}
+};
   async function token(){var s=(await sb.auth.getSession()).data.session;return s&&s.access_token?s.access_token:SUPABASE_KEY;}
   async function api(table,query,opt){var url=SUPABASE_URL+'/rest/v1/'+table+(query||'');var o=opt||{};o.headers=o.headers||{};o.headers.apikey=SUPABASE_KEY;o.headers.Authorization='Bearer '+await token();if(o.body){o.headers['Content-Type']='application/json';o.headers.Prefer='return=representation';}var r=await fetch(url,o);if(!r.ok){throw new Error(await r.text());}return await r.json();}
   function supportLabel(s){return text(s.name_fr)||text(s.name_en)||text(s.code);}
