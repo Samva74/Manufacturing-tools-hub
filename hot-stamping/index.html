@@ -837,8 +837,8 @@ function calc(){
   
 if(!s||!f){
 
-    $('parameterStatus').textContent =
-        '⚪ Aucun paramètre trouvé';
+    el('parameterStatus').textContent =
+    '⚪ Aucun paramètre trouvé';
 
     clearValues();
 
@@ -850,14 +850,14 @@ if(!s||!f){
     f.quality === 'validated'
 ){
 
-    $('parameterStatus').textContent =
-        '✅ Paramètre validé atelier';
+    el('parameterStatus').textContent =
+    '✅ Paramètre validé atelier';
 
 }
 else{
 
-    $('parameterStatus').textContent =
-        '🟠 Paramètre à valider';
+    el('parameterStatus').textContent =
+    '🟠 Paramètre à valider';
 
 }
   
