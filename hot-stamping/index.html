@@ -9,12 +9,35 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../auth-guard.js"></script>
 <style>
-:root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--soft:#e5e5df;--valid:#d9eadb;--warn:#a76b00}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:18px}.wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:14px}
+:root{--bg:#d8d8d3;--card:#eeeeea;--card2:#f6f6f2;--line:#8d8d86;--txt:#1d1d1b;--muted:#5f5f58;--accent:#1d1d1b;--ok:#237a3b;--soft:#e5e5df;--valid:#d9eadb;--warn:#a76b00}*{box-sizing:border-box}
+  html,
+body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    padding:18px;
+
+    touch-action:pan-y;
+    overscroll-behavior-x:none;
+}
+  .wrap{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:14px}
   .logo{width:76px;height:76px;border:2px solid var(--txt);border-radius:20px;background:#e0e1dd;display:grid;place-items:center}
   .logo svg{width:54px;height:54px}
   .title h1{margin:0;font-size:31px}
   .title p{margin:4px 0 0;color:var(--muted);font-size:14px}
-  .top-actions{display:flex;gap:8px;align-items:center;flex-wrap:nowrap}
+  .top-actions{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+}
   .hub-btn,
   .role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}
 .role-pill{
@@ -88,11 +111,6 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
     height:40px;
   }
 }
-.langs{
-  display:flex;
-  gap:6px;
-  align-items:center;
-}
 
 .hub-btn,
 .langs button,
@@ -134,6 +152,16 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
     color:#666;
     border:1px solid #bdbdbd;
 }
+    .top-actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+
+  .langs{
+    width:100%;
+    flex-wrap:wrap;
+    justify-content:flex-start;
+  }
   
 </style>
 </head>
@@ -731,7 +759,12 @@ function el(id){return document.getElementById(id);}
   function num(v,def){var n=Number(v);return Number.isFinite(n)?n:def;}
   function factor(v){var n=Number(v);return Number.isFinite(n)&&n>0?n:1;}
   function toast(msg){var t=el('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}
-  function goHub(){location.href='/';}
+  function goHub(){
+
+    window.location.href =
+        '/index.html';
+
+}
   async function token(){var s=(await sb.auth.getSession()).data.session;return s&&s.access_token?s.access_token:SUPABASE_KEY;}
   async function api(table,query,opt){var url=SUPABASE_URL+'/rest/v1/'+table+(query||'');var o=opt||{};o.headers=o.headers||{};o.headers.apikey=SUPABASE_KEY;o.headers.Authorization='Bearer '+await token();if(o.body){o.headers['Content-Type']='application/json';o.headers.Prefer='return=representation';}var r=await fetch(url,o);if(!r.ok){throw new Error(await r.text());}return await r.json();}
   function supportLabel(s){return text(s.name_fr)||text(s.name_en)||text(s.code);}
