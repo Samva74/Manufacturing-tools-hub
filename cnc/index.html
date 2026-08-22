@@ -694,7 +694,12 @@ async function api(table,opt={}){
   return r.json();
 }
 function toast(t){let e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2200)}
-function goHub(){location.href='/'}
+function goHub(){
+
+    window.location.href =
+        '/index.html';
+
+}
 function loc(r,b){return r?.[b+'_'+lang]||r?.[b+'_fr']||r?.[b]||''}
 function setLang(l){lang=l;localStorage.setItem(APP+'_lang',l);refreshText()}
 function refreshText(){document.querySelectorAll('[data-t]').forEach(e=>e.textContent=TXT[lang][e.dataset.t]||TXT.fr[e.dataset.t]||'');document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));fillLists();calc()}
