@@ -674,7 +674,14 @@ body:not(.can-edit) .parameter-save-btn{
         </div>
         <div class="col">
           <section class="card">
-            <h2><span class="dot"></span><span data-t="quickRead"></span></h2>
+            <h2>
+              <span class="dot"></span>
+              <span data-t="quickRead"></span>
+            </h2>
+            <div
+    id="parameterStatus"
+    class="status">
+</div>
             <div class="res-big valid">
               <div class="lbl" data-t="temperature"></div>
               <div class="val"><span id="rTemp">–</span></div>
@@ -1974,28 +1981,32 @@ if (machineParameter) {
 
     if (!parameter) {
 
-        $('rTemp').textContent = '–';
-        $('rPress').textContent = '–';
-        $('rDwell').textContent = '–';
+    $('parameterStatus').textContent =
+        '⚪ Aucun paramètre trouvé';
 
-        $('cTemp').value = '';
-        $('cPress').value = '';
-        $('cDwell').value = '';
+    $('rTemp').textContent = '–';
+    $('rPress').textContent = '–';
+    $('rDwell').textContent = '–';
 
-        const selectedMaterial = materials.find(
-            material =>
-                material.code === $('material').value
-        );
+    $('cTemp').value = '';
+    $('cPress').value = '';
+    $('cDwell').value = '';
 
-        $('note').textContent =
-            selectedMaterial
-                ? selectedMaterial.note || ''
-                : '';
+    return;
 
-        return;
+}
+if (parameter.quality === 'validated') {
 
-    }
+    $('parameterStatus').textContent =
+        '✅ Paramètre validé atelier';
 
+}
+else {
+
+    $('parameterStatus').textContent =
+        '🟠 Paramètre à valider';
+
+}
 
     /* =========================================
        Lecture rapide
