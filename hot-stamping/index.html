@@ -32,6 +32,12 @@ body{
   .logo svg{width:54px;height:54px}
   .title h1{margin:0;font-size:31px}
   .title p{margin:4px 0 0;color:var(--muted);font-size:14px}
+  .top-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:nowrap;
+}
   .hub-btn,
   .role-pill{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 14px;color:var(--txt);font-weight:850;text-decoration:none;cursor:pointer}
 .role-pill{
@@ -92,7 +98,6 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
   .title h1{font-size:24px}
   .logo{width:64px;height:64px}
   .logo img{width:46px;height:46px}
-
   .role-pill{
     height:40px;
     font-size:14px;
@@ -105,6 +110,16 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
   .langs button{
     height:40px;
   }
+  .top-actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+
+  .langs{
+    width:100%;
+    flex-wrap:wrap;
+    justify-content:flex-start;
+}
 }
 
 .hub-btn,
@@ -146,16 +161,6 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
     background:#ececec;
     color:#666;
     border:1px solid #bdbdbd;
-}
-    .top-actions{
-    width:100%;
-    flex-wrap:wrap;
-  }
-
-  .langs{
-    width:100%;
-    flex-wrap:wrap;
-    justify-content:flex-start;
 }
   
 </style>
