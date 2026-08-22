@@ -2739,6 +2739,165 @@ function fillLaserParameterModal() {
     });
 
 }
+
+async function saveNewLaserParameter() {
+
+    try {
+
+        let machineId =
+            $('newParameterMachine').value;
+
+        let materialCode =
+            $('newParameterMaterial').value;
+
+
+        /* ==========================
+           NOUVELLE MACHINE
+           ========================== */
+
+        if ($('createNewMachine*).checked) {
+
+            const ro*s =
+                await api(
+   *                'laser_machines',
+*                   {
+             *          m:'POST',
+              *         b:{
+                     *      name:
+                      *         $('newLaserMachineName').*alue,
+
+                            watt:
+                                Number(
+                                    $('newLaserMachineWatt').value || 0
+                                ),
+
+                            lens:
+                                $('newLaserMachineLens').value,
+
+                            site:
+                                $('newLaserMachineSite').value
+                        }
+                    }
+                );
+
+            machineId = rows[0].id;
+
+        }
+
+
+        /* ==========================
+           NOUVELLE MATIÈRE
+           ========================== */
+
+        if ($('createNewMateria*').checked) {
+
+            await a*i(
+                'laser_material*',
+                {
+             *      m:'POST',
+                  * b:{
+                        code:*                            $('new*aserMaterialCode').value,
+
+       *                name_fr:
+         *                  $('newLaserMater*alNameFr').value,
+
+               *        name_en:
+                            $('newLaserMaterialNameEn').value,
+
+                        name_pt:
+                            $('newLaserMaterialNamePt').value,
+
+                        family:
+                            $('newLaserMaterialFamily').value,
+
+                        note:
+                            $('newLaserMaterialNote').value
+                    }
+                }
+            );
+
+            materialCode =
+                $('newLaserMaterialCode').value;
+
+        }
+
+
+        /* ==========================
+           PARAMÈTRE LASER
+           ========================== */
+
+        await api(
+            *laser_parameters',
+            {
+ *              m:'POST',
+          *     b:{
+                    machi*e_id:
+                        mach*neId,
+
+                    materia*_code:
+                        mat*rialCode,
+
+                    thi*kness_mm:
+                        *umber(
+                           *$('newParameterThickness').value
+ *                      ),
+
+        *           operation:
+            *           $('newParameterOperatio*').value,
+
+                    pow*r_percent:
+                       *Number(
+                          * $('newParameterPower').value
+    *                   ),
+
+           *        speed_mm_s:
+              *         Number(
+                 *          $('newParameterSpeed').v*lue
+                        ),
+
+  *                 passes:
+         *              Number(
+            *               $('newParameterPass*s').value
+                        *,
+
+                    quality:
+  *                     'validated',
+*                    updated_by_user_id:
+                        user?.id || null,
+
+                    updated_by_email:
+                        user?.email || null,
+
+                    updated_at:
+                        new Date().toISOString()
+                }
+            }
+        );
+
+
+        await loadLibraries();
+
+        fillLists();
+
+        closeLaserParameterModal();
+
+        toast(
+            'Paramètre Laser créé'
+        );
+
+    } catch(error) {
+
+        console.error(
+            error
+        );
+
+        toast(
+            'Erreur création paramètre'
+        );
+
+    }
+
+}
       
       async function init() {
         await initAuth();
