@@ -813,6 +813,8 @@ body:not(.can-edit) .parameter-save-btn{
             min="1"
             step="1">
 
+        </div>
+        
         <span class="unit">
           W
         </span>
@@ -976,54 +978,69 @@ body:not(.can-edit) .parameter-save-btn{
 
 </div>
       
-    <label>
-      Puissance
-    </label>
+    <div class="row">
 
-    <div class="input-unit">
+    <div>
 
-      <input
-          id="newParameterPower"
-          type="number"
-          min="0"
-          max="100"
-          step="0.1">
+        <label>
+            Puissance
+        </label>
 
-      <span class="unit">
-        %
-      </span>
+        <div class="input-unit">
 
-    </div>
+            <input
+                id="newParameterPower"
+                type="number"
+                min="0"
+                max="100"
+                step="0.1">
 
-    <label>
-      Vitesse
-    </label>
+            <span class="unit">
+                %
+            </span>
 
-    <div class="input-unit">
-
-      <input
-          id="newParameterSpeed"
-          type="number"
-          min="0"
-          step="0.1">
-
-      <span class="unit">
-        mm/s
-      </span>
+        </div>
 
     </div>
 
-    <label>
-      Nombre de passes
-    </label>
+    <div>
 
-    <input
-        id="newParameterPasses"
-        type="number"
-        min="1"
-        step="1"
-        value="1">
+        <label>
+            Vitesse
+        </label>
 
+        <div class="input-unit">
+
+            <input
+                id="newParameterSpeed"
+                type="number"
+                min="0"
+                step="0.1">
+
+            <span class="unit">
+                mm/s
+            </span>
+
+        </div>
+
+    </div>
+
+    <div>
+
+        <label>
+            Nombre de passes
+        </label>
+
+        <input
+            id="newParameterPasses"
+            type="number"
+            min="1"
+            step="1"
+            value="1">
+
+    </div>
+
+</div>
     <label>
       Commentaires / observations
     </label>
