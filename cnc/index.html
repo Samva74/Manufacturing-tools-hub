@@ -62,7 +62,32 @@
 .langs button{
     height:40px;
 }
+.status-banner{
+    margin-bottom:12px;
+    padding:12px;
+    border-radius:12px;
+    font-weight:700;
+    text-align:center;
+}
 
+.status-validated{
+    background:#d9eadb;
+    color:#237a3b;
+    border:1px solid #237a3b;
+}
+
+.status-pending{
+    background:#fff3cd;
+    color:#856404;
+    border:1px solid #856404;
+}
+
+.status-missing{
+    background:#ececec;
+    color:#666;
+    border:1px solid #bdbdbd;
+}
+    
 </style>
 </head>
 <body>
@@ -257,6 +282,10 @@
     <div class="col">
       <section class="card">
         <h2><span class="dot"></span><span data-t="quickRead">Lecture rapide</span></h2>
+          <div
+    id="parameterStatus"
+    class="status-banner">
+</div>
         <div class="res-big valid"><div class="lbl" data-t="spindle">Rotation à programmer</div><div class="val"><span id="rpm">–</span></div></div>
         <div class="res-big"><div class="lbl" data-t="feed">Avance à programmer</div><div class="val"><span id="feed">–</span></div></div>
         <div class="res-line"><span>Vc min/rec/max</span><b id="vc">–</b></div>
@@ -815,7 +844,8 @@ function toggleSawEdit(){
 
 function num(v){const n=parseFloat(String(v??'').replace(',','.'));return Number.isFinite(n)?n:null}
 function mmRange(a,b,d){a=num(a);b=num(b);if(a===null||b===null||a===0&&b===0)return '–';return `${(a*d).toFixed(1).replace('.',',')} à ${(b*d).toFixed(1).replace('.',',')} mm`}
-function calc(){
+
+    function calc(){
   syncOperationWithTool();
   let t=selectedTool();
   let ma=
@@ -844,7 +874,32 @@ document.getElementById('productionSite').value =
   const sawMode=isSawMode();
   let d=sawMode ? (+$('sawDiameter').value||160) : (+$('diameter').value||12);
   let z=sawMode ? (+$('sawTeeth').value||48) : (+$('flutes').value||2);
-  if(!t){$('rpm').textContent='–';$('feed').textContent='–';return;}
+        
+  if(!t){
+
+    $('parameterStatus').textContent =
+        '⚪ Aucun paramètre trouvé';
+
+    $('rpm').textContent='–';
+    $('feed').textContent='–';
+
+    return;
+}
+if(
+    t.quality ===
+    'validated'
+){
+
+    $('parameterStatus').textContent =
+        '✅ Paramètre validé atelier';
+
+}
+else{
+
+    $('parameterStatus').textContent =
+        '🟠 Paramètre à valider';
+
+}
   let vc=num(t.vc_rec)||180, fz=num(t.fz_rec)||0.04;
   let nTheo=vc*1000/(Math.PI*d);
   let nLimit=(+ma.n_max||24000)*(+ma.safety_n||1);
