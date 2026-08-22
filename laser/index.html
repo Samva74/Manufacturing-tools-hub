@@ -1044,6 +1044,16 @@ body:not(.can-edit) .parameter-save-btn{
     </label>
 
     <textarea id="newParameterComments"></textarea>
+    
+    <label class="check-line">
+
+    <input
+        id="validatedParameter"
+        type="checkbox">
+
+    ✅ Paramètre validé atelier
+
+</label>
 
 
     <!-- ENREGISTREMENT -->
@@ -3229,7 +3239,9 @@ async function saveNewLaserParameter() {
                             passes,
 
                         quality:
-                            'validated',
+    document.getElementById('validatedParameter')?.checked
+        ? 'validated'
+        : 'to_validate',
 
                         created_by_user_id:
                             user?.id || null,
