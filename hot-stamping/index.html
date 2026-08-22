@@ -761,8 +761,9 @@ function el(id){return document.getElementById(id);}
   function toast(msg){var t=el('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},2200);}
   function goHub(){
 
-    window.location.href =
-        '/index.html';
+    alert(
+        window.location.href
+    );
 
 }
   async function token(){var s=(await sb.auth.getSession()).data.session;return s&&s.access_token?s.access_token:SUPABASE_KEY;}
