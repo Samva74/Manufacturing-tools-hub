@@ -1324,20 +1324,102 @@ body:not(.can-edit) .parameter-save-btn{
       let materials = [],
         params = [],
         machines = [];
+
+      async function loadAllRows(
+    tableName,
+    orderExpression
+) {
+
+    const pageSize = 500;
+
+    let offset = 0;
+
+    let allRows = [];
+
+    while (true) {
+
+        const page = await api(
+            tableName,
+            {
+                q:
+                    '?select=*' +
+                    '&order=' +
+                    orderExpression +
+                    '&limit=' +
+                    pageSize +
+                    '&offset=' +
+                    offset
+            }
+        );
+
+        if (!Array.isArray(page)) {
+
+            throw new Error(
+                'Reponse invalide pour la table ' +
+                tableName
+            );
+
+        }
+
+        allRows.push(
+            ...page
+        );
+
+        if (page.length < pageSize) {
+
+            break;
+
+        }
+
+        offset += pageSize;
+
+    }
+
+    return allRows;
+
+}
+      
       async function loadLibraries() {
-        materials = await api('laser_materials', {
-          q: '?select=*&order=name_fr.asc'
-        });
-        params = await api('laser_parameters', {
-          q: '?select=*&order=material_code.asc'
-        });
-        machines = await api('laser_machines', {
-          q: '?select=*&order=name.asc'
-        });
-        if (!machines.length) machines = [{
-          name: 'Générique CO₂ 80W'
-        }]
-      }
+
+    materials =
+        await loadAllRows(
+            'laser_materials',
+            'name_fr.asc,code.asc'
+        );
+
+    params =
+        await loadAllRows(
+            'laser_parameters',
+            'material_code.asc,id.asc'
+        );
+
+    machines =
+        await loadAllRows(
+            'laser_machines',
+            'name.asc,id.asc'
+        );
+
+    if (!machines.length) {
+
+        machines = [
+            {
+                id: '',
+                name: 'Generique CO2 80W'
+            }
+        ];
+
+    }
+
+    console.log(
+        'Bibliotheque Laser chargee',
+        {
+            materials: materials.length,
+            parameters: params.length,
+            machines: machines.length
+        }
+    );
+
+}
 
       function loc(r, b) {
         return r[b + '_' + lang] || r[b + '_fr'] || r[b] || ''
@@ -1974,33 +2056,47 @@ if (machineParameter) {
 
         'Recherche machine',
 
-        machines.map(machine => ({
+        machines.map(
+            machine => ({
 
-            title: machine.name,
+                title:
+                    machine.name,
 
-            sub:
-                (machine.watt
-                    ? machine.watt + ' W'
-                    : '') +
+                sub:
+                    (
+                        machine.watt
+                            ? machine.watt + ' W'
+                            : ''
+                    ) +
+                    (
+                        machine.site
+                            ? ' - ' + machine.site
+                            : ''
+                    ),
 
-                (machine.site
-                    ? ' · ' + machine.site
-                    : ''),
+                search: [
 
-            search: [
-                machine.name,
-                machine.watt,
-                machine.lens,
-                machine.site
-            ].join(' '),
+                    machine.name,
+                    machine.watt,
+                    machine.lens,
+                    machine.site
 
-            value: String(machine.id)
+                ].join(' '),
 
-        })),
+                value:
+                    String(
+                        machine.id
+                    )
+
+            })
+        ),
 
         machineId => {
 
-            $('machine').value = machineId;
+            $('machine').value =
+                machineId;
+
+            fillThicknessList();
 
             fillOperationList();
 
@@ -2023,23 +2119,32 @@ if (machineParameter) {
 
     openSearch(
 
-        'Recherche matière',
+        'Recherche matiere',
 
         materials.map(
             material => ({
 
                 title:
-                    loc(material, 'name'),
+                    loc(
+                        material,
+                        'name'
+                    ),
 
                 sub:
                     material.code +
-                    ' · ' +
-                    (material.family || ''),
+                    (
+                        material.family
+                            ? ' - ' + material.family
+                            : ''
+                    ),
 
                 search: [
 
                     material.code,
-                    loc(material, 'name'),
+                    loc(
+                        material,
+                        'name'
+                    ),
                     material.family,
                     material.note
 
@@ -2055,6 +2160,8 @@ if (machineParameter) {
 
             $('material').value =
                 materialCode;
+
+            fillThicknessList();
 
             fillOperationList();
 
