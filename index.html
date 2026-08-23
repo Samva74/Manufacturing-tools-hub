@@ -202,7 +202,10 @@
 
   </a>
 
- <a class="card admin-only" href="/admin-users/">
+ <a
+    id="userAdminCard"
+    class="card admin-only"
+    href="/admin-users/">
     <div class="app-icon">
 
         <svg viewBox="0 0 100 100"
@@ -241,6 +244,21 @@ window.authReady.then(async()=>{
 
   const r =
       await window.appAuth.getRole();
+
+  const adminCard =
+    document.getElementById(
+        'userAdminCard'
+    );
+
+if(
+    adminCard &&
+    r !== 'admin'
+){
+
+    adminCard.style.display =
+        'none';
+
+}
 
   const btn =
       document.getElementById(
