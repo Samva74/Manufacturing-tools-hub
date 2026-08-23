@@ -879,6 +879,9 @@ function mmRange(a,b,d){a=num(a);b=num(b);if(a===null||b===null||a===0&&b===0)re
     function calc(){
   syncOperationWithTool();
   let t=selectedTool();
+
+console.log(t);
+        
   let ma=
     machines.find(
       m=>m.name===$('machine').value
