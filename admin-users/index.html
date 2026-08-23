@@ -484,6 +484,16 @@ async function loadUsers(){
 
         </button>
 
+        <button
+    class="delete-btn"
+    data-user-id="${user.user_id}"
+    data-email="${user.email}"
+    data-role="${user.role}">
+
+    🗑️ Supprimer utilisateur
+
+</button>
+
     </div>
 
 `;
@@ -520,6 +530,24 @@ if(pwdBtn){
             await resetUserPassword(
                 user.user_id,
                 user.email
+            );
+
+        };
+
+}
+
+const deleteBtn =
+    div.querySelector('.delete-btn');
+
+if(deleteBtn){
+
+    deleteBtn.onclick =
+        async()=>{
+
+            await deleteUser(
+                user.user_id,
+                user.email,
+                user.role
             );
 
         };
@@ -883,6 +911,140 @@ admin`,
     );
 
     await loadUsers();
+
+}
+
+    /* =========================================================
+   SUPPRESSION D'UN UTILISATEUR
+   ========================================================= */
+
+async function deleteUser(
+    userId,
+    email,
+    userRole
+){
+
+    const session =
+        (
+            await sb.auth.getSession()
+        ).data.session;
+
+    if(!session){
+
+        alert(
+            'Session administrateur expirée. Reconnecte-toi.'
+        );
+
+        return;
+
+    }
+
+    /*
+       Protection :
+       l'administrateur connecté ne peut pas
+       supprimer son propre compte.
+    */
+
+    if(
+        session.user.id === userId
+    ){
+
+        alert(
+`Suppression impossible
+
+Tu ne peux pas supprimer ton propre compte administrateur.`
+        );
+
+        return;
+
+    }
+
+    const confirmed =
+        confirm(
+`⚠️ Supprimer définitivement cet utilisateur ?
+
+Utilisateur :
+${email}
+
+Rôle :
+${userRole || '-'}
+
+Cette action supprimera :
+• le compte de connexion ;
+• le rôle de l'utilisateur ;
+• son accès au Manufacturing Tools Hub.
+
+Cette action est irréversible.`
+        );
+
+    if(!confirmed){
+        return;
+    }
+
+    /*
+       Deuxième confirmation pour éviter
+       une suppression accidentelle.
+    */
+
+    const finalConfirmation =
+        prompt(
+`Pour confirmer la suppression, saisissez exactement :
+
+SUPPRIMER`
+        );
+
+    if(
+        finalConfirmation !==
+        'SUPPRIMER'
+    ){
+
+        if(finalConfirmation !== null){
+
+            alert(
+                'Suppression annulée : confirmation incorrecte.'
+            );
+
+        }
+
+        return;
+
+    }
+
+    try{
+
+        await callAdminManageUser({
+
+            action:
+                'delete-user',
+
+            userId:
+                userId
+
+        });
+
+        alert(
+`Utilisateur supprimé avec succès
+
+${email}
+
+Le compte ne peut désormais plus se connecter au Manufacturing Tools Hub.`
+        );
+
+        await loadUsers();
+
+    }catch(error){
+
+        console.error(
+            'deleteUser',
+            error
+        );
+
+        alert(
+            error.message ||
+            'Suppression utilisateur impossible'
+        );
+
+    }
 
 }
 
