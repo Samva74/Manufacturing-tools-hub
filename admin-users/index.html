@@ -263,25 +263,18 @@ select{
         <label>Mot de passe généré</label>
         <input id="password" readonly>
 
-        <div class="actions">
+       <div class="actions">
 
-            <button
-                id="generateBtn"
-                class="btn secondary">
+    <button
+        id="createBtn"
+        class="btn">
 
-                Générer
+        Créer utilisateur
 
-            </button>
+    </button>
 
-            <button
-                id="createBtn"
-                class="btn">
+</div>
 
-                Créer utilisateur
-
-            </button>
-
-        </div>
 
     </div>
 
@@ -1173,13 +1166,6 @@ ${password}
     await loadUsers();
 
 }
-
-document
-.getElementById(
-    'generateBtn'
-)
-.onclick =
-generatePassword;
 
 document
 .getElementById(
