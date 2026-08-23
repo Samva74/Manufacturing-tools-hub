@@ -1,0 +1,16 @@
+{
+  "name": "Manufacturing Tools Hub",
+  "short_name": "Tool App",
+  "description": "CNC, Hot Stamping & Laser Calculators",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#d8d8d3",
+  "theme_color": "#d8d8d3",
+  "icons": [
+    {
+      "src": "/toolapp-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
