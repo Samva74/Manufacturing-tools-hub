@@ -625,6 +625,21 @@ body:not(.can-edit) .parameter-save-btn{
     </button>
 
 </h2>
+
+        <label>Site</label>
+
+<div class="inputline">
+
+    <select id="site"></select>
+
+    <button
+        class="search-btn"
+        style="visibility:hidden">
+        🔍
+    </button>
+
+</div>
+
         <label data-t="machine"></label>
 
 <div class="inputline">
@@ -1082,9 +1097,28 @@ body:not(.can-edit) .parameter-save-btn{
       const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       const $ = id => document.getElementById(id);
       let lang = localStorage.getItem(APP + '_lang') || 'fr',
-        user = null,
-        role = 'user';
-      const canEdit = () => ['expert', 'admin'].includes(role);
+    user = null,
+    role = 'user',
+    userSiteId = null;
+
+const canEdit = () =>
+    ['expert_site', 'expert', 'admin'].includes(role);
+
+const canWriteSelectedSite = () => {
+
+    if (role === 'admin' || role === 'expert') {
+        return true;
+    }
+
+    if (role === 'expert_site') {
+        return (
+            userSiteId !== null &&
+            String($('site').value) === String(userSiteId)
+        );
+    }
+
+    return false;
+};
       async function token() {
         return (await sb.auth.getSession()).data.session?.access_token || SUPABASE_KEY
       }
@@ -1130,13 +1164,64 @@ body:not(.can-edit) .parameter-save-btn{
         calc()
       }
       async function initAuth() {
-        await window.authReady;
-        user = await window.appAuth.getUser();
-        role = await window.appAuth.getRole();
-        let rp = $('rolePill');
-        if (rp) rp.textContent = (user?.email || '');
-        if (canEdit()) document.body.classList.add('can-edit')
-      }
+
+    await window.authReady;
+
+    user = await window.appAuth.getUser();
+
+    role = await window.appAuth.getRole();
+
+    userSiteId = null;
+
+    if (user?.id) {
+
+        try {
+
+            const roleRows = await api(
+                'user_roles',
+                {
+                    q:
+                        '?select=role,site_id' +
+                        '&user_id=eq.' +
+                        encodeURIComponent(user.id) +
+                        '&limit=1'
+                }
+            );
+
+            if (
+                Array.isArray(roleRows) &&
+                roleRows.length
+            ) {
+
+                role =
+                    roleRows[0].role || role;
+
+                userSiteId =
+                    roleRows[0].site_id ?? null;
+            }
+
+        } catch (error) {
+
+            console.warn(
+                'Impossible de charger le site utilisateur',
+                error
+            );
+        }
+    }
+
+    const rolePill = $('rolePill');
+
+    if (rolePill) {
+
+        rolePill.textContent =
+            user?.email || '';
+    }
+
+    if (canEdit()) {
+
+        document.body.classList.add('can-edit');
+    }
+}
       async function audit(table, record, action, field, oldv, newv) {
         try {
           await api('library_history', {
@@ -1333,7 +1418,8 @@ body:not(.can-edit) .parameter-save-btn{
       };
       let materials = [],
         params = [],
-        machines = [];
+        machines = [],
+        sites = [];
 
       async function loadAllRows(
     tableName,
@@ -1391,6 +1477,11 @@ body:not(.can-edit) .parameter-save-btn{
       
       async function loadLibraries() {
 
+    sites =
+        await loadAllRows(
+            'production_sites',
+            'site_name.asc,id.asc'
+        );
     materials =
         await loadAllRows(
             'laser_materials',
@@ -1438,10 +1529,64 @@ body:not(.can-edit) .parameter-save-btn{
       function fillLists() {
 
     /* =========================================
+       SITE
+       ========================================= */
+
+    const siteSelect =
+        $('site');
+
+    const previousSite =
+        siteSelect.value;
+
+    siteSelect.innerHTML = '';
+
+    sites.forEach(site => {
+
+        siteSelect.add(
+            new Option(
+                site.site_name,
+                String(site.id)
+            )
+        );
+    });
+
+    if (
+        previousSite &&
+        sites.some(
+            site =>
+                String(site.id) ===
+                String(previousSite)
+        )
+    ) {
+
+        siteSelect.value =
+            String(previousSite);
+
+    } else if (
+        role === 'expert_site' &&
+        userSiteId !== null
+    ) {
+
+        siteSelect.value =
+            String(userSiteId);
+
+    } else {
+
+        siteSelect.value = '1';
+    }
+
+    siteSelect.disabled = false;
+
+    updateWriteAccess();
+
+    /* =========================================
        MACHINE
        ========================================= */
 
     const machineSelect =
+        $('machine');
+        
+        const machineSelect =
         $('machine');
 
     const previousMachineId =
@@ -1528,7 +1673,10 @@ body:not(.can-edit) .parameter-save-btn{
 
 function fillThicknessList() {
 
-    const thicknessSelect =
+   const selectedSiteId =
+String($('site').value || '1'); 
+  
+  const thicknessSelect =
         $('thickness');
 
     if (!thicknessSelect) {
@@ -1560,9 +1708,15 @@ function fillThicknessList() {
 
             return (
 
-                String(
-                    parameter.machine_id || ''
-                ) === selectedMachineId
+                String(parameter.site_id || '1')
+===
+selectedSiteId
+
+&&
+
+String(parameter.machine_id || '')
+===
+selectedMachineId
 
                 &&
 
@@ -1583,7 +1737,11 @@ function fillThicknessList() {
 
                 return (
 
-                    !parameter.machine_id
+                  String(parameter.site_id || '1') ===
+selectedSiteId
+
+&&  
+                  !parameter.machine_id
 
                     &&
 
@@ -1696,7 +1854,10 @@ console.log(
 }
 function fillOperationList() {
 
-    const operationSelect = $('operation');
+  const selectedSiteId =
+String($('site').value || '1');  
+  
+  const operationSelect = $('operation');
 
     const selectedMachineId =
     String($('machine').value || '');
@@ -1722,7 +1883,14 @@ function fillOperationList() {
 
         return (
 
-            String(
+
+          String(parameter.site_id || '1')
+===
+selectedSiteId  
+          
+            &&
+          
+          String(
                 parameter.machine_id || ''
             ) === selectedMachineId
 
@@ -1759,7 +1927,11 @@ function fillOperationList() {
 
             return (
 
-                !parameter.machine_id
+              String(parameter.site_id || '1') ===
+selectedSiteId
+
+&&  
+              !parameter.machine_id
 
                 &&
 
@@ -1885,7 +2057,10 @@ function fillOperationList() {
       
      function sp() {
        
-    const selectedMachineId =
+        const selectedSiteId =
+String($('site').value || '1');
+       
+       const selectedMachineId =
     String($('machine').value || '');
 
     const selectedMaterialCode =
@@ -1908,7 +2083,13 @@ function fillOperationList() {
 
         return (
 
-            String(parameter.machine_id || '') ===
+          String(parameter.site_id || '1')
+===
+selectedSiteId  
+          
+            &&
+          
+          String(parameter.machine_id || '') ===
                 selectedMachineId
 
             &&
@@ -2316,22 +2497,83 @@ else {
       async function addMachine() {
         toast(canEdit() ? 'Ajout disponible dans prochaine itération' : 'Droit expert/admin requis')
       }
+      function updateWriteAccess() {
+
+    const allowed =
+        canWriteSelectedSite();
+
+    const saveButton =
+        document.querySelector(
+            '.parameter-save-btn'
+        );
+
+    if (saveButton) {
+
+        saveButton.disabled =
+            !allowed;
+
+        saveButton.style.opacity =
+            allowed ? '1' : '.55';
+
+        saveButton.style.cursor =
+            allowed
+                ? 'pointer'
+                : 'not-allowed';
+    }
+
+    const addButton =
+        document.querySelector(
+            '.section-plus'
+        );
+
+    if (addButton) {
+
+        addButton.disabled =
+            !allowed;
+
+        addButton.style.opacity =
+            allowed ? '1' : '.55';
+
+        addButton.style.cursor =
+            allowed
+                ? 'pointer'
+                : 'not-allowed';
+    }
+
+    const calibrationInputs = [
+        $('cTemp'),
+        $('cPress'),
+        $('cDwell'),
+        $('comments')
+    ];
+
+    calibrationInputs.forEach(element => {
+
+        if (element) {
+            element.disabled = !allowed;
+        }
+    });
+}
+
       async function saveParameter() {
 
     /* =========================================
        1. CONTRÔLE DES DROITS
        ========================================= */
 
-    if (!canEdit()) {
+    if (!canWriteSelectedSite()) {
 
-        toast(
-            TXT[lang].editPermissionRequired ||
-            TXT.fr.editPermissionRequired
-        );
+    toast(
+        role === 'expert_site'
+            ? 'Lecture seule sur ce site'
+            : (
+                TXT[lang].editPermissionRequired ||
+                TXT.fr.editPermissionRequired
+            )
+    );
 
-        return;
-
-    }
+    return;
+}
 
 
     /* =========================================
@@ -2464,7 +2706,11 @@ if (!parameter || !parameter.id) {
 
     const updateData = {
 
-    thickness_mm:
+    site_id:
+    Number(
+        $('site').value
+    ),
+      thickness_mm:
         $('thickness').value === ''
             ? null
             : Number(
@@ -2503,6 +2749,7 @@ if (!parameter || !parameter.id) {
 
         const savedRows = await api(
             'laser_parameters',
+          
             {
                 q:
                     '?id=eq.' +
@@ -2919,7 +3166,7 @@ function fillLaserParameterModal() {
 
 async function saveNewLaserParameter() {
 
-    if (!canEdit()) {
+    if (!canWriteSelectedSite()) {
 
         toast(
             TXT[lang].editPermissionRequired ||
@@ -3279,36 +3526,43 @@ async function saveNewLaserParameter() {
            CONTRÔLE D’UN DOUBLON
            ========================================= */
 
-        const existingParameter =
-            params.find(
-                parameter => {
+        const selectedSiteId =
+    String($('site').value);
 
-                    return (
+const existingParameter =
+    params.find(
+        parameter => {
 
-                        String(
-                            parameter.machine_id || ''
-                        ) === String(machineId)
+            return (
 
-                        &&
+                String(
+                    parameter.site_id || ''
+                ) === selectedSiteId
 
-                        parameter.material_code ===
-                            materialCode
+                &&
 
-                        &&
+                String(
+                    parameter.machine_id || ''
+                ) === String(machineId)
 
-                        Number(
-                            parameter.thickness_mm
-                        ) === thickness
+                &&
 
-                        &&
+                parameter.material_code ===
+                    materialCode
 
-                        parameter.operation ===
-                            operation
+                &&
 
-                    );
+                Number(
+                    parameter.thickness_mm
+                ) === thickness
 
-                }
+                &&
+
+                parameter.operation ===
+                    operation
             );
+        }
+    );
 
         if (existingParameter) {
 
@@ -3326,18 +3580,23 @@ async function saveNewLaserParameter() {
            ========================================= */
 
         const parameterRows =
-            await api(
-                'laser_parameters',
-                {
-                    m: 'POST',
+    await api(
+        'laser_parameters',
+        {
+            m: 'POST',
 
-                    b: {
+            b: {
 
-                        machine_id:
-                            machineId,
+                site_id:
+                    Number(
+                        $('site').value
+                    ),
 
-                        material_code:
-                            materialCode,
+                machine_id:
+                    machineId,
+
+                material_code:
+                    materialCode,
 
                         thickness_mm:
                             thickness,
@@ -3558,6 +3817,19 @@ $('thickness').addEventListener(
 $('operation').addEventListener(
     'change',
     calc
+);
+$('site').addEventListener(
+    'change',
+    () => {
+
+        fillThicknessList();
+
+        fillOperationList();
+
+        calc();
+
+        updateWriteAccess();
+    }
 );
       }
       
