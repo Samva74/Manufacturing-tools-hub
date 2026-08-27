@@ -1125,30 +1125,26 @@ const canWriteSelectedSite = () => {
     const selectedSiteId =
         String($('site')?.value ?? '0');
 
-    /* AUCUN affiche tous les sites,
-       mais reste en lecture seule */
-
-    if (selectedSiteId === '0')*{
+    if (selectedSiteId === '0') {
         return false;
     }
 
-   *if (
+    if (
         role === 'admin' ||
- *      role === 'expert'
+        role === 'expert'
     ) {
-  *     return true;
+        return true;
     }
 
-    if (r*le === 'expert_site') {
+    if (role === 'expert_site') {
 
-        r*turn (
-            userSiteId !== *ull &&
-            selectedSiteId *==
-                String(userSite*d)
+        return (
+            userSiteId !== null &&
+            selectedSiteId === String(userSiteId)
         );
     }
 
-    return fa*se;
+    return false;
 };
       async function token() {
         return (await sb.auth.getSession()).data.session?.access_token || SUPABASE_KEY
