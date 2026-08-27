@@ -1582,10 +1582,7 @@ const canWriteSelectedSite = () => {
     /* =========================================
        MACHINE
        ========================================= */
-
-    const machineSelect =
-        $('machine');
-        
+      
         const machineSelect =
         $('machine');
 
@@ -2128,6 +2125,12 @@ if (machineParameter) {
 
         return (
 
+            String(
+                parameter.site_id || '1'
+            ) === selectedSiteId
+
+            &&
+
             !parameter.machine_id
 
             &&
@@ -2147,9 +2150,7 @@ if (machineParameter) {
 
             parameter.operation ===
                 selectedOperation
-
         );
-
     }
 );
 }
@@ -2375,24 +2376,41 @@ else {
 
       function searchParam() {
 
+    const selectedSiteId =
+        String($('site').value || '1');
+
     const selectedMachineId =
         String($('machine').value || '');
 
+    let searchableParameters =
+        params.filter(
+            parameter =>
 
-    let searchableParameters = params.filter(
-        parameter =>
-            String(parameter.machine_id || '') ===
-            selectedMachineId
-    );
+                String(
+                    parameter.site_id || '1'
+                ) === selectedSiteId
 
+                &&
+
+                String(
+                    parameter.machine_id || ''
+                ) === selectedMachineId
+        );
 
     if (!searchableParameters.length) {
 
-        searchableParameters = params.filter(
-            parameter =>
-                !parameter.machine_id
-        );
+        searchableParameters =
+            params.filter(
+                parameter =>
 
+                    String(
+                        parameter.site_id || '1'
+                    ) === selectedSiteId
+
+                    &&
+
+                    !parameter.machine_id
+            );
     }
 
 
