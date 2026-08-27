@@ -1491,7 +1491,7 @@ const canWriteSelectedSite = () => {
             'name.asc,id.asc'
         ); 
         
-        console.log('MACHINES', machines);
+        console.table(machines);
         
     materials =
         await loadAllRows(
@@ -1577,10 +1577,12 @@ const canWriteSelectedSite = () => {
         siteSelect.value =
             String(userSiteId);
 
-    } else {
+    } else if (sites.length) {
 
-        siteSelect.value = '1';
-    }
+    siteSelect.value = String(
+        sites[0].id
+    );
+}
 
     siteSelect.disabled = false;
 
