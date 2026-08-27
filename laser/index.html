@@ -1104,20 +1104,51 @@ body:not(.can-edit) .parameter-save-btn{
 const canEdit = () =>
     ['expert_site', 'expert', 'admin'].includes(role);
 
-const canWriteSelectedSite = () => {
+const matchesSelectedSite = parameter => {
 
-    if (role === 'admin' || role === 'expert') {
+    const selectedSiteId =
+        String($('site')?.value ?? '0');
+
+    if (selectedSiteId === '0') {
         return true;
     }
 
-    if (role === 'expert_site') {
-        return (
-            userSiteId !== null &&
-            String($('site').value) === String(userSiteId)
+    return (
+        String(parameter.site_id ?? '') ===
+        selectedSiteId
+    );
+};
+
+
+const canWriteSelectedSite = () => {
+
+    const selectedSiteId =
+        String($('site')?.value ?? '0');
+
+    /* AUCUN affiche tous les sites,
+       mais reste en lecture seule */
+
+    if (selectedSiteId === '0')*{
+        return false;
+    }
+
+   *if (
+        role === 'admin' ||
+ *      role === 'expert'
+    ) {
+  *     return true;
+    }
+
+    if (r*le === 'expert_site') {
+
+        r*turn (
+            userSiteId !== *ull &&
+            selectedSiteId *==
+                String(userSite*d)
         );
     }
 
-    return false;
+    return fa*se;
 };
       async function token() {
         return (await sb.auth.getSession()).data.session?.access_token || SUPABASE_KEY
@@ -1714,9 +1745,11 @@ String($('site').value || '1');
 
             return (
 
-                String(parameter.site_id || '1')
-===
-selectedSiteId
+               (
+    selectedSiteId === '0'
+    ||
+    matchesSelectedSite(parameter)
+)
 
 &&
 
@@ -1738,16 +1771,20 @@ selectedMachineId
 
     if (!matchingParameters.length) {
 
-        matchingParameters =
-            params.filter(parameter => {
+    matchingParameters =
+        params.filter(parameter => {
 
-                return (
+            return (
 
-                  String(parameter.site_id || '1') ===
-selectedSiteId
+                (
+                    selectedSiteId === '0'
+                    ||
+                    matchesSelectedSite(parameter)
+                )
 
-&&  
-                  !parameter.machine_id
+                &&
+
+                !parameter.machine_id
 
                     &&
 
@@ -1890,9 +1927,11 @@ String($('site').value || '1');
         return (
 
 
-          String(parameter.site_id || '1')
-===
-selectedSiteId  
+          (
+    selectedSiteId === '0'
+    ||
+    matchesSelectedSite(parameter)
+)
           
             &&
           
@@ -1933,11 +1972,16 @@ selectedSiteId
 
             return (
 
-              String(parameter.site_id || '1') ===
-selectedSiteId
+                (
+                    selectedSiteId === '0'
+                    ||
+                    matchesSelectedSite(parameter)
+                )
 
-&&  
-              !parameter.machine_id
+                &&
+
+                !parameter.machine_id
+
 
                 &&
 
@@ -2089,9 +2133,11 @@ String($('site').value || '1');
 
         return (
 
-          String(parameter.site_id || '1')
-===
-selectedSiteId  
+          (
+    selectedSiteId === '0'
+    ||
+    matchesSelectedSite(parameter)
+) 
           
             &&
           
@@ -2134,9 +2180,11 @@ if (machineParameter) {
 
         return (
 
-            String(
-                parameter.site_id || '1'
-            ) === selectedSiteId
+            (
+                selectedSiteId === '0'
+                ||
+                matchesSelectedSite(parameter)
+            )
 
             &&
 
@@ -2395,9 +2443,11 @@ else {
         params.filter(
             parameter =>
 
-                String(
-                    parameter.site_id || '1'
-                ) === selectedSiteId
+                (
+    selectedSiteId === '0'
+    ||
+    matchesSelectedSite(parameter)
+)
 
                 &&
 
