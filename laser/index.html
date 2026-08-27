@@ -1482,6 +1482,17 @@ const canWriteSelectedSite = () => {
             'production_sites',
             'site_name.asc,id.asc'
         );
+
+        console.log('SITES', sites);
+   
+    machines =
+        await loadAllRows(
+            'laser_machines',
+            'name.asc,id.asc'
+        ); 
+        
+        console.log('MACHINES', machines);
+        
     materials =
         await loadAllRows(
             'laser_materials',
@@ -1494,11 +1505,7 @@ const canWriteSelectedSite = () => {
             'material_code.asc,id.asc'
         );
 
-    machines =
-        await loadAllRows(
-            'laser_machines',
-            'name.asc,id.asc'
-        );
+    
 
     if (!machines.length) {
 
