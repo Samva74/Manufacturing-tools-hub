@@ -254,12 +254,49 @@ select{
 
         <label>Rôle</label>
 
-        <select id="role">
-            <option value="user">User</option>
-            <option value="expert">Expert</option>
-            <option value="admin">Admin</option>
-        </select>
+<select id="role">
+    <option value="user">Utilisateur</option>
+    <option value="expert_machine">Expert Machine</option>
+    <option value="expert_global">Expert Global</option>
+    <option value="admin">Administrateur</option>
+</select>
 
+<label>Machine Laser</label>
+<select id="laserMachine">
+    <option value="">Toutes les machines Laser</option>
+</select>
+
+<label>Machine CNC</label>
+<select id="cncMachine">
+    <option value="">Toutes les machines CNC</option>
+</select>
+
+<label>Machine Hot Stamping</label>
+<select id="hotMachine">
+    <option value="">Toutes les machines Hot Stamping</option>
+</select>
+
+        <label>Application</label>
+
+<select id="application">
+    <option value="">Toutes</option>
+    <option value="laser">Laser</option>
+    <option value="cnc">CNC</option>
+    <option value="hot">Hot Stamping</option>
+</select>
+
+<label>Machine autorisée</label>
+
+<select id="machineId">
+    <option value="">Toutes les machines</option>
+</select>
+
+        <label>Machine autorisée</label>
+
+<select id="machineId">
+    <option value="">Toutes les machines</option>
+</select>
+        
         <label>Mot de passe généré</label>
         <input id="password" readonly>
 
@@ -384,6 +421,58 @@ function generatePassword(){
 
 }
 
+async function loadMachines(){
+
+    await loadMachineTable(
+        'laser_machines',
+        'laserMachine'
+    );
+
+    await loadMachineTable(
+        'cnc_machines',
+        'cncMachine'
+    );
+
+    await loadMachineTable(
+        'hot_machines',
+        'hotMachine'
+    );
+
+}
+
+async function loadMachineTable(
+    table,
+    selectId
+){
+
+    const { data, error } =
+        await sb
+            .from(table)
+            .select('id,name')
+            .order('name');
+
+    if(error){
+        console.error(error);
+        return;
+    }
+
+    const sel =
+        document.getElementById(selectId);
+
+    data.forEach(machine=>{
+
+        const opt =
+            document.createElement('option');
+
+        opt.value = machine.id;
+        opt.textContent = machine.name;
+
+        sel.appendChild(opt);
+
+    });
+
+}
+    
 async function loadUsers(){
 
     const session =
@@ -1310,6 +1399,7 @@ async()=>{
 
     generatePassword();
 
+    await loadMachines();
     await loadUsers();
 
 });
