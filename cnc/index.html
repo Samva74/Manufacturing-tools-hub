@@ -621,8 +621,60 @@ const SUPABASE_URL='https://erzuvpswagzwlrxgctaj.supabase.co';
 const SUPABASE_KEY='sb_publishable_EERLI2l3AjQWkCLsMK3kbA_DMny2RFr';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
-let lang=localStorage.getItem(APP+'_lang')||'fr', user=null, role='user';
-const canEdit=()=>['expert','admin'].includes(role);
+let lang =
+    localStorage.getItem(APP + '_lang') || 'fr';
+
+let user = null;
+let role = 'user';
+let userAccess = null;
+
+function selectedCncMachine(){
+
+    return machines.find(
+        machine =>
+            machine.name ===
+            $('machine').value
+    ) || null;
+
+}
+
+function canEdit(){
+
+    if(!userAccess){
+        return false;
+    }
+
+    if(
+        userAccess.role === 'admin' ||
+        userAccess.role === 'expert_global'
+    ){
+        return true;
+    }
+
+    if(
+        userAccess.role === 'expert_machine'
+    ){
+
+        const selectedMachine =
+            selectedCncMachine();
+
+        if(
+            !selectedMachine ||
+            !userAccess.cnc_machine_id
+        ){
+            return false;
+        }
+
+        return (
+            String(selectedMachine.id) ===
+            String(userAccess.cnc_machine_id)
+        );
+
+    }
+
+    return false;
+
+}
 
 const TXT={
  fr:{title:'CNC Calculator',
@@ -723,7 +775,120 @@ function goHub(){
 function loc(r,b){return r?.[b+'_'+lang]||r?.[b+'_fr']||r?.[b]||''}
 function setLang(l){lang=l;localStorage.setItem(APP+'_lang',l);refreshText()}
 function refreshText(){document.querySelectorAll('[data-t]').forEach(e=>e.textContent=TXT[lang][e.dataset.t]||TXT.fr[e.dataset.t]||'');document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));fillLists();calc()}
-async function initAuth(){await window.authReady;user=await window.appAuth.getUser();role=await window.appAuth.getRole();$('rolePill').textContent=(user?.email||'');if(canEdit())document.body.classList.add('can-edit')}
+async function initAuth(){
+
+    await window.authReady;
+
+    user =
+        await window.appAuth.getUser();
+
+    if(!user){
+
+        window.location.href =
+            '/';
+
+        return;
+
+    }
+
+    const {
+        data,
+        error
+    } = await sb
+        .from('user_roles')
+        .select(
+            'role, cnc_machine_id'
+        )
+        .eq(
+            'user_id',
+            user.id
+        )
+        .maybeSingle();
+
+    if(error){
+
+        console.error(
+            'Erreur chargement droits CNC :',
+            error
+        );
+
+        userAccess = null;
+        role = 'user';
+
+    }else{
+
+        userAccess =
+            data || {
+                role: 'user',
+                cnc_machine_id: null
+            };
+
+        role =
+            userAccess.role || 'user';
+
+    }
+
+    $('rolePill').textContent =
+        user.email || '';
+
+}
+
+function updateCncPermissions(){
+
+    const allowed =
+        canEdit();
+
+    document.body.classList.toggle(
+        'can-edit',
+        allowed
+    );
+
+    const calibrationFields = [
+        $('cRpm'),
+        $('cFeed'),
+        $('comments')
+    ];
+
+    calibrationFields.forEach(
+        function(field){
+
+            if(!field){
+                return;
+            }
+
+            field.disabled =
+                !allowed;
+
+        }
+    );
+
+    const saveCalibrationButton =
+        document.querySelector(
+            'button[onclick="saveCalib()"]'
+        );
+
+    if(saveCalibrationButton){
+
+        saveCalibrationButton.disabled =
+            !allowed;
+
+        saveCalibrationButton.style.opacity =
+            allowed ? '1' : '0.45';
+
+        saveCalibrationButton.style.cursor =
+            allowed
+                ? 'pointer'
+                : 'not-allowed';
+
+        saveCalibrationButton.title =
+            allowed
+                ? ''
+                : 'Lecture seule pour cette machine CNC';
+
+    }
+
+}
+    
 
 function prettyCode(code){
   const manual={
@@ -866,6 +1031,16 @@ function updateSawPanel(){
   }
 }
 function toggleSawEdit(){
+
+    if(!canEdit()){
+
+        toast(
+            'Lecture seule pour cette machine CNC'
+        );
+
+        return;
+
+    }
   const fields=[$('sawTeeth'),$('sawDiameter'),$('sawKerf')];
   const editing=fields.some(f=>f && f.hasAttribute('readonly'));
   fields.forEach(f=>{if(!f)return; if(editing) f.removeAttribute('readonly'); else f.setAttribute('readonly','readonly');});
@@ -985,12 +1160,21 @@ function closeMaterialModal(){
 
 function addMachine(){
 
-  if(!canEdit()){
+  if(
+    !userAccess ||
+    ![
+        'admin',
+        'expert_global'
+    ].includes(userAccess.role)
+){
 
-    toast('Droit expert/admin requis');
+    toast(
+        'Création de machine réservée à l’Expert Global ou à l’Administrateur'
+    );
+
     return;
 
-  }
+}
 
   $('machineModal').classList.add('open');
 
@@ -1204,12 +1388,21 @@ async function saveMaterial(){
 
 async function saveMachine(){
 
-  if(!canEdit()){
+  if(
+    !userAccess ||
+    ![
+        'admin',
+        'expert_global'
+    ].includes(userAccess.role)
+){
 
-    toast('Droit expert/admin requis');
+    toast(
+        'Création de machine réservée à l’Expert Global ou à l’Administrateur'
+    );
+
     return;
 
-  }
+}
 
   const name =
     $('newMachineName').value.trim();
@@ -1550,7 +1743,17 @@ async function saveTool(){
   
 async function saveCalib(){
 
-  try{
+    if(!canEdit()){
+
+        toast(
+            'Lecture seule pour cette machine CNC'
+        );
+
+        return;
+
+    }
+
+    try{
 
     await api(
       'cnc_calibrations',
@@ -1614,8 +1817,17 @@ async function init(){
   await initAuth();
   await loadLibraries();
   refreshText();
+  updateCncPermissions();
   loadCalibs();
-  $('machine').addEventListener('input',calc);
+  $('machine').addEventListener(
+    'change',
+    function(){
+
+        calc();
+        updateCncPermissions();
+
+    }
+);
   $('material').addEventListener('change',()=>{rebuildToolList(false);syncOperationWithTool();calc();});
   $('tool').addEventListener('change',()=>{syncOperationWithTool();calc();});
   $('operation').addEventListener('change',()=>{enforceOperationFromTool();calc();});
