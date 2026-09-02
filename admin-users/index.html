@@ -675,10 +675,13 @@ if(roleBtn){
     async()=>{
 
         await changeUserRole(
-            user.user_id,
-            user.email,
-            user.role
-        );
+    user.user_id,
+    user.email,
+    user.role,
+    user.laser_machine_id,
+    user.cnc_machine_id,
+    user.hot_machine_id
+);
 
     };
 
@@ -986,7 +989,10 @@ ${newPassword}`
 async function changeUserRole(
     userId,
     email,
-    currentRole
+    currentRole,
+    laserMachineId,
+    cncMachineId,
+    hotMachineId
 ){
 
     document.getElementById(
@@ -996,6 +1002,18 @@ async function changeUserRole(
     document.getElementById(
         'editRole'
     ).value = currentRole || 'user';
+
+    document.getElementById(
+        'editLaserMachine'
+    ).value = laserMachineId || '';
+
+    document.getElementById(
+        'editCncMachine'
+    ).value = cncMachineId || '';
+
+    document.getElementById(
+        'editHotMachine'
+    ).value = hotMachineId || '';
 
     document.getElementById(
         'roleModal'
@@ -1157,6 +1175,37 @@ async function createUser(){
             .getElementById('role')
             .value;
 
+    const laserMachineId =
+    document
+        .getElementById('laserMachine')
+        .value || null;
+
+const cncMachineId =
+    document
+        .getElementById('cncMachine')
+        .value || null;
+
+const hotMachineId =
+    document
+        .getElementById('hotMachine')
+        .value || null;
+
+    if(
+    role === 'expert_machine' &&
+    !laserMachineId &&
+    !cncMachineId &&
+    !hotMachineId
+){
+
+    alert(
+        'Sélectionne au moins une machine pour un Expert Machine.'
+    );
+
+    return;
+
+}
+
+
     if(!email){
 
         alert(
@@ -1213,11 +1262,20 @@ async function createUser(){
 
                 body:JSON.stringify({
 
-                    email,
-                    password,
-                    role
+    email,
+    password,
+    role,
 
-                })
+    laser_machine_id:
+        laserMachineId,
+
+    cnc_machine_id:
+        cncMachineId,
+
+    hot_machine_id:
+        hotMachineId
+
+})
 
             }
 
@@ -1431,62 +1489,79 @@ document
 .onclick =
 async()=>{
 
-    const userId =
-        document.getElementById(
-            'editUserId'
-        ).value;
+    try{
 
-    const role =
-        document.getElementById(
-            'editRole'
-        ).value;
+        const userId =
+            document.getElementById(
+                'editUserId'
+            ).value;
 
-    const laserMachineId =
-        document.getElementById(
-            'editLaserMachine'
-        ).value || null;
+        const role =
+            document.getElementById(
+                'editRole'
+            ).value;
 
-    const cncMachineId =
-        document.getElementById(
-            'editCncMachine'
-        ).value || null;
+        const laserMachineId =
+            document.getElementById(
+                'editLaserMachine'
+            ).value || null;
 
-    const hotMachineId =
-        document.getElementById(
-            'editHotMachine'
-        ).value || null;
+        const cncMachineId =
+            document.getElementById(
+                'editCncMachine'
+            ).value || null;
 
-    await callAdminManageUser({
+        const hotMachineId =
+            document.getElementById(
+                'editHotMachine'
+            ).value || null;
 
-        action:'change-role',
+        await callAdminManageUser({
 
-        userId,
+            action:'change-role',
 
-        role,
+            userId,
 
-        laser_machine_id:
-            laserMachineId,
+            role,
 
-        cnc_machine_id:
-            cncMachineId,
+            laser_machine_id:
+                laserMachineId,
 
-        hot_machine_id:
-            hotMachineId
+            cnc_machine_id:
+                cncMachineId,
 
-    });
+            hot_machine_id:
+                hotMachineId
 
-    document
-        .getElementById(
-            'roleModal'
-        )
-        .style.display =
-            'none';
+        });
 
-    await loadUsers();
+        document
+            .getElementById(
+                'roleModal'
+            )
+            .style.display =
+                'none';
 
-    alert(
-        'Utilisateur mis à jour'
-    );
+        await loadUsers();
+
+        alert(
+            'Utilisateur mis à jour'
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            'saveRoleBtn',
+            error
+        );
+
+        alert(
+            error.message ||
+            'Impossible de mettre à jour l’utilisateur'
+        );
+
+    }
 
 };
         
