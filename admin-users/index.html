@@ -1400,50 +1400,60 @@ document
 async()=>{
 
     const userId =
-        document
-        .getElementById(
+        document.getElementById(
             'editUserId'
-        )
-        .value;
+        ).value;
 
     const role =
-        document
-        .getElementById(
+        document.getElementById(
             'editRole'
-        )
-        .value;
+        ).value;
 
     const laserMachineId =
-        document
-        .getElementById(
+        document.getElementById(
             'editLaserMachine'
-        )
-        .value || null;
+        ).value || null;
 
     const cncMachineId =
-        document
-        .getElementById(
+        document.getElementById(
             'editCncMachine'
-        )
-        .value || null;
+        ).value || null;
 
     const hotMachineId =
-        document
-        .getElementById(
+        document.getElementById(
             'editHotMachine'
-        )
-        .value || null;
+        ).value || null;
 
-    console.log({
+    await callAdminManageUser({
+
+        action:'change-role',
+
         userId,
+
         role,
-        laserMachineId,
-        cncMachineId,
-        hotMachineId
+
+        laser_machine_id:
+            laserMachineId,
+
+        cnc_machine_id:
+            cncMachineId,
+
+        hot_machine_id:
+            hotMachineId
+
     });
 
+    document
+        .getElementById(
+            'roleModal'
+        )
+        .style.display =
+            'none';
+
+    await loadUsers();
+
     alert(
-        'Valeurs récupérées correctement'
+        'Utilisateur mis à jour'
     );
 
 };
