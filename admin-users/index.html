@@ -888,17 +888,19 @@ async function changeUserRole(
 ){
 
     const enteredRole =
-        prompt(
+    prompt(
 `Modifier le rôle de :
 
 ${email}
 
 Rôles autorisés :
+
 user
-expert
+expert_machine
+expert_global
 admin`,
-            currentRole || 'user'
-        );
+        currentRole || 'user'
+    );
 
     if(enteredRole === null){
         return;
@@ -910,12 +912,16 @@ admin`,
             .toLowerCase();
 
     if(
-        !['user','expert','admin']
-        .includes(newRole)
-    ){
-        alert('Rôle invalide');
-        return;
-    }
+    ![
+        'user',
+        'expert_machine',
+        'expert_global',
+        'admin'
+    ].includes(newRole)
+){
+    alert('Rôle invalide');
+    return;
+}
 
     const session =
         (
