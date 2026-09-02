@@ -366,7 +366,77 @@ select{
 </div>
 
 </div>
-<script>
+<div id="roleModal" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.5);
+z-index:9999;
+align-items:center;
+justify-content:center;
+">
+
+    <div style="
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    width:500px;
+    max-width:95%;
+    ">
+
+        <h3>Modifier utilisateur</h3>
+
+        <input
+            type="hidden"
+            id="editUserId">
+
+        <label>Rôle</label>
+        <select id="editRole">
+            <option value="user">Utilisateur</option>
+            <option value="expert_machine">Expert Machine</option>
+            <option value="expert_global">Expert Global</option>
+            <option value="admin">Administrateur</option>
+        </select>
+
+        <label>Machine Laser</label>
+        <select id="editLaserMachine">
+            <option value="">Toutes</option>
+        </select>
+
+        <label>Machine CNC</label>
+        <select id="editCncMachine">
+            <option value="">Toutes</option>
+        </select>
+
+        <label>Machine Hot Stamping</label>
+        <select id="editHotMachine">
+            <option value="">Toutes</option>
+        </select>
+
+        <div class="actions">
+
+            <button
+                id="saveRoleBtn"
+                class="btn">
+
+                Sauvegarder
+
+            </button>
+
+            <button
+                id="cancelRoleBtn"
+                class="btn secondary">
+
+                Annuler
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+    <script>
 
 const SUPABASE_URL =
 'https://erzuvpswagzwlrxgctaj.supabase.co';
@@ -887,102 +957,21 @@ async function changeUserRole(
     currentRole
 ){
 
-    const enteredRole =
-    prompt(
-`Modifier le rôle de :
+    document.getElementById(
+        'editUserId'
+    ).value = userId;
 
-${email}
+    document.getElementById(
+        'editRole'
+    ).value = currentRole || 'user';
 
-Rôles autorisés :
-
-user
-expert_machine
-expert_global
-admin`,
-        currentRole || 'user'
-    );
-
-    if(enteredRole === null){
-        return;
-    }
-
-    const newRole =
-        enteredRole
-            .trim()
-            .toLowerCase();
-
-    if(
-    ![
-        'user',
-        'expert_machine',
-        'expert_global',
-        'admin'
-    ].includes(newRole)
-){
-    alert('Rôle invalide');
-    return;
-}
-
-    const session =
-        (
-            await sb.auth.getSession()
-        ).data.session;
-
-    const response =
-        await fetch(
-
-            SUPABASE_URL +
-            '/functions/v1/admin-manage-user',
-
-            {
-
-                method:'POST',
-
-                headers:{
-                    'Content-Type':
-                        'application/json',
-
-                    apikey:
-                        SUPABASE_KEY,
-
-                    Authorization:
-                        'Bearer ' +
-                        session.access_token
-                },
-
-                body:JSON.stringify({
-
-                    action:'change-role',
-                    userId:userId,
-                    role:newRole
-
-                })
-
-            }
-
-        );
-
-    const result =
-        await response.json();
-
-    if(!response.ok){
-
-        alert(
-            result.error ||
-            'Erreur'
-        );
-
-        return;
-
-    }
-
-    alert(
-        'Rôle modifié avec succès'
-    );
-
-    await loadUsers();
+    document.getElementById(
+        'roleModal'
+    ).style.display = 'flex';
 
 }
+
+    
 
     /* =========================================================
    SUPPRESSION D'UN UTILISATEUR
