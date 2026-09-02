@@ -1430,58 +1430,6 @@ window.saveFoil = async function(){
 
 };
 
-    console.log('INSERT FOLIO', payload);
-
-    await api(
-      'hot_foils',
-      '',
-      {
-        method:'POST',
-        body:JSON.stringify(payload)
-      }
-    );
-
-    toast('Folio ajouté');
-
-    closeFoilModal();
-
-    await loadData();
-
-    el('foil').value = code;
-
-    calc();
-
-    [
-      'fCode',
-      'fLabelFr',
-      'fSupplier',
-      'fReference',
-      'fDeltaTemp'
-    ].forEach(function(id){
-
-      el(id).value = '';
-
-    });
-
-    el('fPressureFactor').value = '1';
-    el('fDwellFactor').value = '1';
-
-  }
-  catch(e){
-
-    console.error('Erreur ajout folio :', e);
-
-    alert(
-      'Impossible d’enregistrer le folio dans Supabase.\n\n'
-      + e.message
-    );
-
-    toast('Erreur ajout folio');
-
-  }
-
-};
-
 window.saveMachine = async function(){
 
     if(
