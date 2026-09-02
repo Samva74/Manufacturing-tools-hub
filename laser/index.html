@@ -3584,6 +3584,7 @@ async function saveNewLaserParameter() {
         $('newParameterMachine').value;
       if (
     role === 'expert_machine' &&
+    createParameter &&
     String(machineId) !==
         String(userLaserMachineId)
 ) {
@@ -3593,6 +3594,7 @@ async function saveNewLaserParameter() {
     );
 
     return;
+
 }
 
         let materialCode =
@@ -3603,104 +3605,24 @@ async function saveNewLaserParameter() {
            VALEURS DU PARAMÈTRE
            ========================================= */
 
-        const thickness =
-            Number(
-                $('newParameterThickness').value
-            );
+        const createSite =
+    $('createNewSite')?.checked;
 
-        const operation =
-            $('newParameterOperation').value;
+const createMachine =
+    $('createNewMachine')?.checked;
 
-        const power =
-            Number(
-                $('newParameterPower').value
-            );
+const createMaterial =
+    $('createNewMaterial')?.checked;
 
-        const speed =
-            Number(
-                $('newParameterSpeed').value
-            );
+const createParameter =
 
-        const passes =
-            Number(
-                $('newParameterPasses').value
-            );
-
-
-        /* =========================================
-           VALIDATION DU PARAMÈTRE
-           ========================================= */
-
-        if (
-            !Number.isFinite(thickness) ||
-            thickness <= 0
-        ) {
-
-            toast(
-                'Renseigne une épaisseur valide'
-            );
-
-            $('newParameterThickness').focus();
-
-            return;
-
-        }
-
-        if (!operation) {
-
-            toast(
-                'Sélectionne une opération'
-            );
-
-            return;
-
-        }
-
-        if (
-            !Number.isFinite(power) ||
-            power < 0 ||
-            power > 100
-        ) {
-
-            toast(
-                'La puissance doit être comprise entre 0 et 100 %'
-            );
-
-            $('newParameterPower').focus();
-
-            return;
-
-        }
-
-        if (
-            !Number.isFinite(speed) ||
-            speed < 0
-        ) {
-
-            toast(
-                'Renseigne une vitesse valide'
-            );
-
-            $('newParameterSpeed').focus();
-
-            return;
-
-        }
-
-        if (
-            !Number.isInteger(passes) ||
-            passes < 1
-        ) {
-
-            toast(
-                'Le nombre de passes doit être un nombre entier supérieur à zéro'
-            );
-
-            $('newParameterPasses').focus();
-
-            return;
-
-        }
+    const createParameter =
+    $('newParameterThickness').value.trim() !== '' ||
+    $('newParameterPower').value.trim() !== '' ||
+    $('newParameterSpeed').value.trim() !== '' ||
+    $('newParameterComments').value.trim() !== '';
+      
+      
 
 
         /* =========================================
@@ -3799,7 +3721,83 @@ async function saveNewLaserParameter() {
 
         }
 
+/* =========================================
+   MODE SITE + MACHINE UNIQUEMENT
+   ========================================= */
 
+if(
+    !createParameter &&
+    !createMaterial
+){
+
+    await loadLibraries();
+
+    fillLists();
+
+    closeLaserParameterModal();
+
+    resetLaserParameterModal();
+
+    toast(
+        'Site et machine créés'
+    );
+
+    return;
+
+}
+
+    if (
+        !createSite &&
+        !createMachine
+    ) {
+
+        toast(
+            'Sélectionne une création à effectuer'
+        );
+
+        return;
+
+    }
+
+    await loadLibraries();
+
+    fillLists();
+
+    $('site').value =
+        String(selectedSiteId);
+
+    if (machineId) {
+
+        $('machine').value =
+            String(machineId);
+
+    }
+
+    fillThicknessList();
+
+    fillOperationList();
+
+    calc();
+
+    updateWriteAccess();
+
+    closeLaserParameterModal();
+
+    resetLaserParameterModal();
+
+    toast(
+        createSite && createMachine
+            ? 'Site et machine créés'
+            : (
+                createSite
+                    ? 'Site créé'
+                    : 'Machine créée'
+            )
+    );
+
+    return;
+
+}
         /* =========================================
            VALIDATION MACHINE EXISTANTE
            ========================================= */
@@ -3946,6 +3944,71 @@ async function saveNewLaserParameter() {
    return;
 }
 
+/* =========================================
+   MODE BIBLIOTHÈQUE UNIQUEMENT
+   ========================================= */
+
+
+/* =========================================
+   MODE SITE + MACHINE UNIQUEMENT
+   ========================================= */
+
+if (
+    !createParameter &&
+    !createMaterial
+) {
+
+    if (
+        !createSite &&
+        !createMachine
+    ) {
+
+        toast(
+           'Sélectionne une création à effectuer'
+        );
+
+        return;
+
+    }
+
+    await loadLibraries();
+
+    fillLists();
+
+    $('site').value =
+        String(selectedSiteId);
+
+    if (machineId) {
+
+       $('machine').value =
+           String(machineId);
+
+    }
+
+   fillThicknessList();
+
+    fillOperationList();
+
+    calc();
+
+    updateWriteAccess();
+
+    closeLaserParameterModal();
+
+    resetLaserParameterModal();
+
+    toast(
+        cr*ateSite && createMachine
+           ? 'Site et machine créés'
+           : (
+                createSite
+                    ? 'Site créé'                    : 'Machine créee'
+            )
+    );
+
+    return;
+
+}      
         /* =========================================
            CONTRÔLE D’UN DOUBLON
            ========================================= */
