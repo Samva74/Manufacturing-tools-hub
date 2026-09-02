@@ -580,7 +580,9 @@ var supports=[];
   var foils=[];
   var operations=[];
   var machines=[];
-  var user=null;var role='user';
+  var user=null;
+var role='user';
+var userHotMachineId=null;
 const TXT = {
 
 fr:{
@@ -774,7 +776,44 @@ function el(id){return document.getElementById(id);}
   function validSupport(s){return s&&s.code&&s.temperature_rec!==null&&s.temperature_rec!==undefined;}
   function validFoil(f){return f&&(f.foil_code||f.id);}
   function fillSelect(sel,items,labelFn,valueFn){sel.innerHTML='';items.forEach(function(x){var opt=document.createElement('option');opt.value=valueFn(x);opt.textContent=labelFn(x);sel.appendChild(opt);});}
-async function initAuth(){if(window.authReady){await window.authReady;user=await window.appAuth.getUser();role=await window.appAuth.getRole();el('rolePill').textContent=(user&&user.email?user.email:'');}}
+async function initAuth(){if(window.authReady){await window.authReady;
+                                               user=await window.appAuth.getUser();
+                                               role=await window.appAuth.getRole();
+                                               if(user?.id){
+
+  try{
+
+    const rows =
+      await api(
+        'user_roles',
+        '?select=role,hot_machine_id'
+        + '&user_id=eq.'
+        + encodeURIComponent(user.id)
+        + '&limit=1'
+      );
+
+    if(rows.length){
+
+      role =
+        rows[0].role || role;
+
+      userHotMachineId =
+        rows[0].hot_machine_id || null;
+
+    }
+
+  }
+  catch(e){
+
+    console.warn(
+      'Chargement droits Hot',
+      e
+    );
+
+  }
+
+}
+                                               el('rolePill').textContent=(user&&user.email?user.email:'');}}
 async function loadData(){
   supports=
   await api(
@@ -836,19 +875,54 @@ function selectedFoil(){var code=el('foil').value;return foils.find(function(f){
 function selectedOperation(){var code=el('operation').value;return operations.find(function(o){return o.operation_code===code;})||{temp_factor:1,pressure_factor:1,dwell_factor:1,label_fr:'Standard'};}
 function selectedMachine(){
 
-  var name =
-     el('machine').value;
+    var name =
+        el('machine').value;
 
-  return machines.find(
-     function(m){
-        return m.name===name;
-     }
-  );
+    return machines.find(
+        function(machine){
+
+            return machine.name === name;
+
+        }
+    ) || null;
+
+}
+
+function canEditMachine(){
+
+    if(
+        role === 'admin' ||
+        role === 'expert_global'
+    ){
+        return true;
+    }
+
+    if(role === 'expert_machine'){
+
+        var machine =
+            selectedMachine();
+
+        if(
+            !machine ||
+            !userHotMachineId
+        ){
+            return false;
+        }
+
+        return (
+            String(machine.id) ===
+            String(userHotMachineId)
+        );
+
+    }
+
+    return false;
 
 }
 function clearValues(){['tempRec','pressRec','dwellRec','tempRange','pressRange','dwellRange'].forEach(function(id){el(id).textContent='–';});}
 function calc(){
 
+  updateWriteAccess();
   var machine =
       selectedMachine();
 
@@ -883,10 +957,71 @@ if(!s||!f){
     '✅ Paramètre calculé';
   
   var baseT=[num(s.temperature_min,0),num(s.temperature_rec,0),num(s.temperature_max,0)];var baseP=[num(s.pressure_min,0),num(s.pressure_rec,0),num(s.pressure_max,0)];var baseD=[num(s.dwell_time_min,0),num(s.dwell_time_rec,0),num(s.dwell_time_max,0)];var dt=num(f.temperature_delta,0);var pf=factor(f.pressure_factor);var df=factor(f.dwell_factor);if((!s.temperature_rec)&&f.temperature_rec){baseT=[num(f.temperature_min,0),num(f.temperature_rec,0),num(f.temperature_max,0)];baseP=[num(f.pressure_min,0),num(f.pressure_rec,0),num(f.pressure_max,0)];baseD=[num(f.dwell_time_min,0),num(f.dwell_time_rec,0),num(f.dwell_time_max,0)];dt=0;pf=1;df=1;}var tf=factor(o.temp_factor);var opf=factor(o.pressure_factor);var odf=factor(o.dwell_factor);var t=baseT.map(function(x){return Math.round((x+dt)*tf);});var p=baseP.map(function(x){return (x*pf*opf).toFixed(1);});var d=baseD.map(function(x){return (x*df*odf).toFixed(2);});el('tempRec').textContent=t[1]+' °C';el('pressRec').textContent=p[1]+' bar';el('dwellRec').textContent=d[1]+' s';el('tempRange').textContent=t.join(' / ')+' °C';el('pressRange').textContent=p.join(' / ')+' bar';el('dwellRange').textContent=d.join(' / ')+' s';el('cTemp').value=t[1];el('cPress').value=p[1];el('cDwell').value=d[1];var lines=[];if(s.family)lines.push(s.family);if(s.supplier)lines.push('Support : '+s.supplier+(s.collection?' · '+s.collection:''));if(s.note)lines.push(s.note);if(f.supplier)lines.push('Folio : '+f.supplier+(f.reference?' · '+f.reference:''));lines.push('Folio : ΔT '+dt+' °C · P× '+pf+' · t× '+df);el('note').textContent=lines.join('\n');}
-function modal(title,items,titleFn,subFn,searchFn,pick){var m=el('searchModal'),q=el('searchInput'),list=el('searchResults');el('searchTitle').textContent=title;q.value='';function render(){var term=q.value.toLowerCase().trim();var rows=items.filter(function(x){return !term||searchFn(x).toLowerCase().indexOf(term)>=0;}).slice(0,120);list.innerHTML='';if(!rows.length){list.innerHTML='<p>Aucun résultat.</p>';return;}rows.forEach(function(x){var div=document.createElement('div');div.className='result';var b=document.createElement('b');b.textContent=titleFn(x);div.appendChild(b);var small=document.createElement('div');small.textContent=subFn(x)||'';div.appendChild(small);div.onclick=function(){pick(x);m.classList.remove('open');calc();};list.appendChild(div);});}q.oninput=render;el('searchClose').onclick=function(){m.classList.remove('open');};m.classList.add('open');setTimeout(function(){q.focus();},50);render();}
+function updateWriteAccess(){
+
+    var allowed =
+        canEditMachine();
+
+    var saveButton =
+        document.querySelector(
+            'button[onclick="saveCalibration()"]'
+        );
+
+    if(saveButton){
+
+        saveButton.disabled =
+            !allowed;
+
+        saveButton.style.opacity =
+            allowed ? '1' : '0.45';
+
+        saveButton.style.cursor =
+            allowed
+                ? 'pointer'
+                : 'not-allowed';
+
+        saveButton.title =
+            allowed
+                ? ''
+                : 'Lecture seule pour cette machine Hot Stamping';
+
+    }
+
+    [
+        'cTemp',
+        'cPress',
+        'cDwell',
+        'comments'
+    ].forEach(
+        function(id){
+
+            var field =
+                el(id);
+
+            if(field){
+
+                field.disabled =
+                    !allowed;
+
+            }
+
+        }
+    );
+
+}
+  function modal(title,items,titleFn,subFn,searchFn,pick){var m=el('searchModal'),q=el('searchInput'),list=el('searchResults');el('searchTitle').textContent=title;q.value='';function render(){var term=q.value.toLowerCase().trim();var rows=items.filter(function(x){return !term||searchFn(x).toLowerCase().indexOf(term)>=0;}).slice(0,120);list.innerHTML='';if(!rows.length){list.innerHTML='<p>Aucun résultat.</p>';return;}rows.forEach(function(x){var div=document.createElement('div');div.className='result';var b=document.createElement('b');b.textContent=titleFn(x);div.appendChild(b);var small=document.createElement('div');small.textContent=subFn(x)||'';div.appendChild(small);div.onclick=function(){pick(x);m.classList.remove('open');calc();};list.appendChild(div);});}q.oninput=render;el('searchClose').onclick=function(){m.classList.remove('open');};m.classList.add('open');setTimeout(function(){q.focus();},50);render();}
 window.searchSupport=function(){modal('Recherche support',supports.filter(validSupport),supportLabel,function(s){return [s.supplier,s.collection,s.family].filter(Boolean).join(' · ');},function(s){return [s.code,s.name_fr,s.supplier,s.collection,s.family,s.note].join(' ');},function(s){el('support').value=s.code;});};
 window.searchFoil=function(){modal('Recherche folio',foils.filter(validFoil),foilLabel,function(f){return [f.supplier,f.reference,f.color,f.foil_type].filter(Boolean).join(' · ');},function(f){return [f.foil_code,f.label_fr,f.supplier,f.reference,f.color,f.foil_type].join(' ');},function(f){el('foil').value=f.foil_code||f.id;});};
 window.saveCalibration = async function(){
+  if(!canEditMachine()){
+
+  toast(
+    'Lecture seule : machine non attribuée'
+  );
+
+  return;
+
+}
 
   try{
 
@@ -947,7 +1082,20 @@ window.saveCalibration = async function(){
 
 window.saveSupport = async function(){
 
-  try{
+    if(
+        role !== 'admin' &&
+        role !== 'expert_global'
+    ){
+
+        toast(
+            'Enregistrement de support non autorisé'
+        );
+
+        return;
+
+    }
+
+    try{
 
     var code = el('sCode').value.trim();
     var nameFr = el('sNameFr').value.trim();
@@ -1077,9 +1225,7 @@ created_by_email:
 };
 
 
-window.saveFoil = async function(){
-
-  try{
+v
 
     var code = el('fCode').value.trim();
     var labelFr = el('fLabelFr').value.trim();
@@ -1185,7 +1331,20 @@ user ? user.email : null,
 
 window.saveMachine = async function(){
 
-  try{
+    if(
+        role !== 'admin' &&
+        role !== 'expert_global'
+    ){
+
+        toast(
+            'Création de machine non autorisée'
+        );
+
+        return;
+
+    }
+
+    try{
 
     const payload = {
 
@@ -1256,39 +1415,75 @@ window.saveMachine = async function(){
 window.loadCalibrations=async function(){
   var h=el('calibs');h.innerHTML='';try{var rows=
   await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
-window.addSupport=function(){
+window.addSupport = function(){
 
- document
-   .getElementById('supportModal')
-   .classList
-   .add('open');
+    if(
+        role !== 'admin' &&
+        role !== 'expert_global'
+    ){
+
+        toast(
+            'Création de support réservée à l’Expert Global ou à l’Administrateur'
+        );
+
+        return;
+
+    }
+
+    document
+        .getElementById(
+            'supportModal'
+        )
+        .classList
+        .add('open');
 
 };
 
 window.addFoil = function(){
 
-  document
-    .getElementById('foilModal')
-    .classList
-    .add('open');
+    if(
+        role !== 'admin' &&
+        role !== 'expert_global'
+    ){
 
-};
+        toast(
+            'Création de folio réservée à l’Expert Global ou à l’Administrateur'
+        );
 
-window.addFoil = function(){
+        return;
 
-  document
-    .getElementById('foilModal')
-    .classList
-    .add('open');
+    }
+
+    document
+        .getElementById(
+            'foilModal'
+        )
+        .classList
+        .add('open');
 
 };
 
 window.addMachine = function(){
 
-  document
-    .getElementById('machineModal')
-    .classList
-    .add('open');
+    if(
+        role !== 'admin' &&
+        role !== 'expert_global'
+    ){
+
+        toast(
+            'Création de machine réservée à l’Expert Global ou à l’Administrateur'
+        );
+
+        return;
+
+    }
+
+    document
+        .getElementById(
+            'machineModal'
+        )
+        .classList
+        .add('open');
 
 };
 
