@@ -125,23 +125,48 @@
   <div class="layout">
     <div class="col">
       <section class="card">
-        <h2><span class="dot"></span><span data-t="machineInputs">Entrées machine</span></h2>
-        <label data-t="machine">
-          Machine
-        </label>
-        
-        <div class="inputline">
-          <select id="machine"></select>
-          
-          <button class="search-btn"
-            onclick="searchMachine()">
-            🔍
-          </button>
-          <button class="mini-plus"
-            onclick="addMachine()">
-            +
-          </button>
-        </div>
+        <h2>
+  <span class="dot"></span>
+  <span data-t="machineInputs">
+    Entrées machine
+  </span>
+</h2>
+
+<label>
+  Site
+</label>
+
+<div class="inputline">
+
+  <select id="site"></select>
+
+  <button
+      class="search-btn"
+      style="visibility:hidden">
+      🔍
+  </button>
+
+</div>
+
+<label data-t="machine">
+  Machine
+</label>
+
+<div class="inputline">
+
+  <select id="machine"></select>
+
+  <button class="search-btn"
+          onclick="searchMachine()">
+      🔍
+  </button>
+
+  <button class="mini-plus"
+          onclick="addMachine()">
+      +
+  </button>
+
+</div>
         <div class="row">
 
   <div>
@@ -778,7 +803,10 @@ const TXT={
      foot:'Biblioteca CNC do Excel V3.'}
 };
 
-let materials=[], tools=[], machines=[];
+let materials=[],
+    tools=[],
+    machines=[],
+    sites=[];
 let materialCodesFromTools=[];
 let lastMaterialForTools=null;
 
@@ -935,6 +963,13 @@ function openSearch(title,items,onPick){
 function closeSearch(){$('searchModal').classList.remove('open')}
 
 async function loadLibraries(){
+  sites =
+    await api(
+        'production_sites',
+        {
+            q:'?select=*&order=site_name.asc'
+        }
+    );
   machines=await api('cnc_machines',{q:'?select=*&order=name.asc'});
   if(!machines.length) machines=[{name:'Générique',n_max:24000,vf_max:3000}];
 
@@ -971,6 +1006,38 @@ function materialLabel(code){
 }
 
 function fillLists(){
+  const siteSelect =
+    $('site');
+
+if(siteSelect){
+
+    const currentSite =
+        siteSelect.value;
+
+    siteSelect.innerHTML='';
+
+    sites.forEach(function(site){
+
+        siteSelect.add(
+            new Option(
+                site.site_name,
+                String(site.id)
+            )
+        );
+
+    });
+
+    if(
+        currentSite &&
+        [...siteSelect.options]
+        .some(
+            o => o.value === currentSite
+        )
+    ){
+        siteSelect.value = currentSite;
+    }
+
+}
   let sm=$('machine'), vm=sm.value;
   sm.innerHTML='';
   machines.forEach(m=>sm.add(new Option(m.name,m.name)));
