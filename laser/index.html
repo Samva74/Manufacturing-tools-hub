@@ -1099,10 +1099,17 @@ body:not(.can-edit) .parameter-save-btn{
       let lang = localStorage.getItem(APP + '_lang') || 'fr',
     user = null,
     role = 'user',
-    userSiteId = null;
+    userSiteId = null,
+    userLaserMachineId = null;
 
 const canEdit = () =>
-    ['expert_site', 'expert', 'admin'].includes(role);
+    [
+        'expert_site',
+        'expert',
+        'expert_global',
+        'expert_machine',
+        'admin'
+    ].includes(role);
 
 const matchesSelectedSite = parameter => {
 
@@ -1125,23 +1132,39 @@ const canWriteSelectedSite = () => {
     const selectedSiteId =
         String($('site')?.value ?? '0');
 
+    const selectedMachineId =
+        String($('machine')?.value ?? '');
+
     if (selectedSiteId === '0') {
         return false;
     }
 
     if (
         role === 'admin' ||
-        role === 'expert'
+        role === 'expert' ||
+        role === 'expert_global'
     ) {
         return true;
+    }
+
+    if (role === 'expert_machine') {
+
+        return (
+            userLaserMachineId !== null &&
+            selectedMachineId ===
+                String(userLaserMachineId)
+        );
+
     }
 
     if (role === 'expert_site') {
 
         return (
             userSiteId !== null &&
-            selectedSiteId === String(userSiteId)
+            selectedSiteId ===
+                String(userSiteId)
         );
+
     }
 
     return false;
@@ -1199,6 +1222,7 @@ const canWriteSelectedSite = () => {
     role = await window.appAuth.getRole();
 
     userSiteId = null;
+    userLaserMachineId = null;
 
     if (user?.id) {
 
@@ -1208,7 +1232,7 @@ const canWriteSelectedSite = () => {
                 'user_roles',
                 {
                     q:
-                        '?select=role,site_id' +
+                        '?select=role,site_id,laser_machine_id' +
                         '&user_id=eq.' +
                         encodeURIComponent(user.id) +
                         '&limit=1'
@@ -1225,6 +1249,8 @@ const canWriteSelectedSite = () => {
 
                 userSiteId =
                     roleRows[0].site_id ?? null;
+                userLaserMachineId =
+                    roleRows[0].laser_machine_id ?? null;
             }
 
         } catch (error) {
@@ -3254,6 +3280,18 @@ async function saveNewLaserParameter() {
 
         let machineId =
             $('newParameterMachine').value;
+      if (
+    role === 'expert_machine' &&
+    String(machineId) !==
+        String(userLaserMachineId)
+) {
+
+    toast(
+        'Lecture seule : cette machine ne vous est pas attribuée'
+    );
+
+    return;
+}
 
         let materialCode =
             $('newParameterMaterial').value;
@@ -3594,6 +3632,18 @@ async function saveNewLaserParameter() {
 
         }
 
+      if (
+    role === 'e*pert_machine' &&
+    String(machin*Id) !==
+        String(userLaserMa*hineId)
+) {
+
+    toast(
+        'L*cture seule : vous pouvez enregist*er des paramètres uniquement pour *otre machine attribuée'
+    );
+
+  * return;
+}
 
         /* =========================================
            CONTRÔLE D’UN DOUBLON
@@ -3846,6 +3896,7 @@ function resetLaserParameterModal() {
         await initAuth();
         await loadLibraries();
         refreshText();
+        updateWriteAccess();
         // loadCalibs();
 $('machine').addEventListener(
     'change',
@@ -3856,6 +3907,8 @@ $('machine').addEventListener(
         fillOperationList();
 
         calc();
+
+        updateWriteAccess();
 
     }
 );
