@@ -552,18 +552,43 @@ body:not(.can-edit) .parameter-save-btn{
     height:40px;
   }
 
-}
-
 .status{
     font-size:13px;
     color:var(--muted);
     margin-top:10px;
 }
+
+@media(max-width:900px){
+
+    .modal-grid-2,
     .modal-grid-3{
         grid-template-columns:1fr;
     }
 
-}      
+    body{
+        padding:12px;
+    }
+
+    .top{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .row{
+        grid-template-columns:1fr;
+    }
+
+    .title h1{
+        font-size:24px;
+    }
+
+    .logo{
+        width:64px;
+     
     </style>
   </head>
   <body>
@@ -3532,10 +3557,15 @@ async function saveNewLaserParameter() {
     {
         m: 'POST',
         b: {
-            site_name: siteName,
-            created_by_user_id: user?.id,
-            created_by_email: user?.email
-        }
+    site_name:
+        newSiteName,
+
+    created_by_user_id:
+        user?.id || null,
+
+    created_by_email:
+        user?.email || null
+}
     }
 );
 
@@ -3581,22 +3611,8 @@ async function saveNewLaserParameter() {
 
     let machineId =
         $('newParameterMachine').value;
-      if (
-    role === 'expert_machine' &&
-    createParameter &&
-    String(machineId) !==
-        String(userLaserMachineId)
-) {
-
-    toast(
-        'Lecture seule : cette machine ne vous est pas attribuée'
-    );
-
-    return;
-
-}
-
-        let materialCode =
+      
+    let materialCode =
             $('newParameterMaterial').value;
 
 
@@ -3604,16 +3620,16 @@ async function saveNewLaserParameter() {
            VALEURS DU PARAMÈTRE
            ========================================= */
 
-        const createSite =
-    $('createNewSite')?.checked;
+const createSite =
+    $('createNewSite').checked;
 
 const createMachine =
-    $('createNewMachine')?.checked;
+    $('createNewMachine').checked;
 
 const createMaterial =
-    $('createNewMaterial')?.checked;
+    $('createNewMaterial').checked;
 
-    const createParameter =
+const createParameter =
     $('newParameterThickness').value.trim() !== '' ||
     $('newParameterPower').value.trim() !== '' ||
     $('newParameterSpeed').value.trim() !== '' ||
@@ -3683,8 +3699,7 @@ const createMaterial =
                                 $('newLaserMachineLens')
                                     .value
                                     .trim() || null,
-                            site_id:
-    Number(selectedSiteId),
+                            
                             site:
     selectedSiteName || null,
 
@@ -3907,6 +3922,99 @@ if (
             return;
 
         }
+      const thickness =
+    Number(
+        $('newParameterThickness').value
+    );
+
+const operation =
+    $('newParameterOperation').value;
+
+const power =
+    Number(
+        $('newParameterPower').value
+    );
+
+const speed =
+    Number(
+        $('newParameterSpeed').value
+    );
+
+const passes =
+    Number(
+        $('newParameterPasses').value
+    );
+
+if (
+    !Number.isFinite(thickness) ||
+    thickness <= 0
+) {
+
+    toast(
+        'Renseigne une épaisseur valide'
+    );
+
+    $('newParameterThickness').focus();
+
+    return;
+
+}
+
+if (!operation) {
+
+    toast(
+        'Sélectionne une opération'
+    );
+
+    return;
+
+}
+
+if (
+    !Number.isFinite(power) ||
+    power < 0 ||
+    power > 100
+) {
+
+    toast(
+        'La puissance doit être comprise entre 0 et 100 %'
+    );
+
+    $('newParameterPower').focus();
+
+    return;
+
+}
+
+if (
+    !Number.isFinite(speed) ||
+    speed < 0
+) {
+
+    toast(
+        'Renseigne une vitesse valide'
+    );
+
+    $('newParameterSpeed').focus();
+
+    return;
+
+}
+
+if (
+    !Number.isInteger(passes) ||
+    passes < 1
+) {
+
+    toast(
+        'Le nombre de passes doit être un entier supérieur à zéro'
+    );
+
+    $('newParameterPasses').focus();
+
+    return;
+
+}
 
       if (
     role === 'expert_machine' &&
