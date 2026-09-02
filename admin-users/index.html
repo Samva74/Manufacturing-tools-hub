@@ -1352,7 +1352,30 @@ Cordialement`;
     );
 
 };
-    
+
+document
+.getElementById(
+    'roleModal'
+)
+.onclick =
+(e)=>{
+
+    if(
+        e.target.id ===
+        'roleModal'
+    ){
+
+        document
+            .getElementById(
+                'roleModal'
+            )
+            .style.display =
+                'none';
+
+    }
+
+};
+        
 window.authReady.then(
 async()=>{
 
