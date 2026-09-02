@@ -3528,17 +3528,16 @@ async function saveNewLaserParameter() {
 
         const siteRows =
             await api(
-                'production_sites',
-                {
-                    m:
-                        'POST',
-
-                    b: {
-                        site_name:
-                            newSiteName,
-                    }
-                }
-            );
+    'production_sites',
+    {
+        m: 'POST',
+        b: {
+            site_name: siteName,
+            created_by_user_id: user?.id,
+            created_by_email: user?.email
+        }
+    }
+);
 
         if(
             !Array.isArray(siteRows) ||
@@ -3613,8 +3612,6 @@ const createMachine =
 
 const createMaterial =
     $('createNewMaterial')?.checked;
-
-const createParameter =
 
     const createParameter =
     $('newParameterThickness').value.trim() !== '' ||
@@ -3725,26 +3722,10 @@ const createParameter =
    MODE SITE + MACHINE UNIQUEMENT
    ========================================= */
 
-if(
+if (
     !createParameter &&
     !createMaterial
-){
-
-    await loadLibraries();
-
-    fillLists();
-
-    closeLaserParameterModal();
-
-    resetLaserParameterModal();
-
-    toast(
-        'Site et machine créés'
-    );
-
-    return;
-
-}
+) {
 
     if (
         !createSite &&
@@ -3774,15 +3755,11 @@ if(
     }
 
     fillThicknessList();
-
     fillOperationList();
-
     calc();
-
     updateWriteAccess();
 
     closeLaserParameterModal();
-
     resetLaserParameterModal();
 
     toast(
@@ -3933,6 +3910,7 @@ if(
 
       if (
     role === 'expert_machine' &&
+    createParameter &&
     String(machineId) !==
         String(userLaserMachineId)
 ) {
@@ -3941,74 +3919,10 @@ if(
         'Lecture seule : vous pouvez enregistrer des paramètres uniquement pour votre machine attribuée'
     );
 
-   return;
-}
-
-/* =========================================
-   MODE BIBLIOTHÈQUE UNIQUEMENT
-   ========================================= */
-
-
-/* =========================================
-   MODE SITE + MACHINE UNIQUEMENT
-   ========================================= */
-
-if (
-    !createParameter &&
-    !createMaterial
-) {
-
-    if (
-        !createSite &&
-        !createMachine
-    ) {
-
-        toast(
-           'Sélectionne une création à effectuer'
-        );
-
-        return;
-
-    }
-
-    await loadLibraries();
-
-    fillLists();
-
-    $('site').value =
-        String(selectedSiteId);
-
-    if (machineId) {
-
-       $('machine').value =
-           String(machineId);
-
-    }
-
-   fillThicknessList();
-
-    fillOperationList();
-
-    calc();
-
-    updateWriteAccess();
-
-    closeLaserParameterModal();
-
-    resetLaserParameterModal();
-
-    toast(
-        cr*ateSite && createMachine
-           ? 'Site et machine créés'
-           : (
-                createSite
-                    ? 'Site créé'                    : 'Machine créee'
-            )
-    );
-
     return;
 
-}      
+}
+
         /* =========================================
            CONTRÔLE D’UN DOUBLON
            ========================================= */
