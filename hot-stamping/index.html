@@ -268,6 +268,12 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
   </span>
 </h2>
 
+<label data-t="site">
+  Site
+</label>
+
+<select id="site"></select>
+
 <label data-t="machine">
   Machine
 </label>
@@ -329,11 +335,6 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
 
 </div>
 
-<label data-t="productionSite">
-  Site de production
-</label>
-
-<input id="productionSite" readonly>
 </section>
       
       <section class="card">
@@ -659,6 +660,7 @@ var supports=[];
   var foils=[];
   var operations=[];
   var machines=[];
+  var sites = [];
   var user=null;
 var role='user';
 var userHotMachineId=null;
@@ -667,6 +669,7 @@ const TXT = {
 fr:{
 machineInputs:'Entrées machine',
 machine:'Machine',
+site:'Site',
 maxTemperature:'Température max machine',
 maxPressure:'Pression max machine',
 productionSite:'Site de production',
@@ -703,6 +706,7 @@ reload:'↻ Recharger calibrations'
 en:{
 machineInputs:'Machine inputs',
 machine:'Machine',
+site:'Site',
 maxTemperature:'Max machine temperature',
 maxPressure:'Max machine pressure',
 productionSite:'Production site',
@@ -739,6 +743,7 @@ reload:'↻ Reload calibrations'
 pt:{
 machineInputs:'Entradas da máquina',
 machine:'Máquina',
+site:'Local',
 maxTemperature:'Temperatura máxima da máquina',
 maxPressure:'Pressão máxima da máquina',
 productionSite:'Local de produção',
@@ -914,41 +919,189 @@ async function loadData(){
     'hot_machines',
     '?select=*&order=name.asc'
   );
+  sites = [
+
+    ...new Set(
+
+        machines
+        .map(function(machine){
+
+            return machine.site;
+
+        })
+        .filter(Boolean)
+
+    )
+
+].sort();
+
+sites.unshift('AUCUN');
 if(!operations.length){operations=[{operation_code:'standard',label_fr:'Standard',temp_factor:1,pressure_factor:1,dwell_factor:1}];}fillLists();}
-function fillLists(){var usable=supports.filter(validSupport);if(!usable.length){usable=supports;}
-      fillSelect(
-  el('machine'),
-  machines,
-  function(m){
-     return m.name;
-  },
-  function(m){
-     return m.name;
-  }
-);
-      fillSelect(
+function fillLists(){
+
+    var usable =
+        supports.filter(
+            validSupport
+        );
+
+    if(!usable.length){
+
+        usable =
+            supports;
+
+    }
+
+    var siteSelect =
+        el('site');
+
+    var previousSite =
+        siteSelect.value;
+
+    fillSelect(
+        siteSelect,
+        sites,
+        function(site){
+
+            return site;
+
+        },
+        function(site){
+
+            return site;
+
+        }
+    );
+
+    if(
+        previousSite &&
+        sites.includes(previousSite)
+    ){
+
+        siteSelect.value =
+            previousSite;
+
+    }else{
+
+        siteSelect.value =
+            'AUCUN';
+
+    }
+
+    fillMachineList();
+
+    fillSelect(
         el('support'),
-        usable,supportLabel,
-        function(s){
-          return s.code;
-  }
-);
-      fillSelect(
+        usable,
+        supportLabel,
+        function(support){
+
+            return support.code;
+
+        }
+    );
+
+    fillSelect(
         el('foil'),
-        foils.filter(validFoil),foilLabel,
-        function(f){
-          return f.foil_code||f.id;
-  }
-);
-      fillSelect(
+        foils.filter(validFoil),
+        foilLabel,
+        function(foil){
+
+            return foil.foil_code || foil.id;
+
+        }
+    );
+
+    fillSelect(
         el('operation'),
-        operations,opLabel,
-        function(o){
-          return o.operation_code;
-  }
-);
-      el('status').textContent=usable.length+' supports utilisables · '+foils.length+' folios · '+operations.length+' opérations';
-calc();}
+        operations,
+        opLabel,
+        function(operation){
+
+            return operation.operation_code;
+
+        }
+    );
+
+    el('status').textContent =
+        usable.length +
+        ' supports utilisables · ' +
+        foils.length +
+        ' folios · ' +
+        operations.length +
+        ' opérations';
+
+    calc();
+
+}
+function fillMachineList(){
+
+    var machineSelect =
+        el('machine');
+
+    var selectedSite =
+        el('site').value;
+
+    var previousMachine =
+        machineSelect.value;
+
+    var filteredMachines =
+
+        selectedSite === 'AUCUN'
+
+            ? machines
+
+            : machines.filter(
+                function(machine){
+
+                    return (
+                        String(machine.site || '')
+                        ===
+                        String(selectedSite)
+                    );
+
+                }
+            );
+
+    fillSelect(
+        machineSelect,
+        filteredMachines,
+        function(machine){
+
+            return machine.name;
+
+        },
+        function(machine){
+
+            return machine.name;
+
+        }
+    );
+
+    if(
+        previousMachine &&
+        filteredMachines.some(
+            function(machine){
+
+                return (
+                    machine.name ===
+                    previousMachine
+                );
+
+            }
+        )
+    ){
+
+        machineSelect.value =
+            previousMachine;
+
+    }else if(machineSelect.options.length){
+
+        machineSelect.selectedIndex =
+            0;
+
+    }
+
+}
 function selectedSupport(){var code=el('support').value;return supports.find(function(s){return s.code===code;});}
 function selectedFoil(){var code=el('foil').value;return foils.find(function(f){return f.foil_code===code||f.id===code;});}
 function selectedOperation(){var code=el('operation').value;return operations.find(function(o){return o.operation_code===code;})||{temp_factor:1,pressure_factor:1,dwell_factor:1,label_fr:'Standard'};}
@@ -1013,9 +1166,6 @@ function calc(){
 
      el('machinePressureMax').value =
         machine.pressure_max || '';
-
-     el('productionSite').value =
-        machine.site || '';
 
   }
 
@@ -1719,14 +1869,33 @@ try{
   window.setLang(currentLang);
   await loadData();
   updateWriteAccess();
-    ['machine','support','foil','operation']
-    .forEach(function(id){
-      
-      el(id).addEventListener(
+    [
+    'machine',
+    'support',
+    'foil',
+    'operation'
+]
+.forEach(function(id){
+
+    el(id).addEventListener(
         'change',
         calc
-      );
-  });
+    );
+
+});
+
+el('site').addEventListener(
+    'change',
+    function(){
+
+        fillMachineList();
+
+        calc();
+
+        updateWriteAccess();
+
+    }
+);
 
 }
 catch(e){
