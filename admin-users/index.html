@@ -508,19 +508,51 @@ async function loadMachineTable(
     }
 
     const sel =
-        document.getElementById(selectId);
+    document.getElementById(selectId);
 
-    data.forEach(machine=>{
+data.forEach(machine=>{
 
-        const opt =
-            document.createElement('option');
+    const opt =
+        document.createElement('option');
 
-        opt.value = machine.id;
-        opt.textContent = machine.name;
+    opt.value = machine.id;
+    opt.textContent = machine.name;
 
-        sel.appendChild(opt);
+    sel.appendChild(opt);
 
-    });
+    // Remplit aussi la fenêtre Modifier rôle
+
+    if(selectId === 'laserMachine'){
+
+        document
+            .getElementById('editLaserMachine')
+            .appendChild(
+                opt.cloneNode(true)
+            );
+
+    }
+
+    if(selectId === 'cncMachine'){
+
+        document
+            .getElementById('editCncMachine')
+            .appendChild(
+                opt.cloneNode(true)
+            );
+
+    }
+
+    if(selectId === 'hotMachine'){
+
+        document
+            .getElementById('editHotMachine')
+            .appendChild(
+                opt.cloneNode(true)
+            );
+
+    }
+
+});
 
 }
     
