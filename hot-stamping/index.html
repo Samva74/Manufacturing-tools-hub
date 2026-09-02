@@ -239,9 +239,11 @@ select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
 
   <select id="machine"></select>
 
-  <button class="search-btn">
+  <button
+    class="search-btn"
+    onclick="searchMachine()">
     🔍
-  </button>
+</button>
 
 <button class="mini-btn"
         onclick="addMachine()">
@@ -1012,6 +1014,44 @@ function updateWriteAccess(){
   function modal(title,items,titleFn,subFn,searchFn,pick){var m=el('searchModal'),q=el('searchInput'),list=el('searchResults');el('searchTitle').textContent=title;q.value='';function render(){var term=q.value.toLowerCase().trim();var rows=items.filter(function(x){return !term||searchFn(x).toLowerCase().indexOf(term)>=0;}).slice(0,120);list.innerHTML='';if(!rows.length){list.innerHTML='<p>Aucun résultat.</p>';return;}rows.forEach(function(x){var div=document.createElement('div');div.className='result';var b=document.createElement('b');b.textContent=titleFn(x);div.appendChild(b);var small=document.createElement('div');small.textContent=subFn(x)||'';div.appendChild(small);div.onclick=function(){pick(x);m.classList.remove('open');calc();};list.appendChild(div);});}q.oninput=render;el('searchClose').onclick=function(){m.classList.remove('open');};m.classList.add('open');setTimeout(function(){q.focus();},50);render();}
 window.searchSupport=function(){modal('Recherche support',supports.filter(validSupport),supportLabel,function(s){return [s.supplier,s.collection,s.family].filter(Boolean).join(' · ');},function(s){return [s.code,s.name_fr,s.supplier,s.collection,s.family,s.note].join(' ');},function(s){el('support').value=s.code;});};
 window.searchFoil=function(){modal('Recherche folio',foils.filter(validFoil),foilLabel,function(f){return [f.supplier,f.reference,f.color,f.foil_type].filter(Boolean).join(' · ');},function(f){return [f.foil_code,f.label_fr,f.supplier,f.reference,f.color,f.foil_type].join(' ');},function(f){el('foil').value=f.foil_code||f.id;});};
+window.searchMachine = function(){
+
+    modal(
+        'Recherche machine',
+        machines,
+
+        function(machine){
+
+            return machine.name || '';
+
+        },
+
+        function(machine){
+
+            return machine.site || '';
+
+        },
+
+        function(machine){
+
+            return [
+                machine.name,
+                machine.site
+            ]
+                .filter(Boolean)
+                .join(' ');
+
+        },
+
+        function(machine){
+
+            el('machine').value =
+                machine.name;
+
+        }
+    );
+
+};
 window.saveCalibration = async function(){
   if(!canEditMachine()){
 
@@ -1225,57 +1265,170 @@ created_by_email:
 };
 
 
-v
+window.saveFoil = async function(){
 
-    var code = el('fCode').value.trim();
-    var labelFr = el('fLabelFr').value.trim();
+    if(
+        role !== 'admin' &&
+        role !== 'expert_global'
+    ){
 
-    if(!code){
+        toast(
+            'Enregistrement de folio non autorisé'
+        );
 
-      alert('Le code du folio est obligatoire.');
-      el('fCode').focus();
-      return;
-
-    }
-
-    if(!labelFr){
-
-      alert('Le nom du folio est obligatoire.');
-      el('fLabelFr').focus();
-      return;
+        return;
 
     }
 
-    const payload = {
+    try{
 
-      foil_code:
-        code,
+        var code =
+            el('fCode')
+                .value
+                .trim();
 
-      label_fr:
-        labelFr,
+        var labelFr =
+            el('fLabelFr')
+                .value
+                .trim();
 
-      supplier:
-        el('fSupplier').value.trim() || null,
+        if(!code){
 
-      reference:
-        el('fReference').value.trim() || null,
+            alert(
+                'Le code du folio est obligatoire.'
+            );
 
-created_by_user_id:
-user ? user.id : null,
- 
-created_by_email:
-user ? user.email : null,
+            el('fCode').focus();
 
-      temperature_delta:
-        num(el('fDeltaTemp').value, 0),
+            return;
 
-      pressure_factor:
-        num(el('fPressureFactor').value, 1),
+        }
 
-      dwell_factor:
-        num(el('fDwellFactor').value, 1)
+        if(!labelFr){
 
-    };
+            alert(
+                'Le nom du folio est obligatoire.'
+            );
+
+            el('fLabelFr').focus();
+
+            return;
+
+        }
+
+        const payload = {
+
+            foil_code:
+                code,
+
+            label_fr:
+                labelFr,
+
+            supplier:
+                el('fSupplier').value.trim() || null,
+
+            reference:
+                el('fReference').value.trim() || null,
+
+            created_by_user_id:
+                user ? user.id : null,
+
+            created_by_email:
+                user ? user.email : null,
+
+            temperature_delta:
+                num(
+                    el('fDeltaTemp').value,
+                    0
+                ),
+
+            pressure_factor:
+                num(
+                    el('fPressureFactor').value,
+                    1
+                ),
+
+            dwell_factor:
+                num(
+                    el('fDwellFactor').value,
+                    1
+                )
+
+        };
+
+        console.log(
+            'INSERT FOLIO',
+            payload
+        );
+
+        await api(
+            'hot_foils',
+            '',
+            {
+                method:
+                    'POST',
+
+                body:
+                    JSON.stringify(
+                        payload
+                    )
+            }
+        );
+
+        toast(
+            'Folio ajouté'
+        );
+
+        closeFoilModal();
+
+        await loadData();
+
+        el('foil').value =
+            code;
+
+        calc();
+
+        [
+            'fCode',
+            'fLabelFr',
+            'fSupplier',
+            'fReference',
+            'fDeltaTemp'
+        ].forEach(
+            function(id){
+
+                el(id).value =
+                    '';
+
+            }
+        );
+
+        el('fPressureFactor').value =
+            '1';
+
+        el('fDwellFactor').value =
+            '1';
+
+    }
+    catch(e){
+
+        console.error(
+            'Erreur ajout folio :',
+            e
+        );
+
+        alert(
+            'Impossible d’enregistrer le folio dans Supabase.\n\n' +
+            e.message
+        );
+
+        toast(
+            'Erreur ajout folio'
+        );
+
+    }
+
+};
 
     console.log('INSERT FOLIO', payload);
 
@@ -1412,8 +1565,21 @@ window.saveMachine = async function(){
 
 };
   
-window.loadCalibrations=async function(){
-  var h=el('calibs');h.innerHTML='';try{var rows=
+window.loadCalibrations =
+async function(){
+
+    var h =
+        el('calibs');
+
+    if(!h){
+        return;
+    }
+
+    h.innerHTML =
+        '';
+
+    try{
+    var rows=
   await api('Hot_Stamping_calibrations','?select=*&order=created_at.desc&limit=20');if(!rows.length){h.innerHTML='<p>Aucune calibration.</p>';return;}rows.forEach(function(r){var div=document.createElement('div');div.className='item';div.innerHTML='<b>'+text(r.material)+' · '+text(r.foil)+'</b><div class="s">'+text(r.temperature)+' °C · '+text(r.pressure)+' bar · '+text(r.dwell_time)+' s<br>'+text(r.created_by_email||r.operator||'')+'</div>';h.appendChild(div);});}catch(e){console.error(e);h.innerHTML='<p>Calibrations non chargées.</p>';}};
 window.addSupport = function(){
 
@@ -1486,7 +1652,16 @@ window.addMachine = function(){
         .add('open');
 
 };
+window.closeMachineModal = function(){
 
+    document
+        .getElementById(
+            'machineModal'
+        )
+        .classList
+        .remove('open');
+
+};
 window.closeSupportModal=function(){
 
  document
