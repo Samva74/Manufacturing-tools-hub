@@ -320,8 +320,20 @@
           Commentaires / Observations
         </label>
         <textarea id="comments"></textarea>
-        <button class="btn" onclick="saveCalib()" data-t="save">💾 Enregistrer calibration</button>
+                <button class="btn" onclick="saveCalib()" data-t="save">
+          💾 Enregistrer calibration
+        </button>
       </section>
+
+      <section class="card">
+        <h2>
+          <span class="dot"></span>
+          <span>Dernières calibrations</span>
+        </h2>
+
+        <div id="calibs"></div>
+      </section>
+
     </div>
   </div>
 
@@ -673,6 +685,17 @@ function canEdit(){
     }
 
     return false;
+
+}
+function canManageGlobalLibrary(){
+
+    return Boolean(
+        userAccess &&
+        (
+            userAccess.role === 'admin' ||
+            userAccess.role === 'expert_global'
+        )
+    );
 
 }
 
@@ -1052,6 +1075,7 @@ function num(v){const n=parseFloat(String(v??'').replace(',','.'));return Number
 function mmRange(a,b,d){a=num(a);b=num(b);if(a===null||b===null||a===0&&b===0)return '–';return `${(a*d).toFixed(1).replace('.',',')} à ${(b*d).toFixed(1).replace('.',',')} mm`}
 
     function calc(){
+  updateCncPermissions();      
   syncOperationWithTool();
   let t=selectedTool();
 
@@ -1133,12 +1157,15 @@ function searchTool(){openSearch('Recherche outil',tools.map(t=>({title:loc(t,'l
 
 function addMaterial(){
 
-  if(!canEdit()){
+  if(!canManageGlobalLibrary()){
 
-    toast('Droit expert/admin requis');
+    toast(
+        'Bibliothèque réservée à l’Expert Global ou à l’Administrateur'
+    );
+
     return;
 
-  }
+}
 
   $('materialModal').classList.add('open');
 
@@ -1196,12 +1223,15 @@ function closeMachineModal(){
 
 function addTool(){
 
-  if(!canEdit()){
+  if(!canManageGlobalLibrary()){
 
-    toast('Droit expert/admin requis');
+    toast(
+        'Bibliothèque réservée à l’Expert Global ou à l’Administrateur'
+    );
+
     return;
 
-  }
+}
 
   const select = $('newToolMaterial');
 
@@ -1263,12 +1293,15 @@ function closeToolModal(){
 
 async function saveMaterial(){
 
-  if(!canEdit()){
+  if(!canManageGlobalLibrary()){
 
-    toast('Droit expert/admin requis');
+    toast(
+        'Bibliothèque réservée à l’Expert Global ou à l’Administrateur'
+    );
+
     return;
 
-  }
+}
 
   const code =
     $('newMaterialCode')
@@ -1555,12 +1588,15 @@ async function saveMachine(){
 
 async function saveTool(){
 
-  if(!canEdit()){
+  if(!canManageGlobalLibrary()){
 
-    toast('Droit expert/admin requis');
+    toast(
+        'Bibliothèque réservée à l’Expert Global ou à l’Administrateur'
+    );
+
     return;
 
-  }
+}
 
   const materialCode =
     $('newToolMaterial').value;
