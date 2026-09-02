@@ -1165,7 +1165,13 @@ const canWriteSelectedSite = () => {
         String($('machine')?.value ?? '');
 
     if (selectedSiteId === '0') {
-        return false;
+
+        return (
+            role === 'admin' ||
+            role === 'expert' ||
+            role === 'expert_global'
+        );
+
     }
 
     if (
