@@ -1399,8 +1399,51 @@ document
 .onclick =
 async()=>{
 
+    const userId =
+        document
+        .getElementById(
+            'editUserId'
+        )
+        .value;
+
+    const role =
+        document
+        .getElementById(
+            'editRole'
+        )
+        .value;
+
+    const laserMachineId =
+        document
+        .getElementById(
+            'editLaserMachine'
+        )
+        .value || null;
+
+    const cncMachineId =
+        document
+        .getElementById(
+            'editCncMachine'
+        )
+        .value || null;
+
+    const hotMachineId =
+        document
+        .getElementById(
+            'editHotMachine'
+        )
+        .value || null;
+
+    console.log({
+        userId,
+        role,
+        laserMachineId,
+        cncMachineId,
+        hotMachineId
+    });
+
     alert(
-        'Le bouton Sauvegarder fonctionne'
+        'Valeurs récupérées correctement'
     );
 
 };
