@@ -240,17 +240,7 @@
   </div>
 
 </div>
-<label data-t="productionSite">
-  Site de production
-</label>
 
-<div class="inputline">
-
-  <input
-    id="productionSite"
-    readonly>
-
-</div> 
       </section>
 
       <section class="card">
@@ -1166,9 +1156,6 @@ document.getElementById('machineSafetyN').value =
 
 document.getElementById('machineSafetyVf').value =
   Math.round((ma.safety_vf || 0) * 100);
-  
-document.getElementById('productionSite').value =
-  ma.site || '';
   
   updateSawPanel();
   const sawMode=isSawMode();
