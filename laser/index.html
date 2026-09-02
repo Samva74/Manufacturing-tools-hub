@@ -399,7 +399,7 @@
       }
 
       .modal-panel {
-        width: min(560px, 100%);
+        width: min(760px, 100%);
         max-height: 82vh;
         overflow: auto;
         background: var(--card);
@@ -495,6 +495,12 @@ body:not(.can-edit) .parameter-save-btn{
     grid-template-columns:1fr 1fr;
     gap:12px;
 }
+      .modal-grid-3{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:12px;
+    align-items:start;
+}
 
 @media(max-width:900px){
 
@@ -553,7 +559,11 @@ body:not(.can-edit) .parameter-save-btn{
     color:var(--muted);
     margin-top:10px;
 }
-      
+    .modal-grid-3{
+        grid-template-columns:1fr;
+    }
+
+}      
     </style>
   </head>
   <body>
@@ -816,150 +826,181 @@ body:not(.can-edit) .parameter-save-btn{
     </div>
 
 
+<!-- SITE, MACHINE ET MATIÈRE -->
+
+<div class="modal-grid-3">
+
+    <!-- SITE -->
+
+    <div>
+
+        <label>
+            Site existant
+        </label>
+
+        <select id="newParameterSite"></select>
+
+        <label class="check-line">
+
+            <input
+                id="createNewSite"
+                type="checkbox"
+                onchange="toggleNewSiteFields()">
+
+            Créer un nouveau site
+
+        </label>
+
+        <div
+            id="newSiteFields"
+            class="creation-fields"
+            style="display:none">
+
+            <label>
+                Nom du nouveau site
+            </label>
+
+            <input
+                id="newLaserSiteName"
+                placeholder="Exemple : Thailand">
+
+        </div>
+
+    </div>
+
+
     <!-- MACHINE -->
 
-    <div class="modal-grid-2">
+    <div>
 
-<div>
+        <label>
+            Machine existante
+        </label>
 
-    <label>
-      Machine existante
-    </label>
+        <select id="newParameterMachine"></select>
 
-    <select id="newParameterMachine"></select>
+        <label class="check-line">
 
-    <label class="check-line">
+            <input
+                id="createNewMachine"
+                type="checkbox"
+                onchange="toggleNewMachineFields()">
 
-      <input
-          id="createNewMachine"
-          type="checkbox"
-          onchange="toggleNewMachineFields()">
+            Créer une nouvelle machine
 
-      Créer une nouvelle machine
+        </label>
 
-    </label>
+        <div
+            id="newMachineFields"
+            class="creation-fields"
+            style="display:none">
 
-    <div
-        id="newMachineFields"
-        class="creation-fields"
-        style="display:none">
+            <label>
+                Nom de la machine
+            </label>
 
-      <label>
-        Nom de la machine
-      </label>
+            <input
+                id="newLaserMachineName"
+                placeholder="Exemple : Trotec Speedy 400">
 
-      <input
-          id="newLaserMachineName"
-          placeholder="Exemple : Trotec Speedy 400">
+            <label>
+                Puissance machine
+            </label>
 
-<label>
-    Puissance machine
-</label>
+            <div class="input-unit">
 
-<div class="input-unit">
+                <input
+                    id="newLaserMachineWatt"
+                    type="number"
+                    min="1"
+                    step="1">
 
-    <input
-        id="newLaserMachineWatt"
-        type="number"
-        min="1"
-        step="1">
+                <span class="unit">
+                    W
+                </span>
 
-    <span class="unit">
-        W
-    </span>
+            </div>
 
-</div>
+            <label>
+                Lentille
+            </label>
 
-<label>
-    Lentille
-</label>
+            <input
+                id="newLaserMachineLens"
+                placeholder="Exemple : 2 pouces">
 
-<input
-    id="newLaserMachineLens"
-    placeholder="Exemple : 2 pouces">
-
-<label>
-    Site de production
-</label>
-
-<input
-    id="newLaserMachineSite"
-    placeholder="Exemple : Carouge">
+        </div>
 
     </div>
 
-    </div>
 
-<div>
     <!-- MATIÈRE -->
 
+    <div>
 
-    <label>
-      Matière existante
-    </label>
+        <label>
+            Matière existante
+        </label>
 
-    <select id="newParameterMaterial"></select>
+        <select id="newParameterMaterial"></select>
 
-    <label class="check-line">
+        <label class="check-line">
 
-      <input
-          id="createNewMaterial"
-          type="checkbox"
-          onchange="toggleNewMaterialFields()">
+            <input
+                id="createNewMaterial"
+                type="checkbox"
+                onchange="toggleNewMaterialFields()">
 
-      Créer une nouvelle matière
+            Créer une nouvelle matière
 
-    </label>
+        </label>
 
-    <div
-        id="newMaterialFields"
-        class="creation-fields"
-        style="display:none">
+        <div
+            id="newMaterialFields"
+            class="creation-fields"
+            style="display:none">
 
-      <label>
-        Code matière
-      </label>
+            <label>
+                Code matière
+            </label>
 
-      <input
-          id="newLaserMaterialCode"
-          placeholder="Exemple : pmma_cast">
+            <input
+                id="newLaserMaterialCode"
+                placeholder="Exemple : pmma_cast">
 
-      <label>
-        Nom français
-      </label>
+            <label>
+                Nom français
+            </label>
 
-      <input
-          id="newLaserMaterialNameFr">
+            <input id="newLaserMaterialNameFr">
 
-      <label>
-        Nom anglais
-      </label>
+            <label>
+                Nom anglais
+            </label>
 
-      <input
-          id="newLaserMaterialNameEn">
+            <input id="newLaserMaterialNameEn">
 
-      <label>
-        Nom portugais
-      </label>
+            <label>
+                Nom portugais
+            </label>
 
-      <input
-          id="newLaserMaterialNamePt">
+            <input id="newLaserMaterialNamePt">
 
-      <label>
-        Famille
-      </label>
+            <label>
+                Famille
+            </label>
 
-      <input
-          id="newLaserMaterialFamily"
-          placeholder="Exemple : Acrylic">
+            <input
+                id="newLaserMaterialFamily"
+                placeholder="Exemple : Acrylic">
 
-      <label>
-        Note
-      </label>
+            <label>
+                Note
+            </label>
 
-      <textarea id="newLaserMaterialNote"></textarea>
+            <textarea id="newLaserMaterialNote"></textarea>
 
-    </div>
+        </div>
 
     </div>
 
@@ -3236,7 +3277,20 @@ function closeLaserParameterModal() {
         .classList.remove('open');
 
 }
+function toggleNewSiteFields() {
 
+    const createSite =
+        $('createNewSite').checked;
+
+    $('newSiteFields').style.display =
+        createSite
+            ? 'block'
+            : 'none';
+
+    $('newParameterSite').disabled =
+        createSite;
+
+}
 function toggleNewMachineFields() {
 
     $('newMachineFields').style.display =
@@ -3263,38 +3317,121 @@ function toggleNewMaterialFields() {
 
 function fillLaserParameterModal() {
 
+    /* =========================================
+       SITES
+       ========================================= */
+
+    const siteSelect =
+        $('newParameterSite');
+
+    siteSelect.innerHTML =
+        '';
+
+    sites.forEach(site => {
+
+        siteSelect.add(
+            new Option(
+                site.site_name,
+                String(site.id)
+            )
+        );
+
+    });
+
+    const currentSiteId =
+        $('site').value;
+
+    if(
+        sites.some(
+            site =>
+                String(site.id) ===
+                String(currentSiteId)
+        )
+    ){
+
+        siteSelect.value =
+            String(currentSiteId);
+
+    }
+
+
+    /* =========================================
+       MACHINES
+       ========================================= */
+
     const machineSelect =
         $('newParameterMachine');
 
-    machineSelect.innerHTML = '';
+    machineSelect.innerHTML =
+        '';
 
     machines.forEach(machine => {
 
         machineSelect.add(
             new Option(
                 machine.name,
-                machine.id
+                String(machine.id)
             )
         );
 
     });
 
+    const currentMachineId =
+        $('machine').value;
+
+    if(
+        machines.some(
+            machine =>
+                String(machine.id) ===
+                String(currentMachineId)
+        )
+    ){
+
+        machineSelect.value =
+            String(currentMachineId);
+
+    }
+
+
+    /* =========================================
+       MATIÈRES
+       ========================================= */
 
     const materialSelect =
         $('newParameterMaterial');
 
-    materialSelect.innerHTML = '';
+    materialSelect.innerHTML =
+        '';
 
     materials.forEach(material => {
 
         materialSelect.add(
             new Option(
-                loc(material,'name'),
+                loc(
+                    material,
+                    'name'
+                ),
                 material.code
             )
         );
 
     });
+
+    const currentMaterialCode =
+        $('material').value;
+
+    if(
+        materials.some(
+            material =>
+                material.code ===
+                currentMaterialCode
+        )
+    ){
+
+        materialSelect.value =
+            currentMaterialCode;
+
+    }
 
 }
 
@@ -3313,8 +3450,144 @@ async function saveNewLaserParameter() {
 
     try {
 
-        let machineId =
-            $('newParameterMachine').value;
+    let selectedSiteId =
+        $('newParameterSite').value;
+
+    let selectedSiteName = '';
+
+    const existingSelectedSite =
+        sites.find(
+            site =>
+                String(site.id) ===
+                String(selectedSiteId)
+        );
+
+    if(existingSelectedSite){
+
+        selectedSiteName =
+            existingSelectedSite.site_name;
+
+    }
+
+
+    /* =========================================
+       CRÉATION D’UN NOUVEAU SITE
+       ========================================= */
+
+    if($('createNewSite').checked){
+
+        if(
+            role !== 'admin' &&
+            role !== 'expert_global' &&
+            role !== 'expert'
+        ){
+
+            toast(
+                'La création d’un site est réservée à un Expert Global ou à un Administrateur'
+            );
+
+            return;
+
+        }
+
+        const newSiteName =
+            $('newLaserSiteName')
+                .value
+                .trim();
+
+        if(!newSiteName){
+
+            toast(
+                'Le nom du nouveau site est obligatoire'
+            );
+
+            $('newLaserSiteName').focus();
+
+            return;
+
+        }
+
+        const duplicateSite =
+            sites.find(
+                site =>
+                    String(site.site_name)
+                        .trim()
+                        .toLowerCase() ===
+                    newSiteName.toLowerCase()
+            );
+
+        if(duplicateSite){
+
+            toast(
+                'Ce site existe déjà'
+            );
+
+            return;
+
+        }
+
+        const siteRows =
+            await api(
+                'production_sites',
+                {
+                    m:
+                        'POST',
+
+                    b: {
+                        site_name:
+                            newSiteName,
+
+                        created_by_user_id:
+                            user?.id || null,
+
+                        created_by_email:
+                            user?.email || null
+                    }
+                }
+            );
+
+        if(
+            !Array.isArray(siteRows) ||
+            !siteRows.length ||
+            siteRows[0].id === undefined ||
+            siteRows[0].id === null
+        ){
+
+            throw new Error(
+                'Le site a été créé sans identifiant exploitable'
+            );
+
+        }
+
+        selectedSiteId =
+            String(
+                siteRows[0].id
+            );
+
+        selectedSiteName =
+            siteRows[0].site_name ||
+            newSiteName;
+
+    }
+
+
+    /* =========================================
+       VALIDATION DU SITE
+       ========================================= */
+
+    if(!selectedSiteId){
+
+        toast(
+            'Sélectionne un site'
+        );
+
+        return;
+
+    }
+
+
+    let machineId =
+        $('newParameterMachine').value;
       if (
     role === 'expert_machine' &&
     String(machineId) !==
@@ -3497,11 +3770,10 @@ async function saveNewLaserParameter() {
                                 $('newLaserMachineLens')
                                     .value
                                     .trim() || null,
-
+                            site_id:
+    Number(selectedSiteId),
                             site:
-                                $('newLaserMachineSite')
-                                    .value
-                                    .trim() || null,
+    selectedSiteName || null,
 
                             created_by_user_id:
                                 user?.id || null,
@@ -3668,13 +3940,13 @@ async function saveNewLaserParameter() {
         }
 
       if (
-    role === 'e*pert_machine' &&
-    String(machin*Id) !==
-        String(userLaserMa*hineId)
+    role === 'expert_machine' &&
+    String(machineId) !==
+        String(userLaserMachineId)
 ) {
 
     toast(
-        'L*cture seule : vous pouvez enregist*er des paramètres uniquement pour *otre machine attribuée'
+        'Lecture seule : vous pouvez enregistrer des paramètres uniquement pour votre machine attribuée'
     );
 
    return;
@@ -3684,8 +3956,6 @@ async function saveNewLaserParameter() {
            CONTRÔLE D’UN DOUBLON
            ========================================= */
 
-        const selectedSiteId =
-    String($('site').value);
 
 const existingParameter =
     params.find(
@@ -3746,9 +4016,9 @@ const existingParameter =
             b: {
 
                 site_id:
-                    Number(
-                        $('site').value
-                    ),
+    Number(
+        selectedSiteId
+    ),
 
                 machine_id:
                     machineId,
@@ -3832,9 +4102,11 @@ const existingParameter =
 
         fillLists();
 
-
         /* Sélection du nouveau paramètre */
 
+        $('site').value =
+            String(selectedSiteId);
+      
         $('machine').value =
             String(machineId);
 
@@ -3883,19 +4155,32 @@ const existingParameter =
 
 function resetLaserParameterModal() {
 
-    $('createNewMachine').checked = false;
+    $('createNewSite').checked =
+        false;
 
-    $('createNewMaterial').checked = false;
+    $('createNewMachine').checked =
+        false;
 
-    $('newMachineFields').style.display = 'none';
+    $('createNewMaterial').checked =
+        false;
 
-    $('newMaterialFields').style.display = 'none';
+    $('newSiteFields').style.display =
+        'none';
+
+    $('newMachineFields').style.display =
+        'none';
+
+    $('newMaterialFields').style.display =
+        'none';
+
+    $('newParameterSite').disabled =
+        false;
 
     [
+        'newLaserSiteName',
         'newLaserMachineName',
         'newLaserMachineWatt',
         'newLaserMachineLens',
-        'newLaserMachineSite',
         'newLaserMaterialCode',
         'newLaserMaterialNameFr',
         'newLaserMaterialNameEn',
