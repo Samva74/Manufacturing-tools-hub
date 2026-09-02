@@ -268,19 +268,24 @@
         border-color: var(--ok)
       }
 
-      .res-big .lbl {
-        font-size: 13px;
-        color: var(--muted)
-      }
+     .rec-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-      .res-big .lbl {
-    font-size: 13px;
-    color: var(--muted);
+    min-height:110px;
 }
 
-.res-big .val {
-    font-size: 30px;
-    font-weight: 900;
+.rec-label{
+    font-size:17px;
+    font-weight:700;
+    color:var(--muted);
+}
+
+.rec-value{
+    font-size:36px;
+    font-weight:900;
+    text-align:right;
 }
 
 /* Bloc compact pour Passes */
@@ -697,18 +702,40 @@ body:not(.can-edit) .parameter-save-btn{
     id="parameterStatus"
     class="status">
 </div>
-            <div class="res-big valid">
-              <div class="lbl" data-t="temperature"></div>
-              <div class="val"><span id="rTemp">–</span></div>
-            </div>
-            <div class="res-big">
-              <div class="lbl" data-t="pressure"></div>
-              <div class="val"><span id="rPress">–</span></div>
-            </div>
-            <div class="res-small">
-              <div class="lbl" data-t="dwell"></div>
-              <div class="val"><span id="rDwell">–</span></div>
-            </div>
+            <div class="res-big valid rec-card">
+
+    <div class="rec-label">
+        Puissance à programmer
+    </div>
+
+    <div class="rec-value">
+        <span id="powerRec">12 %</span>
+    </div>
+
+</div>
+            <div class="res-big rec-card">
+
+    <div class="rec-label">
+        Vitesse à programmer
+    </div>
+
+    <div class="rec-value">
+        <span id="speedRec">450 mm/s</span>
+    </div>
+
+</div>
+            <div class="res-big rec-card">
+
+    <div class="rec-label">
+        Passes
+    </div>
+
+    <div class="rec-value">
+        <span id="passesRec">1</span>
+    </div>
+
+</div>
+            
           </section>
           <section class="card">
 
