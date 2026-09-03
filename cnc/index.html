@@ -319,7 +319,29 @@
     id="parameterStatus"
     class="status-banner">
 </div>
-        <div class="res-big valid"><div class="lbl" data-t="spindle">Rotation à programmer</div><div class="val"><span id="rpm">–</span></div></div>
+        <div class="res-big valid">
+
+  <div class="lbl">
+    Rotation à programmer
+  </div>
+
+  <div class="val">
+
+    <input
+      id="rpmManual"
+      type="number"
+      style="
+        width:180px;
+        border:none;
+        background:transparent;
+        font-size:30px;
+        font-weight:900;
+        text-align:center;
+      ">
+
+  </div>
+
+</div>
         <div class="res-big"><div class="lbl" data-t="feed">Avance à programmer</div><div class="val"><span id="feed">–</span></div></div>
         <div class="res-line"><span>Vc min/rec/max</span><b id="vc">–</b></div>
         <div class="res-line"><span>Fz min/rec/max</span><b id="fz">–</b></div>
@@ -1236,13 +1258,19 @@ if(isSawMode()){
 
     rpm =
         Math.max(
-            ma.n_min || 3500,
+            ma.n_min || 4000,
             rpm
         );
 
 }
   let feed=Math.round(Math.min(rpm*z*fz,vfLimit));
-  $('rpm').textContent=rpm+' tr/min';
+  if(
+    !$('rpmManual').dataset.userEdited
+){
+
+    $('rpmManual').value = rpm;
+
+}
   $('feed').textContent=feed+' mm/min';
   $('vc').textContent=`${t.vc_min??'–'} / ${t.vc_rec??'–'} / ${t.vc_max??'–'} m/min`;
   $('fz').textContent=`${t.fz_min??'–'} / ${t.fz_rec??'–'} / ${t.fz_max??'–'} mm/dent`;
@@ -1257,7 +1285,53 @@ if(isSawMode()){
 function searchMachine(){openSearch('Recherche machine',machines.map(m=>({title:m.name,sub:'Machine CNC',search:m.name,value:m.name})),v=>{$('machine').value=v;calc()})}
 function searchMaterial(){openSearch('Recherche matière',materialCodesFromTools.map(code=>({title:materialLabel(code),sub:code,search:[code,materialLabel(code)].join(' '),value:code})),v=>{$('material').value=v;fillLists();calc()})}
 function searchTool(){openSearch('Recherche outil',tools.map(t=>({title:loc(t,'label')||t.label_fr||t.tool_code,sub:materialLabel(t.material_code)+' · Vc '+(t.vc_rec||'')+' · Fz '+(t.fz_rec||''),search:[t.tool_code,loc(t,'label'),loc(t,'usage'),t.material_code,materialLabel(t.material_code),t.remark_fr].join(' '),value:String(t.id)})),v=>{let t=tools.find(x=>String(x.id)===v);if(t){$('material').value=t.material_code;fillLists();$('tool').value=v;calc()}})}
+function updateFeedFromManualRPM(){
 
+    let t =
+        selectedTool();
+
+    if(!t){
+        return;
+    }
+
+    let rpm =
+        +$('rpmManual').value || 0;
+
+    let z =
+        isSawMode()
+            ? (+$('sawTeeth').value || 48)
+            : (+$('flutes').value || 2);
+
+    let fz =
+        num(t.fz_rec) || 0.04;
+
+    let ma =
+        machines.find(
+            m => m.name === $('machine').value
+        );
+
+    let vfLimit =
+        (+ma.vf_max || 3000) *
+        (+ma.safety_vf || 1);
+
+    let feed =
+        Math.round(
+            Math.min(
+                rpm * z * fz,
+                vfLimit
+            )
+        );
+
+    $('feed').textContent =
+        feed + ' mm/min';
+
+    $('cRpm').value =
+        rpm;
+
+    $('cFeed').value =
+        feed;
+
+}
 function addMaterial(){
 
   if(!canManageGlobalLibrary()){
@@ -1973,6 +2047,16 @@ async function init(){
 
     }
 );
+  $('rpmManual').addEventListener(
+    'input',
+    function(){
+
+        this.dataset.userEdited = '1';
+
+        updateFeedFromManualRPM();
+
+    }
+);  
   $('material').addEventListener('change',()=>{rebuildToolList(false);syncOperationWithTool();calc();});
   $('tool').addEventListener('change',()=>{syncOperationWithTool();calc();});
   $('operation').addEventListener('change',()=>{enforceOperationFromTool();calc();});
