@@ -2169,10 +2169,26 @@ async function init(){
     }
 );
   $('rpmManual').addEventListener(
-    'input',
+    'focus',
     function(){
 
         this.dataset.userEdited = '1';
+
+    }
+);
+
+$('rpmManual').addEventListener(
+    'change',
+    function(){
+
+        updateFeedFromManualRPM();
+
+    }
+);
+
+$('rpmManual').addEventListener(
+    'blur',
+    function(){
 
         updateFeedFromManualRPM();
 
