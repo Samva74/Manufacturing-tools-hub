@@ -20,7 +20,20 @@
     gap:14px;
     align-items:start;
 }
-    .col{display:flex;flex-direction:column;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.12)}h2{display:flex;gap:8px;margin:0 0 12px;font-size:18px}.dot{width:10px;height:10px;margin-top:6px;border-radius:50%;background:var(--accent)}label{display:block;color:var(--muted);font-size:13px;font-weight:750;margin:10px 0 5px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.inputline{display:flex;gap:8px;align-items:stretch}select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:white;color:var(--txt);font-size:15px}textarea{min-height:78px}.search-btn,.mini-plus{height:46px;min-width:46px;border-radius:14px;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}.search-btn{border:1px solid var(--line);background:white}.mini-plus{border:none;background:var(--accent);color:white;display:none}.can-edit .mini-plus{display:flex}.res-big{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:13px;margin:10px 0}.res-big.valid{background:var(--valid);border-color:var(--ok)}.res-big .lbl{font-size:13px;color:var(--muted)}.res-big .val{font-size:30px;font-weight:900}.res-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0;gap:20px}.res-line span{color:var(--muted)}.res-line b{text-align:right}.note{background:rgba(29,29,27,.06);border-left:4px solid var(--accent);padding:10px;border-radius:12px;margin-top:10px;white-space:pre-line}.btn{width:100%;border:none;border-radius:13px;background:var(--accent);color:white;padding:13px;margin-top:10px;font-weight:850;cursor:pointer}.btn.secondary{background:var(--card2);color:var(--txt);border:1px solid var(--line)}.lib{margin-top:14px}.item{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}.item .s{color:var(--muted);font-size:13px}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1d1b;color:white;padding:11px 14px;border-radius:999px;display:none;z-index:99}.foot{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;z-index:9998;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal-panel{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}.modal-head{display:flex;justify-content:space-between}.close{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:8px 12px;font-weight:900}.result{padding:12px;border:1px solid var(--line);border-radius:14px;background:white;margin-top:8px;cursor:pointer}.result:hover{background:var(--valid)}.calib-input-wrap{position:relative}.calib-input-wrap input{font-weight:850;padding-right:78px}.calib-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-weight:850;color:var(--txt);pointer-events:none}
+    .col{display:flex;flex-direction:column;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.12)}h2{display:flex;gap:8px;margin:0 0 12px;font-size:18px}.dot{width:10px;height:10px;margin-top:6px;border-radius:50%;background:var(--accent)}label{display:block;color:var(--muted);font-size:13px;font-weight:750;margin:10px 0 5px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.inputline{display:flex;gap:8px;align-items:stretch}select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:white;color:var(--txt);font-size:15px}textarea{min-height:78px}.search-btn,.mini-plus{height:46px;min-width:46px;border-radius:14px;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}.search-btn{border:1px solid var(--line);background:white}.mini-plus{border:none;background:var(--accent);color:white;display:none}.can-edit .mini-plus{display:flex}
+    .res-big{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:13px 18px;margin:10px 0;display:flex;justify-content:space-between;align-items:center;}
+    .res-big.valid{background:var(--valid);border-color:var(--ok)}
+    .res-big .lbl{font-size:13px;color:var(--muted)}
+    .res-big .val{font-size:30px;font-weight:900;text-align:right;}
+    .res-big .unit{
+    font-size:18px;
+    font-weight:700;
+    margin-left:8px;
+}
+    .res-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0;gap:20px}
+    .res-line span{color:var(--muted)}
+    .res-line b{text-align:right}
+    .note{background:rgba(29,29,27,.06);border-left:4px solid var(--accent);padding:10px;border-radius:12px;margin-top:10px;white-space:pre-line}.btn{width:100%;border:none;border-radius:13px;background:var(--accent);color:white;padding:13px;margin-top:10px;font-weight:850;cursor:pointer}.btn.secondary{background:var(--card2);color:var(--txt);border:1px solid var(--line)}.lib{margin-top:14px}.item{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}.item .s{color:var(--muted);font-size:13px}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1d1b;color:white;padding:11px 14px;border-radius:999px;display:none;z-index:99}.foot{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;z-index:9998;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal-panel{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}.modal-head{display:flex;justify-content:space-between}.close{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:8px 12px;font-weight:900}.result{padding:12px;border:1px solid var(--line);border-radius:14px;background:white;margin-top:8px;cursor:pointer}.result:hover{background:var(--valid)}.calib-input-wrap{position:relative}.calib-input-wrap input{font-weight:850;padding-right:78px}.calib-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-weight:850;color:var(--txt);pointer-events:none}
 .role-pill{
     display:flex;
     align-items:center;
@@ -320,29 +333,20 @@
     class="status-banner">
 </div>
         <div class="res-big valid">
-
-  <div class="lbl">
-    Rotation à programmer
-  </div>
-
-  <div class="val">
-
-    <input
-      id="rpmManual"
-      type="number"
-      style="
-        width:180px;
-        border:none;
-        background:transparent;
-        font-size:30px;
-        font-weight:900;
-        text-align:center;
-      ">
-
-  </div>
-
+    <div class="lbl">Rotation à programmer</div>
+    <div class="val">
+        <span id="rpm">–</span>
+        <span class="unit">tr/min</span>
+    </div>
 </div>
-        <div class="res-big"><div class="lbl" data-t="feed">Avance à programmer</div><div class="val"><span id="feed">–</span></div></div>
+
+<div class="res-big">
+    <div class="lbl">Avance à programmer</div>
+    <div class="val">
+        <span id="feed">–</span>
+        <span class="unit">mm/min</span>
+    </div>
+</div>
         <div class="res-line"><span>Vc min/rec/max</span><b id="vc">–</b></div>
         <div class="res-line"><span>Fz min/rec/max</span><b id="fz">–</b></div>
         <div class="res-line"><span>Passe</span><b id="pass">–</b></div>
@@ -1271,7 +1275,8 @@ if(isSawMode()){
     $('rpmManual').value = rpm;
 
 }
-  $('feed').textContent=feed+' mm/min';
+  $('rpm').textContent = rpm;
+  $('feed').textContent=feed;
   $('vc').textContent=`${t.vc_min??'–'} / ${t.vc_rec??'–'} / ${t.vc_max??'–'} m/min`;
   $('fz').textContent=`${t.fz_min??'–'} / ${t.fz_rec??'–'} / ${t.fz_max??'–'} mm/dent`;
   $('pass').textContent=sawMode ? (($('sawKerf').value||'3.2')+' mm trait scie') : (t.passe_txt||t.pass_txt||mmRange(t.pass_min_coef,t.pass_max_coef,d)||'–');
