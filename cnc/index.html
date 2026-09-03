@@ -1269,10 +1269,14 @@ document.getElementById('machineSafetyVf').value =
     $('parameterStatus').textContent =
         '⚪ Aucun paramètre trouvé';
 
-    $('rpm').textContent='–';
-    $('feed').textContent='–';
+    $('rpmManual').value =
+        '';
+
+    $('feed').textContent =
+        '–';
 
     return;
+
 }
 if(
     t.quality ===
@@ -1328,13 +1332,7 @@ if(isSawMode()){
         );
 
 }
-  if(
-    !$('rpmManual').dataset.userEdited
-){
-
-    $('rpmManual').value = rpm;
-
-}
+  
   const rpmManual =
     $('rpmManual');
 
@@ -1350,7 +1348,7 @@ if(
 
 $('feed').textContent =
     feed;
-``
+
   $('vc').textContent=`${t.vc_min??'–'} / ${t.vc_rec??'–'} / ${t.vc_max??'–'} m/min`;
   $('fz').textContent=`${t.fz_min??'–'} / ${t.fz_rec??'–'} / ${t.fz_max??'–'} mm/dent`;
   $('pass').textContent=sawMode ? (($('sawKerf').value||'3.2')+' mm trait scie') : (t.passe_txt||t.pass_txt||mmRange(t.pass_min_coef,t.pass_max_coef,d)||'–');
@@ -1364,12 +1362,45 @@ $('feed').textContent =
 function searchMachine(){openSearch('Recherche machine',machines.map(m=>({title:m.name,sub:'Machine CNC',search:m.name,value:m.name})),v=>{$('machine').value=v;calc()})}
 function searchMaterial(){openSearch('Recherche matière',materialCodesFromTools.map(code=>({title:materialLabel(code),sub:code,search:[code,materialLabel(code)].join(' '),value:code})),v=>{$('material').value=v;fillLists();calc()})}
 function searchTool(){openSearch('Recherche outil',tools.map(t=>({title:loc(t,'label')||t.label_fr||t.tool_code,sub:materialLabel(t.material_code)+' · Vc '+(t.vc_rec||'')+' · Fz '+(t.fz_rec||''),search:[t.tool_code,loc(t,'label'),loc(t,'usage'),t.material_code,materialLabel(t.material_code),t.remark_fr].join(' '),value:String(t.id)})),v=>{let t=tools.find(x=>String(x.id)===v);if(t){$('material').value=t.material_code;fillLists();$('tool').value=v;calc()}})}
-function updateFeedFromManualRPM(){
+function updateFeedFromManualRPM(applyLimits){
 
     const t =
         selectedTool();
 
-    if(!t){
+    const rpmField =
+        $('rpmManual');
+
+    if(
+        !t ||
+        !rpmField
+    ){
+        return;
+    }
+
+    const typedValue =
+        rpmField.value.trim();
+
+    if(typedValue === ''){
+
+        $('feed').textContent =
+            '–';
+
+        $('cRpm').value =
+            '';
+
+        $('cFeed').value =
+            '';
+
+        return;
+    }
+
+    let rpm =
+        Number(typedValue);
+
+    if(
+        !Number.isFinite(rpm) ||
+        rpm <= 0
+    ){
         return;
     }
 
@@ -1393,11 +1424,6 @@ function updateFeedFromManualRPM(){
             safety_vf:1
         };
 
-    const rpmManual =
-        Number(
-            $('rpmManual').value
-        ) || 0;
-
     const safetyN =
         ma.safety_n === null ||
         ma.safety_n === undefined
@@ -1414,27 +1440,34 @@ function updateFeedFromManualRPM(){
         (Number(ma.n_max) || 24000) *
         safetyN;
 
-    let rpm =
-        Math.min(
-            rpmManual,
-            nMaximum
-        );
-
-    if(isSawMode()){
-
-        const nMinimum =
-            Number(ma.n_min) || 4000;
+    if(applyLimits){
 
         rpm =
-            Math.max(
+            Math.min(
                 rpm,
-                nMinimum
+                nMaximum
             );
 
-    }
+        if(isSawMode()){
 
-    rpm =
-        Math.round(rpm);
+            const nMinimum =
+                Number(ma.n_min) || 4000;
+
+            rpm =
+                Math.max(
+                    rpm,
+                    nMinimum
+                );
+
+        }
+
+        rpm =
+            Math.round(rpm);
+
+        rpmField.value =
+            rpm;
+
+    }
 
     const z =
         isSawMode()
@@ -1448,7 +1481,7 @@ function updateFeedFromManualRPM(){
         (Number(ma.vf_max) || 3000) *
         safetyVf;
 
-    const feed =
+    let feed =
         Math.round(
             Math.min(
                 rpm * z * fz,
@@ -1456,14 +1489,20 @@ function updateFeedFromManualRPM(){
             )
         );
 
-    $('rpmManual').value =
-        rpm;
+    if(isSawMode()){
+
+        feed =
+            Math.round(
+                feed / 2
+            );
+
+    }
 
     $('feed').textContent =
         feed;
 
     $('cRpm').value =
-        rpm;
+        Math.round(rpm);
 
     $('cFeed').value =
         feed;
@@ -2189,16 +2228,22 @@ async function init(){
     'focus',
     function(){
 
-        this.dataset.userEdited = '1';
+        this.dataset.userEdited =
+            '1';
+
+        this.select();
 
     }
 );
 
 $('rpmManual').addEventListener(
-    'change',
+    'input',
     function(){
 
-        updateFeedFromManualRPM();
+        this.dataset.userEdited =
+            '1';
+
+        updateFeedFromManualRPM(false);
 
     }
 );
@@ -2207,7 +2252,24 @@ $('rpmManual').addEventListener(
     'blur',
     function(){
 
-        updateFeedFromManualRPM();
+        updateFeedFromManualRPM(true);
+
+    }
+);
+
+$('rpmManual').addEventListener(
+    'keydown',
+    function(event){
+
+        if(event.key === 'Enter'){
+
+            event.preventDefault();
+
+            updateFeedFromManualRPM(true);
+
+            this.blur();
+
+        }
 
     }
 );
