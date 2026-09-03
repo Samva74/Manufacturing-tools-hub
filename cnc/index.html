@@ -170,6 +170,18 @@
         <div class="row">
 
   <div>
+  <label>n min machine</label>
+
+  <div class="calib-input-wrap">
+    <input id="machineNmin" readonly>
+
+    <span class="calib-unit">
+      tr/min
+    </span>
+  </div>
+</div>
+            
+  <div>
     <label data-t="machineNmax">
   n max machine
 </label>
@@ -421,6 +433,23 @@
 
     <div class="row">
 
+      <div>
+  <label>n min machine</label>
+
+  <div class="calib-input-wrap">
+
+    <input id="newMachineNmin"
+           type="number"
+           value="3500"
+           inputmode="numeric">
+
+    <span class="calib-unit">
+      tr/min
+    </span>
+
+  </div>
+</div>
+        
       <div>
 
         <label>n max machine</label>
@@ -815,7 +844,8 @@ function goHub(){
 }
 function loc(r,b){return r?.[b+'_'+lang]||r?.[b+'_fr']||r?.[b]||''}
 function setLang(l){lang=l;localStorage.setItem(APP+'_lang',l);refreshText()}
-function refreshText(){document.querySelectorAll('[data-t]').forEach(e=>e.textContent=TXT[lang][e.dataset.t]||TXT.fr[e.dataset.t]||'');document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));fillLists();calc()}
+function refreshText(){document.querySelectorAll('[data-t]').forEach(e=>e.textContent=TXT[lang][e.dataset.t]||TXT.fr[e.dataset.t]||'');document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));fillLists();
+                       calc()}
 async function initAuth(){
 
     await window.authReady;
@@ -1145,7 +1175,10 @@ console.log(t);
     ||machines[0]
     ||{n_max:24000,vf_max:3000,safety_n:1,safety_vf:1};
   
-  document.getElementById('machineNmax').value =
+document.getElementById('machineNmin').value =
+  ma.n_min || '';
+        
+document.getElementById('machineNmax').value =
   ma.n_max || '';
 
 document.getElementById('machineVfmax').value =
@@ -1191,7 +1224,23 @@ else{
   let nTheo=vc*1000/(Math.PI*d);
   let nLimit=(+ma.n_max||24000)*(+ma.safety_n||1);
   let vfLimit=(+ma.vf_max||3000)*(+ma.safety_vf||1);
-  let rpm=Math.round(Math.min(nTheo,nLimit));
+  let rpm =
+    Math.round(
+        Math.min(
+            nTheo,
+            nLimit
+        )
+    );
+
+if(isSawMode()){
+
+    rpm =
+        Math.max(
+            ma.n_min || 3500,
+            rpm
+        );
+
+}
   let feed=Math.round(Math.min(rpm*z*fz,vfLimit));
   $('rpm').textContent=rpm+' tr/min';
   $('feed').textContent=feed+' mm/min';
@@ -1497,6 +1546,9 @@ async function saveMachine(){
   const nMax =
     num($('newMachineNmax').value);
 
+  const nMin =
+    num($('newMachineNmin').value);
+    
   const vfMax =
     num($('newMachineVfMax').value);
 
@@ -1546,6 +1598,9 @@ async function saveMachine(){
 
     n_max:
       nMax,
+
+    n_min:
+    nMin || 4000,  
 
     vf_max:
       vfMax,
