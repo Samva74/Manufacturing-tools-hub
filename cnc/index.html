@@ -1310,7 +1310,24 @@ if(isSawMode()){
         );
 
 }
-  let feed=Math.round(Math.min(rpm*z*fz,vfLimit));
+  let feed =
+    Math.round(
+        Math.min(
+            rpm * z * fz,
+            vfLimit
+        )
+    );
+
+/* Réduction avance pour scie circulaire */
+
+if(isSawMode()){
+
+    feed =
+        Math.round(
+            feed / 2
+        );
+
+}
   if(
     !$('rpmManual').dataset.userEdited
 ){
