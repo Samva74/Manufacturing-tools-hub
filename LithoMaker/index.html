@@ -81,9 +81,9 @@ NOTES
 Qf=q?`${(v/q.nx).toFixed(3)} / ${(p/q.ny).toFixed(3)} mm/px`:"—";
 const qualityLabel =
 I <= 180 ? "Rapide" :
-I <= 300 ? "Standard" :
-I <= 600 ? "Haute qualité" :
-"Très haute qualité"; 
+I <= 300 ? "HD" :
+I <= 600 ? "Full HD" :
+"Ultra"; 
 return k("div",{className:"min-h-screen bg-[#f6f7f9] text-[#111827] font-[Inter,system-ui,sans-serif] selection:bg-black selection:text-white",children:[g("style",{children:"@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');"}),
 g("header",{
 className:"sticky top-0 z-20 bg-[#0f1217] text-white border-b border-white/10",
@@ -142,12 +142,49 @@ onChange:(w)=>c(parseInt(w.target.value)),
 className:"mt-2 w-full accent-black"
 }),
 k("div",{
-className:"flex justify-between text-[10px] text-black/40 font-mono mt-1",
+className:"mt-2 grid grid-cols-4 gap-2",
 children:[
-g("span",{children:"Rapide"}),
-g("span",{children:"HD"}),
-g("span",{children:"Full HD"}),
-g("span",{children:"Ultra"})
+
+g("button",{
+onClick:()=>c(180),
+className:`h-[32px] rounded-[8px] text-[11px] font-semibold transition ${
+I===180
+?"bg-black text-white"
+:"bg-[#f6f7f9] border border-black/10 text-black/60"
+}`,
+children:"Rapide"
+}),
+
+g("button",{
+onClick:()=>c(300),
+className:`h-[32px] rounded-[8px] text-[11px] font-semibold transition ${
+I===300
+?"bg-black text-white"
+:"bg-[#f6f7f9] border border-black/10 text-black/60"
+}`,
+children:"HD"
+}),
+
+g("button",{
+onClick:()=>c(600),
+className:`h-[32px] rounded-[8px] text-[11px] font-semibold transition ${
+I===600
+?"bg-black text-white"
+:"bg-[#f6f7f9] border border-black/10 text-black/60"
+}`,
+children:"Full HD"
+}),
+
+g("button",{
+onClick:()=>c(800),
+className:`h-[32px] rounded-[8px] text-[11px] font-semibold transition ${
+I===800
+?"bg-black text-white"
+:"bg-[#f6f7f9] border border-black/10 text-black/60"
+}`,
+children:"Ultra"
+})
+
 ]
 })
 ]}),k("div",{children:[k("div",{className:"flex items-center justify-between",children:[g("label",{className:"text-[12px] font-medium text-black/80",children:"Contraste"}),k("span",{className:"text-[11px] font-mono px-2 py-0.5 rounded-full bg-[#f6f7f9] border border-black/10",children:[m.toFixed(2),"×"]})]}),
