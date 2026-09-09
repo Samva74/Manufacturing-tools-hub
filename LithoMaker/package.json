@@ -1,0 +1,18 @@
+{
+  "name": "lithomaker",
+  "version": "1.0.0",
+  "description": "Générateur de lithophanie et relief CNC pour Corian / Plexiglas",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "lithophane",
+    "corian",
+    "cnc",
+    "stl",
+    "plexiglas"
+  ],
+  "license": "MIT"
+}
