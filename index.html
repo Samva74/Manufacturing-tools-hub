@@ -21,7 +21,7 @@
   .logout{background:#1d1d1b;color:white}
   .grid{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:22px;
 }
   .card{
@@ -31,10 +31,15 @@
   padding:30px;
   text-decoration:none;
   color:var(--txt);
-  min-height:415px;
 
-  display:flex;
-  flex-direction:column;
+  min-height:260px;
+
+  transition:.2s ease;
+}
+
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
   .app-icon{
     width:76px;
