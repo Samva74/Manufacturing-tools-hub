@@ -83,7 +83,7 @@ const qualityLabel =
 I <= 180 ? "Rapide" :
 I <= 300 ? "HD" :
 I <= 600 ? "Full HD" :
-"Ultra"; 
+"Ultra HD"; 
 return k("div",{className:"min-h-screen bg-[#f6f7f9] text-[#111827] font-[Inter,system-ui,sans-serif] selection:bg-black selection:text-white",children:[g("style",{children:"@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');"}),
 g("header",{
 className:"sticky top-0 z-20 bg-[#0f1217] text-white border-b border-white/10",
@@ -142,7 +142,7 @@ onChange:(w)=>c(parseInt(w.target.value)),
 className:"mt-2 w-full accent-black"
 }),
 k("div",{
-className:"mt-2 flex gap-2",
+className:"mt-2 flex justify-between items-center",
 children:[
 
 g("button",{
@@ -156,9 +156,9 @@ children:"Rapide"
 }),
 
 g("button",{
-onClick:()=>c(300),
+onClick:()=>c(400),
 className:`h-[32px] rounded-[8px] text-[11px] font-semibold transition ${
-I===300
+I===400
 ?"bg-black text-white"
 :"bg-[#f6f7f9] border border-black/10 text-black/60"
 }`,
@@ -166,9 +166,9 @@ children:"HD"
 }),
 
 g("button",{
-onClick:()=>c(600),
+onClick:()=>c(700),
 className:`h-[32px] rounded-[8px] text-[11px] font-semibold transition ${
-I===600
+I===700
 ?"bg-black text-white"
 :"bg-[#f6f7f9] border border-black/10 text-black/60"
 }`,
@@ -176,13 +176,13 @@ children:"Full HD"
 }),
 
 g("button",{
-onClick:()=>c(800),
+onClick:()=>c(1000),
 className:`h-[32px] rounded-[8px] text-[11px] font-semibold transition ${
-I===800
+I===1000
 ?"bg-black text-white"
 :"bg-[#f6f7f9] border border-black/10 text-black/60"
 }`,
-children:"Ultra"
+children:" HD"
 })
 
 ]
