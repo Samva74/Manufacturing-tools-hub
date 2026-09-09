@@ -18,7 +18,12 @@
   .subtitle{font-size:21px;margin:28px 0 0;color:#000}
   .actions{display:flex;gap:8px;align-items:center;margin-top:50px}
   .pill,.logout{border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:16px 24px;font-weight:900;font-size:20px;cursor:pointer}
-  .logout{background:#1d1d1b;color:white}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .logout{background:#1d1d1b;color:white}
+  .grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:22px;
+}
   .card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:30px;text-decoration:none;color:var(--txt);min-height:415px}
   .app-icon{
     width:76px;
@@ -139,7 +144,9 @@
   <div class="top">
     <div>
       <h1>Tool App</h1>
-      <div class="subtitle">CNC, Hot Stamping, Laser</div>
+      <div class="subtitle">
+  CNC, Hot Stamping, Laser, LithoMaker
+</div>
     </div>
     <div class="actions">
       <button class="pill" id="loginButton" onclick="window.appAuth.showLogin()">Connexion...</button>
@@ -209,6 +216,29 @@
 
   </a>
 
+    <a class="card" href="/LithoMaker/">
+">
+      <svg viewBox="0 0 100 100"
+           fill="none"
+           stroke="#1d1d1b"
+           stroke-width="8"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+
+        <rect x="18" y="18" width="64" height="64" rx="6"/>
+        <circle cx="40" cy="40" r="8"/>
+        <path d="M20 72 L42 50 L56 62 L80 36"/>
+
+      </svg>
+    </div>
+
+    <h2>LithoMaker</h2>
+
+    <p>
+      Générateur Corian et Lithophane CNC.
+    </p>
+
+  </a>
  <a
     id="userAdminCard"
     class="card admin-only"
