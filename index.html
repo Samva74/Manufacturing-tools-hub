@@ -21,7 +21,7 @@
   .logout{background:#1d1d1b;color:white}
   .grid{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:22px;
 }
   .card{
@@ -39,7 +39,7 @@
   box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 .card-wide{
-    grid-column:1 / -1;
+    grid-column:1 / span 3;
 }
 
   .app-icon{
@@ -101,6 +101,7 @@
       grid-template-columns:1fr;
       gap:10px;
   }
+  .card-wide{grid-column:1;}
 
   .card{
     width:100%;
@@ -162,7 +163,7 @@
     <div>
       <h1>Tool App</h1>
       <div class="subtitle">
-  CNC, Hot Stamping, Laser, LithoMaker
+  Calculators et Makers pour la fabrication
 </div>
     </div>
     <div class="actions">
@@ -172,7 +173,7 @@
   </div>
 <div class="grid">
 
-  <a class="card" href="/cnc/">
+  <a class="card calculator-card" href="/cnc/">
     <div class="app-icon">
       <svg viewBox="0 0 100 100" fill="none" stroke="#1d1d1b"
            stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
@@ -188,7 +189,7 @@
 
   </a>
 
-  <a class="card" href="/hot-stamping/">
+  <a class="card calculator-card" href="/hot-stamping/">
     <div class="app-icon">
       <svg viewBox="0 0 100 100"
            fill="none"
@@ -210,7 +211,7 @@
 
   </a>
 
-  <a class="card" href="/laser/">
+  <a class="card calculator-card" href="/laser/">
     <div class="app-icon">
       <svg viewBox="0 0 100 100"
            fill="none"
@@ -231,7 +232,7 @@
     <h2>Laser Calculator</h2>
     <p>Matières, opérations et paramètres laser.</p>
 </a>
-  <a class="card" href="/LithoMaker/">
+  <a class="card maker-card" href="/LithoMaker/">
     <div class="app-icon">
 
     <svg viewBox="0 0 100 100"
@@ -258,6 +259,43 @@
   </p>
 
 </a>
+  <a class="card maker-card" href="/LaserMaker/">
+    <div class="app-icon">
+      <svg viewBox="0 0 100 100" fill="none" stroke="#1d1d1b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 76 H82"/>
+        <path d="M25 64 H75 L82 76 H18 Z"/>
+        <path d="M50 16 V42"/>
+        <path d="M42 24 L50 16 L58 24"/>
+        <path d="M50 42 L43 52"/>
+        <path d="M50 42 L57 52"/>
+        <path d="M50 42 V55"/>
+        <circle cx="50" cy="42" r="3" fill="#1d1d1b" stroke="none"/>
+      </svg>
+    </div>
+    <div class="card-text">
+      <h2>LaserMaker</h2>
+      <p>Transformation d’images pour gravure laser.</p>
+    </div>
+  </a>
+
+  <a class="card maker-card" href="/MarqueterieMaker/">
+    <div class="app-icon">
+      <svg viewBox="0 0 100 100" fill="none" stroke="#1d1d1b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="17" y="17" width="66" height="66" rx="8"/>
+        <path d="M17 48 L48 17"/>
+        <path d="M17 76 L76 17"/>
+        <path d="M32 83 L83 32"/>
+        <path d="M59 83 L83 59"/>
+        <path d="M35 17 L83 65"/>
+        <path d="M17 55 L45 83"/>
+      </svg>
+    </div>
+    <div class="card-text">
+      <h2>MarqueterieMaker</h2>
+      <p>Vectorisation, palettes de bois et plans de marqueterie.</p>
+    </div>
+  </a>
+
  <a
     id="userAdminCard"
     class="card card-wide admin-only"
